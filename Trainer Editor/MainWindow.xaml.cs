@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 namespace Trainer_Editor {
     /// <summary>
@@ -23,82 +24,80 @@ namespace Trainer_Editor {
         public MainWindow() {
             InitializeComponent();
 
-            List<Trainer> trainers = new List<Trainer>();
+            //Trainer_parties.ReCreate();
 
-            char cursor;
-            string monStruct = "";
-            StringBuilder sb = new StringBuilder();
-            int open = 0;
-            int closed = 0;
-
-            string path = @"C:\Users\Scott\Desktop\trainer_parties.h";
-            //FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-            try {
-                using (StreamReader sr = new StreamReader(path)) {
-                    string line = "a";
-
-                    while ((line = sr.ReadLine()) != null) {
-
-                        if (MonRegex.IfContainsTrainerAddTrainer(line, ref trainers)) {
-
-                            while (sr.Peek() != ';') {
-
-                                cursor = (char)sr.Read();
-
-                                if (cursor == '{')
-                                    open += 1;
-                                else if (cursor == '}')
-                                    closed += 1;
-
-                                sb.Append(cursor);
-
-                                if (open == closed && open > 0) {
-                                    monStruct = sb.ToString();
-                                    trainers.Last().AddMonFromStruct(monStruct);
-                                    sb.Clear();
-                                    open = 0;
-                                    closed = 0;
-                                }
-                            }
-                            open = 0;
-                            closed = 0;
-                        }
-
-                    }
-                    //sr.Dispose();
-                    //sr.Close();
-                }
-            }
-            catch (Exception e) {
-                Debug.WriteLine(e.Message);
-            }
-
-            //fs = new FileStream(@"C:\Users\Scott\Desktop\party_test.h", FileMode.OpenOrCreate, FileAccess.Write);
-            path = @"C:\Users\Scott\Desktop\party_test.h";
-
-            try {
-                using (StreamWriter sw = new StreamWriter(path)) {
-
-                    foreach (Trainer trainer in trainers) {
-                        sw.Write($"{trainer.CreatePartyStruct()}");
-                        sw.Write("\n\n");
-                    }
-                    //sw.Dispose();
-                    //sw.Close();
-
-                }
-
-            }
-            catch (Exception e) {
-                Debug.WriteLine(e.Message);
-            }
-            //foreach (var trainer in Trainers) {
-            //    //if(trainer.Party.Count > 0)
-            //    Console.WriteLine("  Num: {0}   Name: {1}", Trainers.IndexOf(trainer), trainer.TrainerPartyName);
-            //    trainer.PrintPartySpecies();
+            //List<Trainer> trainers = FileManager.Trainers.Read();
+            //List<Party> parties = FileManager.TrainerParties.Read();
+            //
+            //for (int i = 0; i < parties.Count(); i++) {
+            //    trainers[i + 1].party = parties[i];
             //}
-            Debug.WriteLine("Files Saved.");
+            //
+            ////for(int i = 0; i < parties.Count(); i ++) {
+            ////    trainers[i+1].party = parties.Find(p => p.TrainerPartyName.Equals(trainers[i+1].partySize));
+            ////}
+            //
+            //Debug.WriteLine("test");
 
         }
+
+        private async void Button_Click(object sender, RoutedEventArgs e) {
+
+            List<Trainer> trainers = await Test.ReadTrainers();
+            Debug.WriteLine("Trainers Read.");
+
+            List<Party> parties = await Test.ReadParties();
+            Debug.WriteLine("Parties Read.");
+
+            trainers = await Test.StitchLists(trainers, parties);
+            Debug.WriteLine($"Stitch Complete. {trainers[0].PartySize}");
+
+            await Test.WriteTrainers(trainers);
+            Debug.WriteLine("Trainers Saved.");
+
+            await Test.WriteParties(trainers);
+            Debug.WriteLine("Parties Saved.");
+
+        }
+    }
+
+    public class Test {
+        public static Task<List<Trainer>> ReadTrainers() {
+
+            return Task.Factory.StartNew(() =>
+            {
+                return FileManager.ReadTrainers();
+            });
+        }
+        public static Task<List<Party>> ReadParties() {
+
+            return Task.Factory.StartNew(() =>
+            {
+                return FileManager.ReadParties();
+            });
+        }
+        public static Task WriteTrainers(List<Trainer> trainers) {
+            return Task.Factory.StartNew(() =>
+            {
+                FileManager.WriteTrainers(trainers);
+            });
+        }
+        public static Task WriteParties(List<Trainer> trainers) {
+            return Task.Factory.StartNew(() =>
+            {
+                FileManager.WriteParties(trainers);
+            });
+        }
+        public static Task<List<Trainer>> StitchLists(List<Trainer> trainers, List<Party> parties ) {
+
+            return Task.Factory.StartNew(() =>
+            {
+                for (int i = 0; i < parties.Count(); i++) {
+                    trainers[i + 1].Party = parties[i];
+                }
+                return trainers;
+            });
+        }
+
     }
 }
