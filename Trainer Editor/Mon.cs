@@ -1,16 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Trainer_Editor {
-    public class Mon {
-        public string Iv { get; set; }
+    public class Mon : ObservableObject {
+        public Mon() { }
+        public Mon(string species) {
+            Species = species;
+        }
+        private string species;
+        private string iv;
+
+        public string Iv {
+            get { return iv; }
+            set {
+                string match = RegexInput.Digits.Match(value).Value;
+                match = match != "" ? match : "0";
+                iv = int.Parse(match) < 255 ? match : "255";
+            }
+        }
         public string Lvl { get; set; }
-        public string Species { get; set; }
+        public string Species {
+            get { return species; }
+            set {
+                species = value;
+                OnPropertyChanged("Species");
+            }
+        }
         public string HeldItem { get; set; }
-        public List<string> Moves { get; set; }
+        public ObservableCollection<string> Moves { get; set; }
 
         public string SpeciesMember {
             get => string.IsNullOrEmpty(Species) ? "" : $"\n\t.species = {Species},";
@@ -35,19 +56,14 @@ namespace Trainer_Editor {
                     if (i < Moves.Count - 1)
                         movesText += ", ";
                 }
-            
+
                 return $"\n\t.moves = {{{movesText}}}";
             }
         }
 
-        public static List<string> MatchMoves(string monStruct) {
-            
-            List<string> moves = new List<string>();
-            MatchCollection moveCollection = RegexMon.Moves.Matches(monStruct);
-            for (int i = 0; i < moveCollection.Count; i++) {
-                moves.Add(moveCollection[i].Value);
-            }
-            return moves;
+        public static ObservableCollection<string> MatchMoves(string monStruct) {
+
+            return new ObservableCollection<string>(RegexMon.Moves.Matches(monStruct).Select(m => m.Value));
 
         }
     }

@@ -15,6 +15,12 @@ using System.Windows.Shapes;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Text.RegularExpressions;
+using Microsoft.Win32;
+using Ookii.Dialogs.Wpf;
+using System.Globalization;
 
 namespace Trainer_Editor {
     /// <summary>
@@ -24,80 +30,160 @@ namespace Trainer_Editor {
         public MainWindow() {
             InitializeComponent();
 
-            //Trainer_parties.ReCreate();
-
-            //List<Trainer> trainers = FileManager.Trainers.Read();
-            //List<Party> parties = FileManager.TrainerParties.Read();
-            //
-            //for (int i = 0; i < parties.Count(); i++) {
-            //    trainers[i + 1].party = parties[i];
-            //}
-            //
             ////for(int i = 0; i < parties.Count(); i ++) {
             ////    trainers[i+1].party = parties.Find(p => p.TrainerPartyName.Equals(trainers[i+1].partySize));
             ////}
-            //
-            //Debug.WriteLine("test");
 
+            DataContext = Data.Instance;
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e) {
 
-            List<Trainer> trainers = await Test.ReadTrainers();
+            List<Trainer> trainers = await Task.Run(() => FileManager.ReadTrainers());
             Debug.WriteLine("Trainers Read.");
 
-            List<Party> parties = await Test.ReadParties();
+            Dictionary<string, Party> parties = await Task.Run(() => FileManager.ReadParties());
             Debug.WriteLine("Parties Read.");
 
-            trainers = await Test.StitchLists(trainers, parties);
-            Debug.WriteLine($"Stitch Complete. {trainers[0].PartySize}");
+            trainers = await Task.Run(() => Data.StitchLists(trainers, parties));
+            Debug.WriteLine($"Stitch Complete.");
 
-            await Test.WriteTrainers(trainers);
-            Debug.WriteLine("Trainers Saved.");
+            //await Task.Run(() => FileManager.WriteTrainers(trainers));
+            //Debug.WriteLine("Trainers Saved.");
+            //
+            //await Task.Run(() => FileManager.WriteParties(trainers));
+            //Debug.WriteLine("Parties Saved.");
 
-            await Test.WriteParties(trainers);
-            Debug.WriteLine("Parties Saved.");
+            await Task.Run(() => Data.Instance.Trainers = trainers);
+        }
 
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e) {
+
+            TextBox textbox = sender as TextBox;
+            if (textbox != null && Data.Instance.Trainers.Count > 0) {
+                ListBox1.ItemsSource = Data.Instance.Trainers.Where(t => t.TrainerIndexName.Contains(textbox.Text, StringComparison.OrdinalIgnoreCase));
+            }
+
+        }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            Trainer tr = ListBox1.SelectedItem as Trainer;
+            if(tr?.Party != null) {
+                Data.Instance.SelectedMon = tr.Party.MonList[0];
+            }
+
+        }
+
+        private async void MenuOpen_Click(object sender, RoutedEventArgs e) {
+
+            //OpenFileDialog openFileDialog = new OpenFileDialog();
+            //if (openFileDialog.ShowDialog() == true)
+            //    Debug.WriteLine(openFileDialog.FileName);
+
+            VistaFolderBrowserDialog d = new VistaFolderBrowserDialog();
+            if (d.ShowDialog() == true)
+                Debug.WriteLine(d.SelectedPath);
+
+            List<Trainer> trainers = await Task.Run(() => FileManager.ReadTrainers());
+            Debug.WriteLine("Trainers Read.");
+
+            Dictionary<string, Party> parties = await Task.Run(() => FileManager.ReadParties());
+            Debug.WriteLine("Parties Read.");
+
+            trainers = await Task.Run(() => Data.StitchLists(trainers, parties));
+            Debug.WriteLine($"Stitch Complete.");
+
+            //await Task.Run(() => FileManager.WriteTrainers(trainers));
+            //Debug.WriteLine("Trainers Saved.");
+
+            //await Task.Run(() => FileManager.WriteParties(trainers));
+            //Debug.WriteLine("Parties Saved.");
+
+            await Task.Run(() => Data.Instance.Trainers = trainers);
+        }
+
+
+
+    }
+    public class ObservableObject : INotifyPropertyChanged {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string name) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
+    public class Data : ObservableObject {
 
-    public class Test {
-        public static Task<List<Trainer>> ReadTrainers() {
+        private Data() { }
 
-            return Task.Factory.StartNew(() =>
-            {
-                return FileManager.ReadTrainers();
-            });
-        }
-        public static Task<List<Party>> ReadParties() {
-
-            return Task.Factory.StartNew(() =>
-            {
-                return FileManager.ReadParties();
-            });
-        }
-        public static Task WriteTrainers(List<Trainer> trainers) {
-            return Task.Factory.StartNew(() =>
-            {
-                FileManager.WriteTrainers(trainers);
-            });
-        }
-        public static Task WriteParties(List<Trainer> trainers) {
-            return Task.Factory.StartNew(() =>
-            {
-                FileManager.WriteParties(trainers);
-            });
-        }
-        public static Task<List<Trainer>> StitchLists(List<Trainer> trainers, List<Party> parties ) {
-
-            return Task.Factory.StartNew(() =>
-            {
-                for (int i = 0; i < parties.Count(); i++) {
-                    trainers[i + 1].Party = parties[i];
-                }
-                return trainers;
-            });
+        private static Data _instance = new Data();
+        public static Data Instance {
+            get { return _instance; }
         }
 
+        private List<Trainer> _trainers = new List<Trainer>();
+        public List<Trainer> Trainers {
+            get { return _trainers; }
+            set { _trainers = value; OnPropertyChanged("Trainers"); }
+        }
+
+        private Trainer selectedTrainer;
+        public  Trainer SelectedTrainer {
+            get { return selectedTrainer; }
+            set { selectedTrainer = value;
+                //SelectedMon = value?.Party?.MonList[0];
+                OnPropertyChanged("SelectedTrainer"); }
+        }
+
+        private Mon selectedMon;
+        public Mon SelectedMon {
+            get { return selectedMon; }
+            set { selectedMon = value; OnPropertyChanged("SelectedMon"); }
+        }
+
+
+        private List<string> _species = SpeciesDefines.List;
+        public List<string> Species {
+            get { return _species = SpeciesDefines.List; }
+            set { _species = SpeciesDefines.List = value; }
+        }
+
+
+        public static List<Trainer> StitchLists(List<Trainer> trainers, Dictionary<string, Party> parties) {
+
+            for (int i = 0; i < parties.Count(); i++) {
+                trainers[i].Party = parties.GetValueOrDefault(trainers[i].PartySize);
+            }
+            return trainers;
+
+        }
+
+    }
+
+    public class ComparisonConverter : IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+            return value?.Equals(parameter);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+            return value?.Equals(true) == true ? parameter : Binding.DoNothing;
+        }
+    }
+    public class MovesEnabledCoverter : IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            switch (value) {
+                case TYPE.TrainerMonNoItemDefaultMoves:
+                    return false;
+                case TYPE.TrainerMonItemDefaultMoves:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+            return Binding.DoNothing;
+        }
     }
 }

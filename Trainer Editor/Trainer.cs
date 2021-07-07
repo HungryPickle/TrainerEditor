@@ -34,13 +34,7 @@ namespace Trainer_Editor {
         }
         public static List<string> MatchList(Regex member, string trainerStruct) {
 
-            MatchCollection matchCollection = member.Matches(trainerStruct);
-            List<string> list = new List<string>();
-            for (int i = 0; i < matchCollection.Count; i++) {
-                list.Add(matchCollection[i].Value);
-            }
-            return list;
-
+            return new List<string>(member.Matches(trainerStruct).Select(m => m.Value));
         }
         public string TrainerIndexNameMember {
             get => string.IsNullOrEmpty(TrainerIndexName) ? "" : $"[{TrainerIndexName}] =";
@@ -52,9 +46,10 @@ namespace Trainer_Editor {
                     return partyFlags;
 
                 for (int i = 0; i < PartyFlags.Count; i++) {
-                    partyFlags += PartyFlags[i];
                     if (i < PartyFlags.Count - 1)
-                        partyFlags += " | ";
+                        partyFlags += PartyFlags[i] + " | ";
+                    else
+                        partyFlags += PartyFlags[i];
                 }
                 return $"\n\t\t.partyFlags = {partyFlags},";
             }
@@ -70,9 +65,10 @@ namespace Trainer_Editor {
                     return encounterMusic_gender;
 
                 for (int i = 0; i < EncounterMusic_gender.Count; i++) {
-                    encounterMusic_gender += EncounterMusic_gender[i];
                     if (i < EncounterMusic_gender.Count - 1)
-                        encounterMusic_gender += " | ";
+                        encounterMusic_gender += EncounterMusic_gender[i] + " | ";
+                    else
+                        encounterMusic_gender += EncounterMusic_gender[i];
                 }
                 return $"\n\t\t.encounterMusic_gender = {encounterMusic_gender},";
             }
@@ -88,9 +84,10 @@ namespace Trainer_Editor {
                 string items = "";
 
                 for (int i = 0; i < Items.Count; i++) {
-                    items += Items[i];
                     if (i < Items.Count - 1)
-                        items += ", ";
+                        items += Items[i] + ", ";
+                    else
+                        items += Items[i];
                 }
                 return $"\n\t\t.items = {{{items}}},";
             }
@@ -105,10 +102,10 @@ namespace Trainer_Editor {
                     return aiFlags;
 
                 for (int i = 0; i < AiFlags.Count; i++) {
-                    aiFlags += AiFlags[i];
-                    if (i < AiFlags.Count - 1) {
-                        aiFlags += " | ";
-                    }
+                    if (i < AiFlags.Count - 1)
+                        aiFlags += AiFlags[i] + " | ";
+                    else
+                        aiFlags += AiFlags[i];
                 }
                 return $"\n\t\t.aiFlags = {aiFlags},";
             }

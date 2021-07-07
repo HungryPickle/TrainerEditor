@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -21,19 +23,23 @@ namespace Trainer_Editor {
             { TYPE.TrainerMonNoItemCustomMoves.ToString(), TYPE.TrainerMonNoItemCustomMoves },
             { TYPE.TrainerMonItemCustomMoves.ToString(), TYPE.TrainerMonItemCustomMoves }
         };
+        private ObservableCollection<Mon> monList;
 
         public TYPE Type { get; set; }
         public string PartyName { get; set; }
-        protected List<Mon> MonList { get; set; }
+        public ObservableCollection<Mon> MonList{ 
+            get => monList;
+            set { monList = value; }
+        }
 
         public Party(TYPE partyType, string partyName) {
             Type = partyType;
             PartyName = partyName;
-            MonList = new List<Mon>();
+            MonList = new ObservableCollection<Mon>();
         }
 
         public void AddMonFromStruct(string monStruct) {
-            
+
             Mon mon = new Mon();
             mon.Iv = RegexMon.IV.Match(monStruct).Value;
             mon.Lvl = RegexMon.Lvl.Match(monStruct).Value;
@@ -96,13 +102,13 @@ namespace Trainer_Editor {
             return partyStruct;
         }
 
-        public static bool IfContainsPartyAddParty(string line, ref List<Party> parties) {
+        public static bool IfContainsPartyAddParty(string line, ref Dictionary<string, Party> parties) {
 
             string partyName = RegexTrainer.PartyName.Match(line).Value;
             TYPE partyType;
 
             if (TypeDict.TryGetValue(RegexTrainer.PartyType.Match(line).Value, out partyType)) {
-                parties.Add(new Party(partyType, partyName));
+                parties.Add(partyName, new Party(partyType, partyName));
                 return true;
             }
             else

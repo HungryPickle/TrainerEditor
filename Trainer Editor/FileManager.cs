@@ -5,12 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Trainer_Editor {
     public class FileManager {
-        public static List<Party> ReadParties() {
+        public static Dictionary<string,Party> ReadParties() {
 
-            List<Party> parties = new List<Party>();
+            //List<Party> parties = new List<Party>();
+            Dictionary<string, Party> namedParties = new Dictionary<string, Party>();
 
             StringBuilder sb = new StringBuilder();
             char cursor;
@@ -26,7 +28,7 @@ namespace Trainer_Editor {
 
                     while ((line = sr.ReadLine()) != null) {
 
-                        if (Party.IfContainsPartyAddParty(line, ref parties)) {
+                        if (Party.IfContainsPartyAddParty(line, ref namedParties)) {
 
                             while (sr.Peek() != ';' && sr.Peek() != -1) {
 
@@ -40,13 +42,16 @@ namespace Trainer_Editor {
 
                                 if (open == closed && open > 0) {
                                     monStruct = sb.ToString();
-                                    parties.Last().AddMonFromStruct(monStruct);
+                                    namedParties.Last().Value.AddMonFromStruct(monStruct);
                                     sb.Clear();
                                     open = 0;
                                     closed = 0;
                                 }
                             }
                             closed = 0;
+                            //for (; namedParties.Last().Value.MonList.Count < 6; namedParties.Last().Value.MonList.Add(new Mon())) {
+                            //
+                            //}
                         }
 
                     }
@@ -56,7 +61,7 @@ namespace Trainer_Editor {
                 Debug.WriteLine(e.Message);
             }
 
-            return parties;
+            return namedParties;
         }
 
         public static void WriteParties(List<Trainer> trainers) {
@@ -66,13 +71,9 @@ namespace Trainer_Editor {
             try {
                 using (StreamWriter sw = new StreamWriter(path)) {
 
-                    for (int i = 1; i < trainers.Count; i++) {
-                        if (i > 1) {
-                            sw.Write("\n");
-                        }
+                    for (int i = 0; i < trainers.Count; i++) {
                         sw.Write($"{trainers[i].Party.CreatePartyStruct()}");
-                        sw.Write("\n");
-                        
+                        sw.Write("\n\n");
                     }
 
                 }
@@ -154,8 +155,23 @@ namespace Trainer_Editor {
             try {
                 using (StreamWriter sw = new StreamWriter(path)) {
 
-                    sw.Write("const struct Trainer gTrainers[] = {");
-
+                    sw.Write(
+                    "const struct Trainer gTrainers[] = {" +
+                    "\n\t[TRAINER_NONE] =" +
+                    "\n\t{" +
+                    "\n\t\t.partyFlags = 0," +
+                    "\n\t\t.trainerClass = TRAINER_CLASS_PKMN_TRAINER_1," +
+                    "\n\t\t.encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE," +
+                    "\n\t\t.trainerPic = TRAINER_PIC_HIKER," +
+                    "\n\t\t.trainerName = _(\"\")," +
+                    "\n\t\t.items = {}," +
+                    "\n\t\t.doubleBattle = FALSE," +
+                    "\n\t\t.aiFlags = 0," +
+                    "\n\t\t.partySize = 0," +
+                    "\n\t\t.party = {.NoItemDefaultMoves = NULL}," +
+                    "\n\t}," +
+                    "\n");
+                    
                     foreach (Trainer trainer in trainers) {
                         sw.Write($"{trainer.CreateTrainerStruct()}");
                         sw.Write("\n");

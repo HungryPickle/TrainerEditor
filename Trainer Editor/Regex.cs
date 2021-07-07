@@ -8,7 +8,9 @@ namespace Trainer_Editor {
         public static Regex PartyType = new Regex(@"(?<=const\s+struct\s+)\w+");
         public static Regex PartyName = new Regex(@"\w+(?=\[\])");
 
-        public static Regex IndexName = new Regex(@"(?<=\[)TRAINER_\w+(?=\])");
+        //public static Regex IndexName = new Regex(@"(?<=\[)TRAINER_\w+(?=\])");
+        public static Regex IndexName = new Regex(@"(?<=\[)TRAINER_(?!NONE)\w+(?=\])");
+        
 
         public static Regex PartyFlags = new Regex(@"(?<=\.partyFlags\s+=.+)(F_TRAINER_\w+|0)");
         public static Regex TrainerClass = new Regex(@"(?<=\.trainerClass\s+=\s+)TRAINER_CLASS_\w+(?=,)");
@@ -31,6 +33,10 @@ namespace Trainer_Editor {
         public static Regex HeldItem = new Regex(@"(?<=\.heldItem\s+=\s+)ITEM_\w+");
         public static Regex Moves = new Regex(@"(?<=\.moves\s+=.+)MOVE_\w+");
 
+    }
+
+    public class RegexInput {
+        public static Regex Digits = new Regex(@"[1-9][0-9]*");
     }
 
 }
