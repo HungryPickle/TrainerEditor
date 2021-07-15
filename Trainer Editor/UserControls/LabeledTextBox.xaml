@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Trainer_Editor.UserControls.InputUserControl"
+﻿<UserControl x:Class="Trainer_Editor.UserControls.LabeledTextBox"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,7 +10,6 @@
         <StackPanel>
             <Label Content="{Binding LabelText, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
             <TextBox Text="{Binding TextBoxText, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBox Text="{Binding SelectedMon.Moves[0], Mode=OneWay}"></TextBox>
         </StackPanel>
     </Grid>
 </UserControl>

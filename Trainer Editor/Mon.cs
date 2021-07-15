@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -26,8 +27,20 @@ namespace Trainer_Editor {
         public string Species {
             get { return species; }
             set {
-                species = value;
-                OnPropertyChanged("Species");
+                //if (value.Length < 2) { return; }
+
+                //if (Data.Instance.CulledSpeciesList.Contains(value)) {
+                //if (value != null) {
+                if (value == null) { throw new ArgumentNullException("Mon.Species"); }
+                    species = value;
+                    OnPropertyChanged("Species");
+                    //Debug.WriteLine(value.ToString());
+                //}
+                //}
+                //else {
+                //    Data.Instance.CulledSpeciesList = new ObservableCollection<string>(Constants.Species.Where(s => s.Contains(value, StringComparison.OrdinalIgnoreCase)).OrderBy(s => s));
+                //}
+                
             }
         }
         public string HeldItem { get; set; }

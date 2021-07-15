@@ -15,7 +15,7 @@ namespace Trainer_Editor.UserControls {
     /// <summary>
     /// Interaction logic for InputUserControl.xaml
     /// </summary>
-    public partial class InputUserControl : UserControl {
+    public partial class LabeledTextBox : UserControl {
 
         public string LabelText {
             get { return (string)GetValue(LabelTextProperty); }
@@ -24,7 +24,7 @@ namespace Trainer_Editor.UserControls {
 
         // Using a DependencyProperty as the backing store for LabelText.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LabelTextProperty =
-            DependencyProperty.Register("LabelText", typeof(string), typeof(InputUserControl), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("LabelText", typeof(string), typeof(LabeledTextBox), new PropertyMetadata(string.Empty));
 
         //private static void LabelTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
         //    ((InputUserControl)d).LabelText = (string)e.NewValue;
@@ -39,11 +39,11 @@ namespace Trainer_Editor.UserControls {
 
         // Using a DependencyProperty as the backing store for TextBoxText.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TextBoxTextProperty =
-            DependencyProperty.Register("TextBoxText", typeof(string), typeof(InputUserControl), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("TextBoxText", typeof(string), typeof(LabeledTextBox), new PropertyMetadata(string.Empty));
 
 
 
-        public InputUserControl() {
+        public LabeledTextBox() {
             InitializeComponent();
         }
 

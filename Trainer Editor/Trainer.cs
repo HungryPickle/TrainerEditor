@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Trainer_Editor {
     public class Trainer {
-        public string TrainerIndexName { get; set; }
+        public string IndexName { get; set; }
         public List<string> PartyFlags { get; set; }
         public string TrainerClass { get; set; }
         public List<string> EncounterMusic_gender { get; set; }
@@ -20,7 +20,7 @@ namespace Trainer_Editor {
 
         public Trainer(string nameLine, string trainerStruct) {
 
-            TrainerIndexName = RegexTrainer.IndexName.Match(nameLine).Value;
+            IndexName = RegexTrainer.IndexName.Match(nameLine).Value;
 
             PartyFlags = MatchList(RegexTrainer.PartyFlags, trainerStruct);
             TrainerClass = RegexTrainer.TrainerClass.Match(trainerStruct).Value;
@@ -37,7 +37,7 @@ namespace Trainer_Editor {
             return new List<string>(member.Matches(trainerStruct).Select(m => m.Value));
         }
         public string TrainerIndexNameMember {
-            get => string.IsNullOrEmpty(TrainerIndexName) ? "" : $"[{TrainerIndexName}] =";
+            get => string.IsNullOrEmpty(IndexName) ? "" : $"[{IndexName}] =";
         }
         public string PartyFlagsMember {
             get {
@@ -120,11 +120,11 @@ namespace Trainer_Editor {
                 if (Party == null)
                     return "\n\t\t.party = {.NoItemDefaultMoves = NULL},";
                 string type = Party.Type.ToString().Replace("TrainerMon", "");
-                return $"\n\t\t.party = {{.{type} = {Party.PartyName}}},";
+                return $"\n\t\t.party = {{.{type} = {Party.Name}}},";
             }
         }
         public string CreateTrainerStruct() {
-            string partyStruct = $"\n\t[{TrainerIndexName}] =" +
+            string partyStruct = $"\n\t[{IndexName}] =" +
                 "\n\t{" +
                 PartyFlagsMember +
                 TrainerClassMember +

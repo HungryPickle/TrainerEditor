@@ -23,18 +23,37 @@ namespace Trainer_Editor {
             { TYPE.TrainerMonNoItemCustomMoves.ToString(), TYPE.TrainerMonNoItemCustomMoves },
             { TYPE.TrainerMonItemCustomMoves.ToString(), TYPE.TrainerMonItemCustomMoves }
         };
-        private ObservableCollection<Mon> monList;
 
         public TYPE Type { get; set; }
-        public string PartyName { get; set; }
-        public ObservableCollection<Mon> MonList{ 
-            get => monList;
-            set { monList = value; }
-        }
+        public string Name { get; set; }
 
-        public Party(TYPE partyType, string partyName) {
-            Type = partyType;
-            PartyName = partyName;
+        private ObservableCollection<Mon> monList;
+        public ObservableCollection<Mon> MonList {
+            get => monList;
+            set {
+                monList = value;
+            }
+        }
+        public Mon this[int index] {
+            get {
+                if (index < monList.Count) {
+                    return monList[index]; 
+                }
+                else {
+                    return null;
+                }
+            }
+            set {
+                if (index < monList.Count) {
+                    monList[index] = value; 
+                }
+            }
+        }
+        
+
+        public Party(TYPE type, string name) {
+            Type = type;
+            Name = name;
             MonList = new ObservableCollection<Mon>();
         }
 
@@ -92,7 +111,7 @@ namespace Trainer_Editor {
         }
 
         public string CreatePartyStruct() {
-            string partyStruct = $"static const struct {Type} {PartyName}[] = {{";
+            string partyStruct = $"static const struct {Type} {Name}[] = {{";
             for (int i = 0; i < MonList.Count; i++) {
                 partyStruct += CreateMonStruct(MonList[i]);
                 if (i < MonList.Count - 1)
@@ -104,11 +123,11 @@ namespace Trainer_Editor {
 
         public static bool IfContainsPartyAddParty(string line, ref Dictionary<string, Party> parties) {
 
-            string partyName = RegexTrainer.PartyName.Match(line).Value;
-            TYPE partyType;
+            string name = RegexTrainer.PartyName.Match(line).Value;
+            TYPE type;
 
-            if (TypeDict.TryGetValue(RegexTrainer.PartyType.Match(line).Value, out partyType)) {
-                parties.Add(partyName, new Party(partyType, partyName));
+            if (TypeDict.TryGetValue(RegexTrainer.PartyType.Match(line).Value, out type)) {
+                parties.Add(name, new Party(type, name));
                 return true;
             }
             else

@@ -62,7 +62,7 @@ namespace Trainer_Editor {
 
             TextBox textbox = sender as TextBox;
             if (textbox != null && Data.Instance.Trainers.Count > 0) {
-                ListBox1.ItemsSource = Data.Instance.Trainers.Where(t => t.TrainerIndexName.Contains(textbox.Text, StringComparison.OrdinalIgnoreCase));
+                ListBox1.ItemsSource = Data.Instance.Trainers.Where(t => t.IndexName.Contains(textbox.Text, StringComparison.OrdinalIgnoreCase));
             }
 
         }
@@ -142,13 +142,27 @@ namespace Trainer_Editor {
             set { selectedMon = value; OnPropertyChanged("SelectedMon"); }
         }
 
+        private ObservableCollection<string> culledSpeciesList = new ObservableCollection<string>(Constants.Species);
 
-        private List<string> _species = SpeciesDefines.List;
-        public List<string> Species {
-            get { return _species = SpeciesDefines.List; }
-            set { _species = SpeciesDefines.List = value; }
+        public ObservableCollection<string> CulledSpeciesList {
+            get { return culledSpeciesList; }
+            set { culledSpeciesList = value;
+                OnPropertyChanged("CulledSpeciesList");
+            }
+        }
+        //===================================================================================================================================
+
+        private string myText;
+
+        public string MyText {
+            get { return myText; }
+            set { myText = value;
+                OnPropertyChanged("MyText");
+            }
         }
 
+
+        //====================================================================================================================================
 
         public static List<Trainer> StitchLists(List<Trainer> trainers, Dictionary<string, Party> parties) {
 
@@ -174,7 +188,6 @@ namespace Trainer_Editor {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             switch (value) {
                 case TYPE.TrainerMonNoItemDefaultMoves:
-                    return false;
                 case TYPE.TrainerMonItemDefaultMoves:
                     return false;
                 default:

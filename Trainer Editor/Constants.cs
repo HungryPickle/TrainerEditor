@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace Trainer_Editor {
-    class SpeciesDefines {
-        public static List<string> List = new List<string> {
+    class Constants {
+        public static List<string> Species = new List<string> {
            "SPECIES_NONE",
            "SPECIES_BULBASAUR",
            "SPECIES_IVYSAUR",

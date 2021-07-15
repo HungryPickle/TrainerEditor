@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -28,33 +31,57 @@ namespace Trainer_Editor.UserControls {
 
         private void ComboBox_Species_DropDownClosed(object sender, EventArgs e) {
             ComboBox cb = sender as ComboBox;
-            Trainer tr = Data.Instance.SelectedTrainer;
-
-            if (int.Parse((string)cb.Tag) < tr.Party.MonList.Count) {
-                tr.Party.MonList[int.Parse((string)cb.Tag)].Species = cb.Items.GetItemAt(0).ToString();
-            }
-            else if (int.Parse((string)cb.Tag) == tr.Party.MonList.Count) {
-                tr.Party.MonList.Add(new Mon(cb.Items.GetItemAt(0).ToString()));
-                Data.Instance.SelectedMon = tr.Party.MonList[int.Parse((string)cb.Tag)];
-            }
-            //else
-            //    cb.Text = "";  
-            cb.ItemsSource = Data.Instance.Species;
-        }
-
-        private void ComboBox_Species_TextChanged(object sender, TextChangedEventArgs e) {
-            ComboBox cb = sender as ComboBox;
-            if (cb.IsDropDownOpen && cb.Text.Length > 1) {
-                cb.ItemsSource = Data.Instance.Species.Where(s => s.Contains(cb.Text, StringComparison.OrdinalIgnoreCase)).OrderBy(s => s);
+            Mon mon = cb.Tag as Mon;
+            
+            if (mon != null) {
+                mon.Species = Data.Instance.CulledSpeciesList.FirstOrDefault() ?? "SPECIES_NONE";
             }
 
         }
 
         private void ComboBox_Species_GotFocus(object sender, RoutedEventArgs e) {
             ComboBox cb = sender as ComboBox;
-            Trainer tr = Data.Instance.SelectedTrainer;
-            if (int.Parse((string)cb.Tag) < tr.Party.MonList.Count)
-                Data.Instance.SelectedMon = tr.Party.MonList[int.Parse((string)cb.Tag)];
+            Data.Instance.SelectedMon = (Mon)cb.Tag;
+
+            TextBox TxtBox = (TextBox)cb.Template.FindName("PART_EditableTextBox", cb);
+            TxtBox.SelectionLength = 0;
+            
+        }
+
+
+
+    }
+    public class SelectedBoxColorConverter : IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+
+            if (Data.Instance.SelectedTrainer?.Party.MonList.IndexOf((Mon)value) == int.Parse((string)parameter)) {
+                return 0.8;
+            }
+            else {
+                return 1;
+            }
+
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+            return Binding.DoNothing;
+        }
+    }
+    public class PartyIndexConverter : IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            if (Data.Instance.SelectedTrainer.Party[int.Parse((string)parameter)] == null) {
+                return Binding.DoNothing;
+            }
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+            if (value != null) {
+                return value;
+            }
+            else {
+                return null;
+            }
         }
     }
 }

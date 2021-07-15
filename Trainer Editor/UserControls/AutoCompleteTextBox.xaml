@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="Trainer_Editor.UserControls.AutoCompleteTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Trainer_Editor.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}">
+        <TextBox x:Name="textbox1" Height="25" Text="{Binding SelectedItem, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="TextBox_TextChanged"  PreviewKeyDown="TextBox_KeyDown" Background="LightGreen" ></TextBox>
+        <Popup Name="popup" Width="160" Height="150" StaysOpen="False" MouseLeftButtonUp="PopUp_MouseLeftButtonUp" KeyDown="PopUp_KeyDown">
+            <ListBox Name="listbox1" Width="160" Height="150" ItemsSource="{Binding FilteredSource}" SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=Explicit}" SelectionChanged="ListBox_SelectionChanged" />
+
+        </Popup>
+    </Grid>
+</UserControl>
