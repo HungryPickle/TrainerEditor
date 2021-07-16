@@ -69,19 +69,11 @@ namespace Trainer_Editor.UserControls {
     }
     public class PartyIndexConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if (Data.Instance.SelectedTrainer.Party[int.Parse((string)parameter)] == null) {
-                return Binding.DoNothing;
-            }
-            return value;
+            return value == null ? false : true;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            if (value != null) {
-                return value;
-            }
-            else {
-                return null;
-            }
+            return Binding.DoNothing;
         }
     }
 }

@@ -71,6 +71,7 @@ namespace Trainer_Editor {
             Trainer tr = ListBox1.SelectedItem as Trainer;
             if(tr?.Party != null) {
                 Data.Instance.SelectedMon = tr.Party.MonList[0];
+                    
             }
 
         }

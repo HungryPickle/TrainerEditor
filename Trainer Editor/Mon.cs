@@ -31,7 +31,7 @@ namespace Trainer_Editor {
 
                 //if (Data.Instance.CulledSpeciesList.Contains(value)) {
                 //if (value != null) {
-                if (value == null) { throw new ArgumentNullException("Mon.Species"); }
+                if (string.IsNullOrWhiteSpace(value)) { throw new ArgumentNullException("Mon.Species");}
                     species = value;
                     OnPropertyChanged("Species");
                     //Debug.WriteLine(value.ToString());

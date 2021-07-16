@@ -7,9 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}">
-        <TextBox x:Name="textbox1" Height="25" Text="{Binding SelectedItem, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="TextBox_TextChanged"  PreviewKeyDown="TextBox_KeyDown" Background="LightGreen" ></TextBox>
-        <Popup Name="popup" Width="160" Height="150" StaysOpen="False" MouseLeftButtonUp="PopUp_MouseLeftButtonUp" KeyDown="PopUp_KeyDown">
-            <ListBox Name="listbox1" Width="160" Height="150" ItemsSource="{Binding FilteredSource}" SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=Explicit}" SelectionChanged="ListBox_SelectionChanged" />
+        <TextBox x:Name="textbox1" Height="25" Text="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=Explicit}" TextChanged="TextBox_TextChanged"  PreviewKeyDown="TextBox_KeyDown" Background="LightGreen" ></TextBox>
+        <Popup Name="popup1" Width="160" Height="150" StaysOpen="False" MouseLeftButtonUp="PopUp_MouseLeftButtonUp" KeyDown="PopUp_KeyDown">
+            <ListBox Name="listbox1" Width="160" Height="150" ItemsSource="{Binding FilteredSource}" SelectedItem="{Binding SelectedItem, Mode=OneWayToSource, UpdateSourceTrigger=Explicit}" SelectionChanged="ListBox_SelectionChanged"/>
 
         </Popup>
     </Grid>

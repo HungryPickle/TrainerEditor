@@ -25,12 +25,12 @@
                 <UserControls:SelectedBoxColorConverter x:Key="SelectedBoxColorConverter"></UserControls:SelectedBoxColorConverter>
                 <UserControls:PartyIndexConverter x:Key="PartyIndexConverter"></UserControls:PartyIndexConverter>
             </StackPanel.Resources>
-            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[0].Species, Mode=TwoWay}" />
-            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[1].Species, Mode=TwoWay}" />
-            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[2].Species, Mode=TwoWay}" />
-            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[3].Species, Mode=TwoWay}" />
-            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[4].Species, Mode=TwoWay}" />
-            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[5].Species, Mode=TwoWay}" />
+            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[0].Species, Mode=TwoWay}" IsEnabled="{Binding SelectedTrainer.Party[0], Converter={StaticResource PartyIndexConverter}}"/>
+            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[1].Species, Mode=TwoWay}" IsEnabled="{Binding SelectedTrainer.Party[1], Converter={StaticResource PartyIndexConverter}}"/>
+            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[2].Species, Mode=TwoWay}" IsEnabled="{Binding SelectedTrainer.Party[2], Converter={StaticResource PartyIndexConverter}}"/>
+            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[3].Species, Mode=TwoWay}" IsEnabled="{Binding SelectedTrainer.Party[3], Converter={StaticResource PartyIndexConverter}}"/>
+            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[4].Species, Mode=TwoWay}" IsEnabled="{Binding SelectedTrainer.Party[4], Converter={StaticResource PartyIndexConverter}}"/>
+            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[5].Species, Mode=TwoWay}" IsEnabled="{Binding SelectedTrainer.Party[5], Converter={StaticResource PartyIndexConverter}}"/>
         </StackPanel>
 
     </Grid>
