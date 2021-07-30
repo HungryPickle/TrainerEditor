@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -11,40 +12,56 @@ namespace Trainer_Editor {
         public Mon() { }
         public Mon(string species) {
             Species = species;
+            Iv = "0";
+            Lvl = "2";
         }
         private string species;
         private string iv;
+        private string lvl;
+        private string heldItem;
+        private List<string> moves = new List<string> { "", "", "", "" };
+
+        public string Species {
+            get { return species; }
+            set {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentNullException($"Mon.Species null, old value: {species}");
+                species = value;
+                OnPropertyChanged("Species");
+            }
+        }
 
         public string Iv {
             get { return iv; }
             set {
                 string match = RegexInput.Digits.Match(value).Value;
-                match = match != "" ? match : "0";
-                iv = int.Parse(match) < 255 ? match : "255";
+                //match = string.IsNullOrWhiteSpace(match) ? "0" : match;
+                //iv = int.Parse(match) < 255 ? match : "255";
+                iv = match;
+                OnPropertyChanged("Iv");
             }
         }
-        public string Lvl { get; set; }
-        public string Species {
-            get { return species; }
+        public string Lvl {
+            get { return lvl; }
             set {
-                //if (value.Length < 2) { return; }
-
-                //if (Data.Instance.CulledSpeciesList.Contains(value)) {
-                //if (value != null) {
-                if (string.IsNullOrWhiteSpace(value)) { throw new ArgumentNullException("Mon.Species");}
-                    species = value;
-                    OnPropertyChanged("Species");
-                    //Debug.WriteLine(value.ToString());
-                //}
-                //}
-                //else {
-                //    Data.Instance.CulledSpeciesList = new ObservableCollection<string>(Constants.Species.Where(s => s.Contains(value, StringComparison.OrdinalIgnoreCase)).OrderBy(s => s));
-                //}
-                
+                lvl = RegexInput.Digits.Match(value).Value;
+                OnPropertyChanged("Lvl");
             }
         }
-        public string HeldItem { get; set; }
-        public ObservableCollection<string> Moves { get; set; }
+        public string HeldItem {
+            get => heldItem;
+            set {
+                heldItem = value;
+                OnPropertyChanged("HeldItem");
+            }
+        }
+        public List<string> Moves {
+            get => moves;
+            set {
+                moves = value;
+                OnPropertyChanged("Moves");
+            }
+        }
 
         public string SpeciesMember {
             get => string.IsNullOrEmpty(Species) ? "" : $"\n\t.species = {Species},";
@@ -56,27 +73,27 @@ namespace Trainer_Editor {
             get => string.IsNullOrEmpty(Iv) ? "" : $"\n\t.iv = {Iv},";
         }
         public string HeldItemMember {
-            get => string.IsNullOrEmpty(HeldItem) ? "" : $"\n\t.heldItem = {HeldItem}";
+            get => string.IsNullOrEmpty(HeldItem) ? "" : $"\n\t.heldItem = {HeldItem},";
         }
         public string MovesMember {
             get {
                 string movesText = "";
-                if (Moves == null)
+                if (Moves.All(m => string.IsNullOrWhiteSpace(m)))
                     return movesText;
 
-                for (int i = 0; i < Moves.Count; i++) {
-                    movesText += Moves[i];
-                    if (i < Moves.Count - 1)
+                for (int i = 0; i < Moves.Count && !string.IsNullOrWhiteSpace(Moves[i]); i++) {
+                    if (i > 0)
                         movesText += ", ";
+                    movesText += Moves[i];
                 }
 
-                return $"\n\t.moves = {{{movesText}}}";
+                return $"\n\t.moves = {{{movesText}}},";
             }
         }
 
-        public static ObservableCollection<string> MatchMoves(string monStruct) {
+        public static List<string> MatchMoves(string monStruct) {
 
-            return new ObservableCollection<string>(RegexMon.Moves.Matches(monStruct).Select(m => m.Value));
+            return new List<string>(RegexMon.Moves.Matches(monStruct).Select(m => m.Value));
 
         }
     }

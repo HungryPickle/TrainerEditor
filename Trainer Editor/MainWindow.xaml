@@ -7,8 +7,40 @@
         xmlns:UserControls="clr-namespace:Trainer_Editor.UserControls"
         mc:Ignorable="d"
         Title="MainWindow" Height="900" Width="1600"
-        ResizeMode="CanResizeWithGrip">
-    <Grid>
+        ResizeMode="CanResizeWithGrip"
+        >
+        
+    <Grid Background="#FF121212" x:Name="Grid1" >
+        <Grid.Resources>
+            <local:InputEnabledConverter x:Key="InputEnabledConverter"/>
+            <local:EnabledBackgroundConverter x:Key="EnabledBackgroundConverter"/>
+            <local:ComparisonConverter x:Key="ComparisonConverter"/>
+            <Style TargetType="Label">
+                <Setter Property="Foreground" Value="WhiteSmoke"/>
+            </Style>
+            <Style TargetType="RadioButton">
+                <Setter Property="Foreground" Value="WhiteSmoke"/>
+            </Style>
+            <Style TargetType="ListBox">
+                <Setter Property="Foreground" Value="WhiteSmoke"/>
+                <Setter Property="Background" Value="Black"/>
+            </Style>
+            <Style TargetType="TextBox">
+                <Setter Property="Opacity" 
+                    Value="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource EnabledBackgroundConverter}}"/>
+            </Style>
+            <Style TargetType="UserControls:AutoCompleteTextBox">
+                <Setter Property="IsEnabled">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource InputEnabledConverter}">
+                            <Binding Path="SelectedTrainer.Party.Type"/>
+                            <Binding RelativeSource="{RelativeSource Self}" Path="Tag"/>
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
+        
         <DockPanel VerticalAlignment="Top" Height="20">
             <Menu>
                 <MenuItem Header="_File">
@@ -16,32 +48,43 @@
                 </MenuItem>
             </Menu>
         </DockPanel>
-        <Grid HorizontalAlignment="Left" Margin="0,20,0,0" Width="260">
-            <TextBox Text="" TextWrapping="Wrap" Height="40" VerticalAlignment="Top" TextChanged="TextBox_TextChanged"/>
-            <ListBox x:Name="ListBox1" ItemsSource="{Binding Trainers}" SelectedItem="{Binding SelectedTrainer, Mode=OneWayToSource}" Margin="0,40,0,0" DisplayMemberPath="IndexName" SelectionChanged="ListBox_SelectionChanged" Background="{x:Null}" />
-        </Grid>
+
+        <UserControls:TrainerSearchUserControl HorizontalAlignment="Left" Width="260" Margin="0,20,0,0"/>
+
         <StackPanel VerticalAlignment="Top" Orientation="Horizontal" Margin="260,20,0,0" Height="20">
-            <StackPanel.Resources>
-                <local:ComparisonConverter x:Key="ComparisonConverter"></local:ComparisonConverter>
-            </StackPanel.Resources>
-            <RadioButton Content="NoItemDefaultMoves   " HorizontalAlignment="Center" VerticalAlignment="Top" IsChecked="{Binding Path=SelectedTrainer.Party.Type, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static local:TYPE.TrainerMonNoItemDefaultMoves}}"></RadioButton>
-            <RadioButton Content="ItemDefaultMoves   " HorizontalAlignment="Center" VerticalAlignment="Top" IsChecked="{Binding Path=SelectedTrainer.Party.Type, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static local:TYPE.TrainerMonItemDefaultMoves}}"></RadioButton>
-            <RadioButton Content="NoItemCustomMoves   " HorizontalAlignment="Center" VerticalAlignment="Top" IsChecked="{Binding Path=SelectedTrainer.Party.Type, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static local:TYPE.TrainerMonNoItemCustomMoves}}"></RadioButton>
-            <RadioButton Content="ItemCustomMoves   " HorizontalAlignment="Center" VerticalAlignment="Top" IsChecked="{Binding Path=SelectedTrainer.Party.Type, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static local:TYPE.TrainerMonItemCustomMoves}}"></RadioButton>
-        </StackPanel>
-        <UserControls:PartyUserControl HorizontalAlignment="Left" Margin="260,0,0,0"></UserControls:PartyUserControl>
-        <StackPanel Width="150" Height="100" HorizontalAlignment="Left" Margin="430,0,0,0">
-            <StackPanel.Resources>
-                <local:MovesEnabledCoverter x:Key="MovesEnabledConverter"></local:MovesEnabledCoverter>
-            </StackPanel.Resources>
-            <ComboBox Name="ComboBox_Move0" Tag="0" Height="25" Text="{Binding SelectedMon.Moves[0], Mode=TwoWay}" IsEditable="True" IsEnabled="{Binding Path=SelectedTrainer.Party.Type, Converter={StaticResource MovesEnabledConverter}, Mode=OneWay}"></ComboBox>
-            <ComboBox Name="ComboBox_Move1" Tag="1" Height="25" Text="{Binding SelectedMon.Moves[1], Mode=TwoWay}" IsEditable="True" IsEnabled="{Binding Path=SelectedTrainer.Party.Type, Converter={StaticResource MovesEnabledConverter}, Mode=OneWay}"></ComboBox>
-            <ComboBox Name="ComboBox_Move2" Tag="2" Height="25" Text="{Binding SelectedMon.Moves[2], Mode=TwoWay}" IsEditable="True" IsEnabled="{Binding Path=SelectedTrainer.Party.Type, Converter={StaticResource MovesEnabledConverter}, Mode=OneWay}"></ComboBox>
-            <ComboBox Name="ComboBox_Move3" Tag="3" Height="25" Text="{Binding SelectedMon.Moves[3], Mode=TwoWay}" IsEditable="True" IsEnabled="{Binding Path=SelectedTrainer.Party.Type, Converter={StaticResource MovesEnabledConverter}, Mode=OneWay}"></ComboBox>
+            <RadioButton Content="NoItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.Party.Type, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static local:PartyType.TrainerMonNoItemDefaultMoves}}"></RadioButton>
+            <RadioButton Content="ItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.Party.Type, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static local:PartyType.TrainerMonItemDefaultMoves}}"></RadioButton>
+            <RadioButton Content="NoItemCustomMoves   " IsChecked="{Binding Path=SelectedTrainer.Party.Type, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static local:PartyType.TrainerMonNoItemCustomMoves}}"></RadioButton>
+            <RadioButton Content="ItemCustomMoves   " IsChecked="{Binding Path=SelectedTrainer.Party.Type, Converter={StaticResource ComparisonConverter}, ConverterParameter={x:Static local:PartyType.TrainerMonItemCustomMoves}}"></RadioButton>
         </StackPanel>
 
-        <UserControls:LabeledTextBox LabelText="IV (0-255)" TextBoxText="{Binding SelectedMon.Iv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="350,200,0,0" Height="100" Width="100"></UserControls:LabeledTextBox>
-        <Button Content="Button" HorizontalAlignment="Center" Height="91" Width="190" Click="Button_Click"/>
+        <UserControls:PartyUserControl HorizontalAlignment="Left" Margin="260,0,0,0" Height="156" Width="170" ></UserControls:PartyUserControl>
+
+        <UserControls:MovesUserControl Width="150" Margin="440,110,0,0" Tag="{x:Static local:Input.Moves}"/>
+
+        <UserControls:AutoCompleteTextBox LabelContent="Held Item" Width="120" Margin="0,275,600,0" 
+            SelectedItem="{Binding SelectedMon.HeldItem, Mode=TwoWay}" 
+            ListSource="{Binding ItemsList, Mode=OneWay}" 
+            Tag="{x:Static local:Input.HeldItem}" />
+
+
+        <UserControls:LabeledTextBox LabelText="IV (0-255)" Height="60" Width="100" Margin="0,360,900,0" 
+            TextBoxText="{Binding SelectedMon.Iv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="LabeledTextBox_PreviewKeyDown"/>
+
+        <UserControls:LabeledTextBox LabelText="Lvl (2-100)" Height="60" Width="100" Margin="0,240,900,0"
+            TextBoxText="{Binding SelectedMon.Lvl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <StackPanel HorizontalAlignment="Center" Height="280" Width="200">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Height" Value="70"/>
+                    <Setter Property="Width" Value="200"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Content="Read Files"  Click="Button_Click"/>
+            <Button Content="Write Files" Click="Button_Click_1"/>
+            <Button Content="ReadWrite Constants" Click="Button_Click_2"/>
+        </StackPanel>
 
     </Grid>
 </Window>

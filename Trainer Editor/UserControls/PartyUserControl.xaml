@@ -8,30 +8,56 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Grid.Resources>
-            <Style TargetType="ComboBox">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition Width="1*" MinWidth="18" MaxWidth="18" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
-                <Setter Property="Height" Value="25"/>
-                <Setter Property="IsEditable" Value="True"/>
-                <Setter Property="IsTextSearchEnabled" Value="False"/>
-                <Setter Property="ItemsSource" Value="{Binding CulledSpeciesList}" />
-                <EventSetter Event="PreviewTextInput" Handler="ComboBox_Species_PreviewTextInput"/>
-                <EventSetter Event="GotFocus" Handler="ComboBox_Species_GotFocus"/>
+        <Grid.Resources>
+            <UserControls:HighlightSelectedMonConverter x:Key="HighlightSelectedMonConverter"/>
+            <UserControls:DoesSlotHaveMonConverter x:Key="DoesSlotHaveMonConverter"/>
+
+            <Style TargetType="UserControls:AutoCompleteTextBox">
+                <EventSetter Event="GotFocus" Handler="AutoCompleteTextBox_GotFocus"/>
+                <Setter Property="LabelVisibility" Value="Collapsed"/>
+                <Setter Property="TextBoxBackground">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource HighlightSelectedMonConverter}">
+                            <Binding Path="SelectedMon"/>
+                            <Binding RelativeSource="{RelativeSource Self}" Path="Tag"/>
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="IsEnabled" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag, Converter={StaticResource DoesSlotHaveMonConverter}}"/>
+                <Setter Property="SelectedItem" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag.Species, Mode=TwoWay}"/>
+                <Setter Property="ListSource" Value="{Binding SpeciesList, Mode=OneWay}"/>
             </Style>
-            
         </Grid.Resources>
-        <StackPanel Width="160" Height="175" Background="DarkGreen">
-            <StackPanel.Resources>
-                <UserControls:SelectedBoxColorConverter x:Key="SelectedBoxColorConverter"></UserControls:SelectedBoxColorConverter>
-                <UserControls:PartyIndexConverter x:Key="PartyIndexConverter"></UserControls:PartyIndexConverter>
-            </StackPanel.Resources>
-            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[0].Species, Mode=TwoWay}" IsEnabled="{Binding SelectedTrainer.Party[0], Converter={StaticResource PartyIndexConverter}}"/>
-            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[1].Species, Mode=TwoWay}" IsEnabled="{Binding SelectedTrainer.Party[1], Converter={StaticResource PartyIndexConverter}}"/>
-            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[2].Species, Mode=TwoWay}" IsEnabled="{Binding SelectedTrainer.Party[2], Converter={StaticResource PartyIndexConverter}}"/>
-            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[3].Species, Mode=TwoWay}" IsEnabled="{Binding SelectedTrainer.Party[3], Converter={StaticResource PartyIndexConverter}}"/>
-            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[4].Species, Mode=TwoWay}" IsEnabled="{Binding SelectedTrainer.Party[4], Converter={StaticResource PartyIndexConverter}}"/>
-            <UserControls:AutoCompleteTextBox ListSource="{Binding CulledSpeciesList, Mode=OneWay}" SelectedItem="{Binding SelectedTrainer.Party[5].Species, Mode=TwoWay}" IsEnabled="{Binding SelectedTrainer.Party[5], Converter={StaticResource PartyIndexConverter}}"/>
+        
+        <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="6">
+            <UserControls:AutoCompleteTextBox Tag="{Binding SelectedTrainer.Party[0]}"/>
+            <UserControls:AutoCompleteTextBox Tag="{Binding SelectedTrainer.Party[1]}"/>
+            <UserControls:AutoCompleteTextBox Tag="{Binding SelectedTrainer.Party[2]}"/>
+            <UserControls:AutoCompleteTextBox Tag="{Binding SelectedTrainer.Party[3]}"/>
+            <UserControls:AutoCompleteTextBox Tag="{Binding SelectedTrainer.Party[4]}"/>
+            <UserControls:AutoCompleteTextBox Tag="{Binding SelectedTrainer.Party[5]}"/>
         </StackPanel>
+
+        <Button x:Name="Add" Content="Add" Grid.Column="0" Grid.Row="7" Click="Add_Click"/>
+        <Button x:Name="Delete" Content="Delete" Grid.Column="1" Grid.Row="7" Click="Delete_Click"/>
+
+        <Button x:Name="MoveUp" Content="🡑" FontSize="24" Grid.Column="2" Grid.RowSpan="3" Click="MoveUp_Click"></Button>
+        <Button x:Name="MoveDown" Content="🡓" FontSize="24" Grid.Column="2" Grid.Row="3" Grid.RowSpan="3" Click="MoveDown_Click"></Button>
 
     </Grid>
 </UserControl>

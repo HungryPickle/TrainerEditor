@@ -6,6 +6,8 @@ using System.Linq;
 
 namespace Trainer_Editor {
     public class Trainer {
+        private Party party;
+
         public string IndexName { get; set; }
         public List<string> PartyFlags { get; set; }
         public string TrainerClass { get; set; }
@@ -16,7 +18,11 @@ namespace Trainer_Editor {
         public string DoubleBattle { get; set; }
         public List<string> AiFlags { get; set; }
         public string PartySize { get; set; }
-        public Party Party { get; set; }
+        public Party Party {
+            get => party;
+            set { party = value; } 
+        }
+
 
         public Trainer(string nameLine, string trainerStruct) {
 
@@ -112,7 +118,7 @@ namespace Trainer_Editor {
         }
         public string PartySizeMember {
             get => string.IsNullOrEmpty(PartySize) ?
-                "\n\t\t.partySize = 0," : 
+                "\n\t\t.partySize = 0," :
                 $"\n\t\t.partySize = ARRAY_COUNT({PartySize}),";
         }
         public string PartyMember {
@@ -137,7 +143,7 @@ namespace Trainer_Editor {
                 PartySizeMember +
                 PartyMember +
                 "\n\t},";
-            
+
             return partyStruct;
         }
     }

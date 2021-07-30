@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -8,36 +9,49 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Trainer_Editor {
-    public enum TYPE {
+    public enum PartyType {
         TrainerMonNoItemDefaultMoves,
         TrainerMonItemDefaultMoves,
         TrainerMonNoItemCustomMoves,
         TrainerMonItemCustomMoves
     };
 
-    public class Party {
+    public class Party : ObservableObject{
 
-        private static readonly Dictionary<string, TYPE> TypeDict = new Dictionary<string, TYPE>{
-            { TYPE.TrainerMonNoItemDefaultMoves.ToString(), TYPE.TrainerMonNoItemDefaultMoves },
-            { TYPE.TrainerMonItemDefaultMoves.ToString(), TYPE.TrainerMonItemDefaultMoves },
-            { TYPE.TrainerMonNoItemCustomMoves.ToString(), TYPE.TrainerMonNoItemCustomMoves },
-            { TYPE.TrainerMonItemCustomMoves.ToString(), TYPE.TrainerMonItemCustomMoves }
+        private static readonly Dictionary<string, PartyType> TypeDict = new Dictionary<string, PartyType>{
+            { PartyType.TrainerMonNoItemDefaultMoves.ToString(), PartyType.TrainerMonNoItemDefaultMoves },
+            { PartyType.TrainerMonItemDefaultMoves.ToString(), PartyType.TrainerMonItemDefaultMoves },
+            { PartyType.TrainerMonNoItemCustomMoves.ToString(), PartyType.TrainerMonNoItemCustomMoves },
+            { PartyType.TrainerMonItemCustomMoves.ToString(), PartyType.TrainerMonItemCustomMoves }
         };
 
-        public TYPE Type { get; set; }
+        private PartyType type;
+        public PartyType Type { 
+            get => type;
+            set {
+                type = value;
+                OnPropertyChanged("Type");
+            }
+        }
         public string Name { get; set; }
 
         private ObservableCollection<Mon> monList;
+
         public ObservableCollection<Mon> MonList {
             get => monList;
             set {
                 monList = value;
             }
         }
+        
+        public void PartyChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged("Item[]");
+        }
+
         public Mon this[int index] {
             get {
                 if (index < monList.Count) {
-                    return monList[index]; 
+                    return monList[index];
                 }
                 else {
                     return null;
@@ -45,16 +59,17 @@ namespace Trainer_Editor {
             }
             set {
                 if (index < monList.Count) {
-                    monList[index] = value; 
+                    monList[index] = value;
                 }
             }
         }
-        
 
-        public Party(TYPE type, string name) {
+
+        public Party(PartyType type, string name) {
             Type = type;
             Name = name;
             MonList = new ObservableCollection<Mon>();
+            MonList.CollectionChanged += new NotifyCollectionChangedEventHandler(PartyChanged);
         }
 
         public void AddMonFromStruct(string monStruct) {
@@ -65,15 +80,15 @@ namespace Trainer_Editor {
             mon.Species = RegexMon.Species.Match(monStruct).Value;
 
             switch (Type) {
-                case TYPE.TrainerMonNoItemDefaultMoves:
+                case PartyType.TrainerMonNoItemDefaultMoves:
                     break;
-                case TYPE.TrainerMonItemDefaultMoves:
+                case PartyType.TrainerMonItemDefaultMoves:
                     mon.HeldItem = RegexMon.HeldItem.Match(monStruct).Value;
                     break;
-                case TYPE.TrainerMonNoItemCustomMoves:
+                case PartyType.TrainerMonNoItemCustomMoves:
                     mon.Moves = Mon.MatchMoves(monStruct);
                     break;
-                case TYPE.TrainerMonItemCustomMoves:
+                case PartyType.TrainerMonItemCustomMoves:
                     mon.HeldItem = RegexMon.HeldItem.Match(monStruct).Value;
                     mon.Moves = Mon.MatchMoves(monStruct);
                     break;
@@ -90,17 +105,16 @@ namespace Trainer_Editor {
             mon.LvlMember +
             mon.SpeciesMember;
             switch (Type) {
-                case TYPE.TrainerMonNoItemDefaultMoves:
+                case PartyType.TrainerMonNoItemDefaultMoves:
                     break;
-                case TYPE.TrainerMonItemDefaultMoves:
+                case PartyType.TrainerMonItemDefaultMoves:
                     monStruct += mon.HeldItemMember;
                     break;
-                case TYPE.TrainerMonNoItemCustomMoves:
+                case PartyType.TrainerMonNoItemCustomMoves:
                     monStruct += mon.MovesMember;
                     break;
-                case TYPE.TrainerMonItemCustomMoves:
-                    monStruct += mon.HeldItemMember + ',' +
-                    mon.MovesMember;
+                case PartyType.TrainerMonItemCustomMoves:
+                    monStruct += mon.HeldItemMember + mon.MovesMember;
                     break;
                 default:
                     break;
@@ -124,7 +138,7 @@ namespace Trainer_Editor {
         public static bool IfContainsPartyAddParty(string line, ref Dictionary<string, Party> parties) {
 
             string name = RegexTrainer.PartyName.Match(line).Value;
-            TYPE type;
+            PartyType type;
 
             if (TypeDict.TryGetValue(RegexTrainer.PartyType.Match(line).Value, out type)) {
                 parties.Add(name, new Party(type, name));

@@ -35,8 +35,21 @@ namespace Trainer_Editor {
 
     }
 
+    public class RegexConfig {
+        public static Regex Species = new Regex(@"(?<=---Species---(\r\n|\r|\n))[^\r\n]+");
+        public static Regex Moves = new Regex(@"(?<=---Moves---(\r\n|\r|\n))[^\r\n]+");
+        public static Regex Items = new Regex(@"(?<=---Items---(\r\n|\r|\n))[^\r\n]+");
+
+        public static Dictionary<Constant, Regex> Constants = new Dictionary<Constant, Regex> {
+            { Constant.Species, Species },
+            { Constant.Moves, Moves },
+            { Constant.Items, Items }
+        };
+    }
+
     public class RegexInput {
-        public static Regex Digits = new Regex(@"[1-9][0-9]*");
+        //public static Regex Digits = new Regex(@"[1-9][0-9]*");
+        public static Regex Digits = new Regex(@"[0-9]+");
     }
 
 }
