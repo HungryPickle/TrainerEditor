@@ -44,12 +44,12 @@ namespace Trainer_Editor.UserControls {
         public static readonly DependencyProperty FilteredSourceProperty =
             DependencyProperty.Register("FilteredSource", typeof(IEnumerable<string>), typeof(AutoCompleteTextBox), new PropertyMetadata(null));
 
-        public string SelectedItem {
-            get { return (string)GetValue(SelectedItemProperty); }
-            set { SetValue(SelectedItemProperty, value); }
+        public string ListItem {
+            get { return (string)GetValue(ListItemProperty); }
+            set { SetValue(ListItemProperty, value); }
         }
-        public static readonly DependencyProperty SelectedItemProperty =
-            DependencyProperty.Register("SelectedItem", typeof(string), typeof(AutoCompleteTextBox), new PropertyMetadata(string.Empty));
+        public static readonly DependencyProperty ListItemProperty =
+            DependencyProperty.Register("ListItem", typeof(string), typeof(AutoCompleteTextBox), new PropertyMetadata(string.Empty));
 
         public double TextBoxFontSize {
             get { return (double)GetValue(TextBoxFontSizeProperty); }
@@ -98,12 +98,14 @@ namespace Trainer_Editor.UserControls {
             if (FilteredSource == null || ListSource == null)
                 return;
 
-            if (FilteredSource.Contains(textbox1.Text) || ListSource.Contains(textbox1.Text)) {
-                textbox1.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            if (FilteredSource.Contains(textbox.Text) || ListSource.Contains(textbox.Text)) {
+                textbox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
                 isFirstKey = true;
             }
             else {
-                FilteredSource = new ObservableCollection<string>(ListSource.Where(t => t.Contains(textbox1.Text, StringComparison.OrdinalIgnoreCase)).OrderBy(t => t));
+                FilteredSource = new ObservableCollection<string>(ListSource
+                    .Where(t => t.Contains(textbox.Text, StringComparison.OrdinalIgnoreCase))
+                    .OrderBy(t => t));
             }
         }
 
@@ -114,44 +116,62 @@ namespace Trainer_Editor.UserControls {
         }
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
-            popup1.IsOpen = true;
-
-            if (e.Key == Key.Enter) {
-                if (FilteredSource?.FirstOrDefault() == null) {
-                    textbox1.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
-                }
-                else {
-                    textbox1.Text = FilteredSource.FirstOrDefault();
-                }
-                popup1.IsOpen = false;
-                e.Handled = true;
+            switch (e.Key) {
+                case Key.Delete:
+                    if (ListSource.Contains(string.Empty)) {
+                        textbox.Clear();
+                    }
+                    e.Handled = true;
+                    break;
+                case Key.Escape:
+                    popup.IsOpen = false;
+                    e.Handled = true;
+                    break;
+                case Key.Enter:
+                    if (FilteredSource?.FirstOrDefault() != null) {
+                        textbox.Text = FilteredSource.FirstOrDefault();
+                    }
+                    popup.IsOpen = false;
+                    e.Handled = true;
+                    break;
+                case Key.Down:
+                    if (popup.IsOpen) {
+                        listbox1.Focus();
+                    }
+                    break;
+                case Key.Up:
+                case Key.Left:
+                case Key.Right:
+                case Key.LeftShift:
+                case Key.RightShift:
+                case Key.LeftCtrl:
+                case Key.RightCtrl:
+                    break;
+                default:
+                    if (isFirstKey) {
+                        textbox.Clear();
+                        isFirstKey = false;
+                    }
+                    popup.IsOpen = true;
+                    break;
             }
-            else if (isFirstKey) {
-                textbox1.Clear();
-                isFirstKey = false;
-            }
-
-            if (e.Key == Key.Down) {
-                listbox1.Focus();
-            }
-
-
         }
 
         private void PopUp_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            popup1.IsOpen = false;
-            textbox1.Focus();
+            popup.IsOpen = false;
+            textbox.Focus();
         }
 
         private void PopUp_KeyDown(object sender, KeyEventArgs e) {
-            if (e.Key == Key.Enter) {
-                popup1.IsOpen = false;
-                textbox1.Focus();
+            if (e.Key == Key.Enter || e.Key == Key.Escape) {
+                popup.IsOpen = false;
+                textbox.Focus();
             }
         }
 
         private void PopUp_Closed(object sender, EventArgs e) {
-            textbox1.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
+            textbox.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
         }
     }
+
 }

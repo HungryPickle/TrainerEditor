@@ -1,0 +1,83 @@
+﻿<Page x:Class="Trainer_Editor.Pages.PartyPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:global="clr-namespace:Trainer_Editor"
+      xmlns:local="clr-namespace:Trainer_Editor.Pages"
+      xmlns:UserControls="clr-namespace:Trainer_Editor.UserControls"
+      mc:Ignorable="d" 
+      d:DesignHeight="630" d:DesignWidth="1120"
+      Title="PartyPage">
+
+    <Grid >
+        <Grid.Resources>
+
+            <global:PartyTypeRadioButtonConverter x:Key="PartyTypeRadioButtonConverter"/>
+
+            <Style TargetType="UserControls:AutoCompleteTextBox" BasedOn="{StaticResource PartyType}"/>
+            <BitmapImage x:Key="GhostBitmap" UriSource="/Graphics/ghost.png"/>
+            <BitmapImage x:Key="RocketBitmap" UriSource="/Graphics/rocket.png"/>
+
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
+            <Image x:Name="PokemonSprite"
+                 Height="64" Width="64"
+                UseLayoutRounding="True"
+                Source="{Binding SelectedMon.Species, Converter={StaticResource PokemonSpriteConverter}, 
+                FallbackValue={StaticResource GhostBitmap}}"/>
+            
+            <Image x:Name="TrainerSprite" Margin="10,0,0,0" 
+                Height="64" Width="64"
+                UseLayoutRounding="True"
+                Source="{Binding SelectedTrainer.TrainerPic, Converter={StaticResource TrainerSpriteConverter},
+                FallbackValue={StaticResource RocketBitmap}}"/>
+            
+        </StackPanel>
+        
+        <StackPanel Grid.ColumnSpan="4" Orientation="Horizontal" Margin="10,10,10,10" >
+            <RadioButton Content="NoItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonNoItemDefaultMoves}}"></RadioButton>
+            <RadioButton Content="ItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonItemDefaultMoves}}"></RadioButton>
+            <RadioButton Content="NoItemCustomMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonNoItemCustomMoves}}"></RadioButton>
+            <RadioButton Content="ItemCustomMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonItemCustomMoves}}"></RadioButton>
+        </StackPanel>
+
+        <UserControls:PartyUserControl x:Name="party" Grid.Column="0" Grid.Row="2" 
+            Width="170" />
+
+        <UserControls:MovesUserControl x:Name="moves" Grid.Column="1" Grid.Row="2"
+            Width="150" VerticalAlignment="Center" />
+
+
+        <StackPanel Grid.Row="3"  >
+            <UserControls:LabeledTextBox x:Name="lvlBox" LabelText="Lvl (1-100)"  Width="100" 
+                TextBoxText="{Binding SelectedMon.Lvl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                />
+
+            <UserControls:LabeledTextBox x:Name="ivBox" LabelText="IV (0-255)"  Width="100" 
+                TextBoxText="{Binding SelectedMon.Iv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                />
+
+            <UserControls:AutoCompleteTextBox x:Name="heldItemBox" LabelContent="Held Item" Width="120" 
+                ListItem="{Binding SelectedMon.HeldItem, Mode=TwoWay}" 
+                ListSource="{Binding ItemsList, Mode=OneWay}" 
+                Tag="{x:Static global:Input.HeldItem}"/>
+        </StackPanel>
+
+
+    </Grid>
+</Page>

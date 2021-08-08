@@ -16,17 +16,23 @@ namespace Trainer_Editor {
         TrainerMonItemCustomMoves
     };
 
-    public class Party : ObservableObject{
+    public class Party : ObservableObject {
 
-        private static readonly Dictionary<string, PartyType> TypeDict = new Dictionary<string, PartyType>{
+        private static readonly Dictionary<string, PartyType> TypeStringToType = new Dictionary<string, PartyType>{
             { PartyType.TrainerMonNoItemDefaultMoves.ToString(), PartyType.TrainerMonNoItemDefaultMoves },
             { PartyType.TrainerMonItemDefaultMoves.ToString(), PartyType.TrainerMonItemDefaultMoves },
             { PartyType.TrainerMonNoItemCustomMoves.ToString(), PartyType.TrainerMonNoItemCustomMoves },
             { PartyType.TrainerMonItemCustomMoves.ToString(), PartyType.TrainerMonItemCustomMoves }
         };
+        public static readonly Dictionary<PartyType, List<string>> TypeToPartyFlags = new Dictionary<PartyType, List<string>> {
+            { PartyType.TrainerMonNoItemDefaultMoves, new List<string>{ "0" } },
+            { PartyType.TrainerMonItemDefaultMoves, new List<string>{ "F_TRAINER_PARTY_HELD_ITEM" } },
+            { PartyType.TrainerMonNoItemCustomMoves, new List<string>{ "F_TRAINER_PARTY_CUSTOM_MOVESET" } },
+            { PartyType.TrainerMonItemCustomMoves, new List<string>{ "F_TRAINER_PARTY_HELD_ITEM", "F_TRAINER_PARTY_CUSTOM_MOVESET" } }
+        };
 
         private PartyType type;
-        public PartyType Type { 
+        public PartyType Type {
             get => type;
             set {
                 type = value;
@@ -39,32 +45,33 @@ namespace Trainer_Editor {
 
         public ObservableCollection<Mon> MonList {
             get => monList;
-            set {
-                monList = value;
+            set { monList = value;
+                OnPropertyChanged("MonList");
             }
         }
-        
+
         public void PartyChanged(object sender, NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged("Item[]");
         }
 
         public Mon this[int index] {
             get {
-                if (index < monList.Count) {
+                if (index < monList.Count)
                     return monList[index];
-                }
-                else {
+                else
                     return null;
-                }
             }
             set {
-                if (index < monList.Count) {
+                if (index < monList.Count)
                     monList[index] = value;
-                }
             }
         }
 
-
+        public static Party CreateDummy() {
+            Party party = new Party(PartyType.TrainerMonNoItemDefaultMoves, "DUMMY_PARTY");
+            party.MonList.Add(new Mon("SPECIES_NONE"));
+            return party;
+        }
         public Party(PartyType type, string name) {
             Type = type;
             Name = name;
@@ -135,12 +142,12 @@ namespace Trainer_Editor {
             return partyStruct;
         }
 
-        public static bool IfContainsPartyAddParty(string line, ref Dictionary<string, Party> parties) {
+        public static bool IfContainsPartyAddParty(string line, Dictionary<string, Party> parties) {
 
             string name = RegexTrainer.PartyName.Match(line).Value;
             PartyType type;
 
-            if (TypeDict.TryGetValue(RegexTrainer.PartyType.Match(line).Value, out type)) {
+            if (TypeStringToType.TryGetValue(RegexTrainer.PartyType.Match(line).Value, out type)) {
                 parties.Add(name, new Party(type, name));
                 return true;
             }

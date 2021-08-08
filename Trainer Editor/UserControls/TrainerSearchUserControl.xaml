@@ -7,14 +7,18 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBox x:Name="TextBox1"  Height="20" VerticalAlignment="Top" 
+        <Grid.Resources>
+
+        </Grid.Resources>
+        <TextBox x:Name="textbox"  Height="20" VerticalAlignment="Top" 
             TextChanged="TextBox_TextChanged" 
             PreviewKeyDown="TextBox_PreviewKeyDown"/>
-        <ListBox x:Name="ListBox1" Margin="0,20,0,0"  
-            ItemsSource="{Binding FilteredTrainers}" 
-            SelectedItem="{Binding SelectedTrainer, Mode=OneWayToSource, UpdateSourceTrigger=Explicit}" 
+        <ListBox x:Name="listbox" Margin="0,20,0,0"  
+            ItemsSource="{Binding FilteredTrainers}"  
             DisplayMemberPath="IndexName"
-            SelectionChanged="ListBox_SelectionChanged"
-            PreviewKeyDown="ListBox1_PreviewKeyDown"/>
+            SelectionChanged="ListBox_SelectionChanged"/>
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom">
+
+        </StackPanel>
     </Grid>
 </UserControl>

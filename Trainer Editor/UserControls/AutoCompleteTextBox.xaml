@@ -15,20 +15,20 @@
                 Visibility="{Binding LabelVisibility}"
                 Content="{Binding LabelContent}" 
                 FontSize="{Binding LabelFontSize}"/>
-            <TextBox Name="textbox1"
-                Text="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=Explicit}" 
+            <TextBox Name="textbox"
+                Text="{Binding ListItem, Mode=TwoWay, UpdateSourceTrigger=Explicit}" 
                 FontSize="{Binding TextBoxFontSize}"
                 Background="{Binding TextBoxBackground}"
                 TextChanged="TextBox_TextChanged"  PreviewKeyDown="TextBox_PreviewKeyDown" 
                 Padding="2,2,2,2"/>
-            <Popup Name="popup1" 
+            <Popup Name="popup" 
                    HorizontalAlignment="Center" 
                    Height="200" 
                    StaysOpen="False" 
                    MouseLeftButtonUp="PopUp_MouseLeftButtonUp" KeyDown="PopUp_KeyDown" Closed="PopUp_Closed">
                 <ListBox Name="listbox1" 
                      ItemsSource="{Binding FilteredSource}" 
-                     SelectedItem="{Binding SelectedItem, Mode=OneWayToSource, UpdateSourceTrigger=Explicit}" 
+                     SelectedItem="{Binding ListItem, Mode=OneWayToSource, UpdateSourceTrigger=Explicit}" 
                      SelectionChanged="ListBox_SelectionChanged"/>
             </Popup>
     </StackPanel>

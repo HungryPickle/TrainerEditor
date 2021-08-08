@@ -4,10 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -15,12 +13,14 @@ using System.Windows.Shapes;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
 using Ookii.Dialogs.Wpf;
 using System.Globalization;
+using Trainer_Editor.Pages;
+using System.Windows.Controls;
+using Trainer_Editor.UserControls;
 
 namespace Trainer_Editor {
     /// <summary>
@@ -30,23 +30,22 @@ namespace Trainer_Editor {
     public enum Input {
         Moves, HeldItem
     };
-    public enum Constant {
-        Species, Moves, Items
-    };
+
 
     public partial class MainWindow : Window {
 
+
         public MainWindow() {
             InitializeComponent();
-            
-            ////for(int i = 0; i < parties.Count(); i ++) {
-            ////    trainers[i+1].party = parties.Find(p => p.TrainerPartyName.Equals(trainers[i+1].partySize));
-            ////}
-            
+
+            Data.Instance.SelectedTrainer = Trainer.CreateDummy();
+            Data.Instance.SelectedMon = Data.Instance.SelectedTrainer.Party[0];
+
             Data.Instance.SpeciesList = FileManager.ReadConstants(Constant.Species);
             Data.Instance.ItemsList = FileManager.ReadConstants(Constant.Items);
             Data.Instance.MovesList = FileManager.ReadConstants(Constant.Moves);
 
+            ControlNav.LoadControlNavs();
 
             DataContext = Data.Instance;
         }
@@ -58,7 +57,7 @@ namespace Trainer_Editor {
             Dictionary<string, Party> parties = await Task.Run(() => FileManager.ReadParties());
             Debug.WriteLine("Parties Read.");
 
-            trainers = await Task.Run(() => Data.StitchLists(trainers, parties));
+            trainers = await Task.Run(() => FileManager.StitchLists(trainers, parties));
             Debug.WriteLine($"Stitch Complete.");
 
             await Task.Run(() => Data.Instance.Trainers = trainers);
@@ -101,7 +100,7 @@ namespace Trainer_Editor {
             Dictionary<string, Party> parties = await Task.Run(() => FileManager.ReadParties());
             Debug.WriteLine("Parties Read.");
 
-            trainers = await Task.Run(() => Data.StitchLists(trainers, parties));
+            trainers = await Task.Run(() => FileManager.StitchLists(trainers, parties));
             Debug.WriteLine($"Stitch Complete.");
 
             //await Task.Run(() => FileManager.WriteTrainers(trainers));
@@ -113,18 +112,10 @@ namespace Trainer_Editor {
             await Task.Run(() => Data.Instance.Trainers = trainers);
         }
 
-        private void LabeledTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
-            if (e.Key == Key.Up) {
-                var request = new TraversalRequest(FocusNavigationDirection.Up);
-                //Window.GetWindow(this).
-                
-                Grid1.MoveFocus(request);
-                
-                
-                e.Handled = true;
-            }
-        }
+
+
     }
+
     public class ObservableObject : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -132,129 +123,6 @@ namespace Trainer_Editor {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
-    public class Data : ObservableObject {
-
-        private Data() { }
-
-        private static Data instance = new Data();
-        public static Data Instance {
-            get { return instance; }
-        }
-
-        private List<Trainer> trainers = new List<Trainer>();
-        public List<Trainer> Trainers {
-            get { return trainers; }
-            set { trainers = value; OnPropertyChanged("Trainers"); FilteredTrainers = value; }
-        }
-
-        private List<Trainer> filteredTrainers = new List<Trainer>();
-        public List<Trainer> FilteredTrainers {
-            get { return filteredTrainers; }
-            set { filteredTrainers = value; OnPropertyChanged("FilteredTrainers"); }
-        }
 
 
-        private Trainer selectedTrainer;
-        public Trainer SelectedTrainer {
-            get { return selectedTrainer; }
-            set { selectedTrainer = value;
-                //SelectedMon = value?.Party?.MonList[0];
-                OnPropertyChanged("SelectedTrainer"); }
-        }
-
-        private Mon selectedMon;
-        public Mon SelectedMon {
-            get { return selectedMon; }
-            set { selectedMon = value; OnPropertyChanged("SelectedMon"); }
-        }
-
-        private List<string> speciesList;
-
-        public List<string> SpeciesList {
-            get { return speciesList; }
-            set { speciesList = value;
-                OnPropertyChanged("SpeciesList");
-            }
-        }
-
-        private List<string> itemsList;
-
-        public List<string> ItemsList {
-            get { return itemsList; }
-            set { itemsList = value;
-                OnPropertyChanged("ItemsList");
-            }
-        }
-
-        private List<string> movesList;
-
-        public List<string> MovesList {
-            get { return movesList; }
-            set { movesList = value;
-                OnPropertyChanged("MovesList");
-            }
-        }
-
-
-
-        public static List<Trainer> StitchLists(List<Trainer> trainers, Dictionary<string, Party> parties) {
-
-            for (int i = 0; i < parties.Count(); i++) {
-                trainers[i].Party = parties.GetValueOrDefault(trainers[i].PartySize);
-            }
-            return trainers;
-
-        }
-
-    }
-
-    public class ComparisonConverter : IValueConverter {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
-            return value?.Equals(parameter);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
-            //return value?.Equals(true) == true ? parameter : Binding.DoNothing;
-            return (bool)value ? parameter : Binding.DoNothing;
-        }
-    }
-    public class InputEnabledConverter : IMultiValueConverter {
-
-        public static Dictionary<Input, bool> TrainerMonNoItemDefaultMoves = new Dictionary<Input, bool> { { Input.HeldItem, false }, { Input.Moves, false } };
-        public static Dictionary<Input, bool> TrainerMonItemDefaultMoves = new Dictionary<Input, bool> { { Input.HeldItem, true }, { Input.Moves, false } };
-        public static Dictionary<Input, bool> TrainerMonNoItemCustomMoves = new Dictionary<Input, bool> { { Input.HeldItem, false }, { Input.Moves, true } };
-        public static Dictionary<Input, bool> TrainerMonItemCustomMoves = new Dictionary<Input, bool> { { Input.HeldItem, true }, { Input.Moves, true } };
-
-        public static Dictionary<PartyType, Dictionary<Input, bool>> IsInputEnabled = new Dictionary<PartyType, Dictionary<Input, bool>> {
-            { PartyType.TrainerMonNoItemDefaultMoves, TrainerMonNoItemDefaultMoves },
-            { PartyType.TrainerMonItemDefaultMoves, TrainerMonItemDefaultMoves },
-            { PartyType.TrainerMonNoItemCustomMoves, TrainerMonNoItemCustomMoves },
-            { PartyType.TrainerMonItemCustomMoves, TrainerMonItemCustomMoves }
-        };
-
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
-
-            if (!(values[0] is PartyType && values[1] is Input))
-                return false;
-
-            PartyType partyType = (PartyType)values[0];
-            Input input = (Input)values[1];
-
-            return IsInputEnabled[partyType][input];
-            
-        }
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class EnabledBackgroundConverter : IValueConverter {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            return (bool)value ? 1.0 : 0.3;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            throw new NotImplementedException();
-        }
-    }
 }

@@ -10,16 +10,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Trainer_Editor.UserControls;
 
-namespace Trainer_Editor.UserControls {
+namespace Trainer_Editor.Pages {
     /// <summary>
-    /// Interaction logic for MovesUserControl.xaml
+    /// Interaction logic for PartyPage.xaml
     /// </summary>
-    public partial class MovesUserControl : UserControl {
+    public partial class PartyPage : Page {
 
-        public MovesUserControl() {
+        public PartyPage() {
             InitializeComponent();
-            
+
+
+            DataContext = Data.Instance;
         }
+
     }
 }

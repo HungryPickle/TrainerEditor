@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Trainer_Editor {
 
@@ -21,17 +22,17 @@ namespace Trainer_Editor {
         private string regexConfig = @"C:\TrainerEditor\RegexConfig.slowpoketail";
         public string RegexConfig { get { return regexConfig; } set { regexConfig = value; } }
 
-        private string speciesHeader = @"C:\TrainerEditor\species.h";
+        private string speciesHeader = @"C:\TrainerEditor\headers\species.h";
         private string speciesConstants = @"C:\TrainerEditor\Species.slowpoketail";
         public string SpeciesHeader { get => speciesHeader; set => speciesHeader = value; }
         public string SpeciesConstants { get => speciesConstants; set => speciesConstants = value; }
 
-        private string itemsHeader = @"C:\TrainerEditor\items.h";
+        private string itemsHeader = @"C:\TrainerEditor\headers\items.h";
         private string itemsConstants = @"C:\TrainerEditor\Items.slowpoketail";
         public string ItemsHeader { get => itemsHeader; set => itemsHeader = value; }
         public string ItemsConstants { get => itemsConstants; set => itemsConstants = value; }
 
-        private string movesHeader = @"C:\TrainerEditor\moves.h";
+        private string movesHeader = @"C:\TrainerEditor\headers\moves.h";
         private string movesConstants = @"C:\TrainerEditor\Moves.slowpoketail";
         public string MovesHeader { get => movesHeader; set => movesHeader = value; }
         public string MovesConstants { get => movesConstants; set => movesConstants = value; }
@@ -43,7 +44,6 @@ namespace Trainer_Editor {
 
         public static Dictionary<string,Party> ReadParties() {
 
-            //List<Party> parties = new List<Party>();
             Dictionary<string, Party> namedParties = new Dictionary<string, Party>();
 
             StringBuilder sb = new StringBuilder();
@@ -59,7 +59,7 @@ namespace Trainer_Editor {
                 using StreamReader sr = new StreamReader(path);
                 while ((line = sr.ReadLine()) != null) {
 
-                    if (Party.IfContainsPartyAddParty(line, ref namedParties)) {
+                    if (Party.IfContainsPartyAddParty(line, namedParties)) {
 
                         while (sr.Peek() != ';' && sr.Peek() != -1) {
 
@@ -80,9 +80,6 @@ namespace Trainer_Editor {
                             }
                         }
                         closed = 0;
-                        //for (; namedParties.Last().Value.MonList.Count < 6; namedParties.Last().Value.MonList.Add(new Mon())) {
-                        //
-                        //}
                     }
 
                 }
@@ -95,8 +92,12 @@ namespace Trainer_Editor {
         }
 
         public static void WriteParties(List<Trainer> trainers) {
+            if (trainers == null || trainers.Count == 0 || trainers[0]?.Party?.MonList?[0] == null) {
+                MessageBox.Show("No Parties to Save.", "caption", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
-            string path = @"C:\TrainerEditor\party_test.h";
+            string path = @"C:\TrainerEditor\tests\party_test.h";
 
             try {
                 using StreamWriter sw = new StreamWriter(path);
@@ -159,8 +160,12 @@ namespace Trainer_Editor {
         }
 
         public static void WriteTrainers(List<Trainer> trainers) {
+            if (trainers == null || trainers.Count == 0) {
+                MessageBox.Show("No Trainers to Save.", "caption", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
-            string path = @"C:\TrainerEditor\trainer_test.h";
+            string path = @"C:\TrainerEditor\tests\trainer_test.h";
 
             try {
                 using StreamWriter sw = new StreamWriter(path);
@@ -194,7 +199,16 @@ namespace Trainer_Editor {
             }
 
         }
-        
+
+        public static List<Trainer> StitchLists(List<Trainer> trainers, Dictionary<string, Party> parties) {
+
+            for (int i = 0; i < parties.Count(); i++) {
+                trainers[i].Party = parties.GetValueOrDefault(trainers[i].PartySize);
+            }
+            return trainers;
+
+        }
+
         private static string GetConstantPath(Constant constant) {
             switch (constant) {
                 case Constant.Species:
@@ -260,14 +274,14 @@ namespace Trainer_Editor {
             try {
                 string line;
                 List<string> constants = new List<string>();
-                if (constant != Constant.Species)
-                    constants.Add(string.Empty);
 
                 using StreamReader sr = new StreamReader(GetConstantPath(constant));
                 while ((line = sr.ReadLine()) != null) {
                     constants.Add(line);
                 }
 
+                if (constant != Constant.Species)
+                    constants.Add(string.Empty);
                 return constants;
             }
             catch (Exception e) {

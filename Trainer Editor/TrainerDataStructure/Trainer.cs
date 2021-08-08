@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace Trainer_Editor {
-    public class Trainer {
+    public class Trainer : ObservableObject {
         private Party party;
 
         public string IndexName { get; set; }
@@ -23,6 +24,23 @@ namespace Trainer_Editor {
             set { party = value; } 
         }
 
+        public PartyType PartyType {
+            get {
+                return Party.Type;
+            }
+            set {
+                Party.Type = value;
+                OnPropertyChanged("PartyType");
+                PartyFlags = Party.TypeToPartyFlags[value];
+            }
+        }
+        public static Trainer CreateDummy() {
+            Trainer trainer = new Trainer();
+            trainer.Party = Party.CreateDummy();
+            trainer.PartyFlags = Party.TypeToPartyFlags[trainer.PartyType];
+            return trainer;
+        }
+        private Trainer() { }
 
         public Trainer(string nameLine, string trainerStruct) {
 
@@ -52,8 +70,8 @@ namespace Trainer_Editor {
                     return partyFlags;
 
                 for (int i = 0; i < PartyFlags.Count; i++) {
-                    if (i < PartyFlags.Count - 1)
-                        partyFlags += PartyFlags[i] + " | ";
+                    if (i > 0)
+                        partyFlags += " | " + PartyFlags[i];
                     else
                         partyFlags += PartyFlags[i];
                 }
@@ -71,8 +89,8 @@ namespace Trainer_Editor {
                     return encounterMusic_gender;
 
                 for (int i = 0; i < EncounterMusic_gender.Count; i++) {
-                    if (i < EncounterMusic_gender.Count - 1)
-                        encounterMusic_gender += EncounterMusic_gender[i] + " | ";
+                    if (i > 0)
+                        encounterMusic_gender += " | " + EncounterMusic_gender[i];
                     else
                         encounterMusic_gender += EncounterMusic_gender[i];
                 }
@@ -90,8 +108,8 @@ namespace Trainer_Editor {
                 string items = "";
 
                 for (int i = 0; i < Items.Count; i++) {
-                    if (i < Items.Count - 1)
-                        items += Items[i] + ", ";
+                    if (i > 0)
+                        items += ", " + Items[i];
                     else
                         items += Items[i];
                 }
@@ -108,8 +126,8 @@ namespace Trainer_Editor {
                     return aiFlags;
 
                 for (int i = 0; i < AiFlags.Count; i++) {
-                    if (i < AiFlags.Count - 1)
-                        aiFlags += AiFlags[i] + " | ";
+                    if (i > 0)
+                        aiFlags += " | " + AiFlags[i];
                     else
                         aiFlags += AiFlags[i];
                 }

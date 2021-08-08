@@ -8,7 +8,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Graphics\ghost.png" />
+    <None Remove="Graphics\rocket.png" />
+    <None Remove="Graphics\slow.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Graphics\ghost.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Graphics\rocket.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Graphics\slow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

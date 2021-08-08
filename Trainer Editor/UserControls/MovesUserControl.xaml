@@ -4,30 +4,23 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Trainer_Editor.UserControls"
-             xmlns:app="clr-namespace:Trainer_Editor"
+             xmlns:global="clr-namespace:Trainer_Editor"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <StackPanel>
             <StackPanel.Resources>
-                <app:InputEnabledConverter x:Key="InputEnabledConverter"/>
-                <Style TargetType="local:AutoCompleteTextBox">
+                <Style TargetType="local:AutoCompleteTextBox" BasedOn="{StaticResource PartyType}">
                     <Setter Property="LabelVisibility" Value="Collapsed"/>
                     <Setter Property="ListSource" Value="{Binding MovesList, Mode=OneWay}"/>
-                    <Setter Property="IsEnabled">
-                        <Setter.Value>
-                            <MultiBinding Converter="{StaticResource InputEnabledConverter}">
-                                <Binding Path="SelectedTrainer.Party.Type"/>
-                                <Binding Source="{x:Static app:Input.Moves}"/>
-                            </MultiBinding>
-                        </Setter.Value>
-                    </Setter>
+                    <Setter Property="Tag" Value="{x:Static global:Input.Moves}"/>
                 </Style>
             </StackPanel.Resources>
-            <local:AutoCompleteTextBox SelectedItem="{Binding SelectedMon.Moves[0], Mode=TwoWay}"/>
-            <local:AutoCompleteTextBox SelectedItem="{Binding SelectedMon.Moves[1], Mode=TwoWay}"/>
-            <local:AutoCompleteTextBox SelectedItem="{Binding SelectedMon.Moves[2], Mode=TwoWay}"/>
-            <local:AutoCompleteTextBox SelectedItem="{Binding SelectedMon.Moves[3], Mode=TwoWay}"/>
+            <Label Content="Moveset"/>
+            <local:AutoCompleteTextBox x:Name="move0" ListItem="{Binding SelectedMon.Moves[0], Mode=TwoWay}"/>
+            <local:AutoCompleteTextBox x:Name="move1" ListItem="{Binding SelectedMon.Moves[1], Mode=TwoWay}"/>
+            <local:AutoCompleteTextBox x:Name="move2" ListItem="{Binding SelectedMon.Moves[2], Mode=TwoWay}"/>
+            <local:AutoCompleteTextBox x:Name="move3" ListItem="{Binding SelectedMon.Moves[3], Mode=TwoWay}"/>
         </StackPanel>
     </Grid>
 </UserControl>

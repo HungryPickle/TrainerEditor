@@ -11,15 +11,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Trainer_Editor.UserControls {
+namespace Trainer_Editor.Pages {
     /// <summary>
-    /// Interaction logic for MovesUserControl.xaml
+    /// Interaction logic for TrainerPage.xaml
     /// </summary>
-    public partial class MovesUserControl : UserControl {
-
-        public MovesUserControl() {
+    public partial class TrainerPage : Page {
+        public TrainerPage() {
             InitializeComponent();
-            
+
+            DataContext = Data.Instance;
         }
     }
 }

@@ -2,8 +2,51 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Trainer_Editor"
+             xmlns:UserControls="clr-namespace:Trainer_Editor.UserControls"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+
+
+        <local:DisabledInputOpacityConverter x:Key="DisabledInputOpacityConverter"/>
+        <local:PartyTypeEnableInputConverter x:Key="PartyTypeEnableInputConverter"/>
+
+        <local:TrainerSpriteConverter x:Key="TrainerSpriteConverter"/>
+        <local:PokemonSpriteConverter x:Key="PokemonSpriteConverter"/>
+
+
+        <Style TargetType="{x:Type UserControls:AutoCompleteTextBox}" x:Key="PartyType">
+            <Setter Property="IsEnabled">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource PartyTypeEnableInputConverter}" >
+                        <Binding Path="SelectedTrainer.Party.Type"/>
+                        <Binding RelativeSource="{RelativeSource Self}" Path="Tag"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+        </Style>
+        
+        <Style TargetType="TextBox" x:Key="DefaultCaretEnd">
+            <EventSetter Event="GotKeyboardFocus" Handler="TextBoxCaret_GotKeyboardFocus"/>
+            <Setter Property="Opacity" Value="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource DisabledInputOpacityConverter}}"/>
+        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource DefaultCaretEnd}">
+            <EventSetter Event="GotKeyboardFocus" Handler="TextBox_GotKeyboardFocus"/>
+            <EventSetter Event="LostKeyboardFocus" Handler="TextBox_LostKeyboardFocus"/>
+        </Style>
+        
+        <Style TargetType="ListBox">
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+            <Setter Property="Background" Value="Black"/>
+        </Style>
+        
+        <Style TargetType="RadioButton">
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+        </Style>
+        
         
     </Application.Resources>
 </Application>

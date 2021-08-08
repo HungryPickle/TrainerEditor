@@ -26,12 +26,6 @@ namespace Trainer_Editor.UserControls {
         public static readonly DependencyProperty LabelTextProperty =
             DependencyProperty.Register("LabelText", typeof(string), typeof(LabeledTextBox), new PropertyMetadata(string.Empty));
 
-        //private static void LabelTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-        //    ((InputUserControl)d).LabelText = (string)e.NewValue;
-        //}
-
-
-
         public string TextBoxText {
             get { return (string)GetValue(TextBoxTextProperty); }
             set { SetValue(TextBoxTextProperty, value); }
@@ -41,12 +35,9 @@ namespace Trainer_Editor.UserControls {
         public static readonly DependencyProperty TextBoxTextProperty =
             DependencyProperty.Register("TextBoxText", typeof(string), typeof(LabeledTextBox), new PropertyMetadata(string.Empty));
 
-
-
         public LabeledTextBox() {
             InitializeComponent();
         }
-
 
     }
 }

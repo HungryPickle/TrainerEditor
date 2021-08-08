@@ -78,10 +78,10 @@ namespace Trainer_Editor {
         public string MovesMember {
             get {
                 string movesText = "";
-                if (Moves.All(m => string.IsNullOrWhiteSpace(m)))
+                if (Moves.All(m => string.IsNullOrEmpty(m)))
                     return movesText;
 
-                for (int i = 0; i < Moves.Count && !string.IsNullOrWhiteSpace(Moves[i]); i++) {
+                for (int i = 0; i < Moves.Count && !string.IsNullOrEmpty(Moves[i]); i++) {
                     if (i > 0)
                         movesText += ", ";
                     movesText += Moves[i];
