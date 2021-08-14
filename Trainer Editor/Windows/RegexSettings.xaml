@@ -1,0 +1,46 @@
+﻿<Window x:Class="Trainer_Editor.Windows.RegexSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Trainer_Editor.Windows"
+        xmlns:controls="clr-namespace:Trainer_Editor.UserControls"
+        mc:Ignorable="d"
+        Title="RegexSettings" Height="450" Width="800" SizeToContent="Height">
+    <Grid Background="#FF121212">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="controls:LabeledTextBox">
+                <Setter Property="TextBoxText" Value="{Binding RelativeSource={RelativeSource Self}, 
+                    Path=Tag, 
+                    Converter={StaticResource RegexStringConverter}, 
+                    Mode=TwoWay,
+                    UpdateSourceTrigger=LostFocus}"
+                    />
+            <Setter Property="Grid.ColumnSpan" Value="4"/>
+            </Style>
+        </Grid.Resources>
+
+        <controls:LabeledTextBox Grid.Row="0" x:Name="species" LabelText="Species Constants" Tag="{Binding RegexConfig.Species, Mode=TwoWay}"/>
+        <controls:LabeledTextBox Grid.Row="1" x:Name="moves" LabelText="Moves Constants" Tag="{Binding RegexConfig.Moves, Mode=TwoWay}"/>
+        <controls:LabeledTextBox Grid.Row="2" x:Name="items" LabelText="Items Constants" Tag="{Binding RegexConfig.Items, Mode=TwoWay}"/>
+        
+
+        <Button x:Name="saveRegex" Content="Save Regexes" Click="saveRegex_Click"
+                Grid.Row="3" Grid.Column="1" Margin="5,15,5,10"/>
+        <Button x:Name="defaultRegex" Content="Default Regexes" Click="defaultRegex_Click"
+                Grid.Row="3" Grid.Column="2" Margin="5,15,5,10"/>
+
+    </Grid>
+</Window>

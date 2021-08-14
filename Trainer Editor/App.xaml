@@ -13,6 +13,8 @@
         <local:TrainerSpriteConverter x:Key="TrainerSpriteConverter"/>
         <local:PokemonSpriteConverter x:Key="PokemonSpriteConverter"/>
 
+        <local:RegexStringConverter x:Key="RegexStringConverter"/>
+
 
         <Style TargetType="{x:Type UserControls:AutoCompleteTextBox}" x:Key="PartyType">
             <Setter Property="IsEnabled">

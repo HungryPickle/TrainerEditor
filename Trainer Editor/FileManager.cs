@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -11,38 +13,53 @@ using System.Windows;
 
 namespace Trainer_Editor {
 
-    public class FilePaths {
-        private FilePaths() { }
+    public class FilePaths : ObservableObject {
 
-        private static FilePaths instance = new FilePaths();
-        public static FilePaths Instance { 
-            get { return instance; }
+        public static string TrainersHeader { get; set; } = @"C:\TrainerEditor\trainers.h";
+        public static string TrainersHeaderTest { get; set; } = @"C:\TrainerEditor\tests\trainer_test.h";
+        public static string PartiesHeader { get; set; } = @"C:\TrainerEditor\trainer_parties.h";
+        public static string PartiesHeaderTest { get; set; } = @"C:\TrainerEditor\tests\party_test.h";
+        public Dictionary<Constant, string> ConstantHeaders { get; set; } = new Dictionary<Constant, string>() {
+            {Constant.Species, @"C:\TrainerEditor\headers\species.h" },
+            {Constant.Moves, @"C:\TrainerEditor\headers\moves.h" },
+            {Constant.Items, @"C:\TrainerEditor\headers\items.h" }
+        };
+        public Dictionary<Constant, string> ConstantLists { get; set; } = new Dictionary<Constant, string>() {
+            {Constant.Species, @"C:\TrainerEditor\Species.json" },
+            {Constant.Moves, @"C:\TrainerEditor\Moves.json" },
+            {Constant.Items, @"C:\TrainerEditor\Items.json" }
+        };
+        
+        public string SpeciesHeader {
+            get => ConstantHeaders[Constant.Species];
+            set { ConstantHeaders[Constant.Species] = value; OnPropertyChanged("SpeciesHeader"); }
         }
-
-        private string regexConfig = @"C:\TrainerEditor\RegexConfig.slowpoketail";
-        public string RegexConfig { get { return regexConfig; } set { regexConfig = value; } }
-
-        private string speciesHeader = @"C:\TrainerEditor\headers\species.h";
-        private string speciesConstants = @"C:\TrainerEditor\Species.slowpoketail";
-        public string SpeciesHeader { get => speciesHeader; set => speciesHeader = value; }
-        public string SpeciesConstants { get => speciesConstants; set => speciesConstants = value; }
-
-        private string itemsHeader = @"C:\TrainerEditor\headers\items.h";
-        private string itemsConstants = @"C:\TrainerEditor\Items.slowpoketail";
-        public string ItemsHeader { get => itemsHeader; set => itemsHeader = value; }
-        public string ItemsConstants { get => itemsConstants; set => itemsConstants = value; }
-
-        private string movesHeader = @"C:\TrainerEditor\headers\moves.h";
-        private string movesConstants = @"C:\TrainerEditor\Moves.slowpoketail";
-        public string MovesHeader { get => movesHeader; set => movesHeader = value; }
-        public string MovesConstants { get => movesConstants; set => movesConstants = value; }
-
+        public string MovesHeader {
+            get => ConstantHeaders[Constant.Moves];
+            set { ConstantHeaders[Constant.Moves] = value; OnPropertyChanged("MovesHeader"); }
+        }
+        public string ItemsHeader {
+            get => ConstantHeaders[Constant.Items];
+            set { ConstantHeaders[Constant.Items] = value; OnPropertyChanged("ItemsHeader"); }
+        }
+        //public string SpeciesConstants {
+        //    get => ConstantListPaths[Constant.Species];
+        //    set { ConstantListPaths[Constant.Species] = value; OnPropertyChanged("SpeciesConstants"); }
+        //}
+        //public string MovesConstants {
+        //    get => ConstantListPaths[Constant.Moves];
+        //    set { ConstantListPaths[Constant.Moves] = value; OnPropertyChanged("MovesConstants"); }
+        //}
+        //public string ItemsConstants {
+        //    get => ConstantListPaths[Constant.Items];
+        //    set { ConstantListPaths[Constant.Items] = value; OnPropertyChanged("ItemsConstants"); }
+        //}
 
     }
 
     public class FileManager {
 
-        public static Dictionary<string,Party> ReadParties() {
+        public static Dictionary<string,Party> ParsePartiesHeader() {
 
             Dictionary<string, Party> namedParties = new Dictionary<string, Party>();
 
@@ -53,10 +70,8 @@ namespace Trainer_Editor {
             int open = 0;
             int closed = 0;
             
-            string path = @"C:\TrainerEditor\trainer_parties.h";
-            
             try {
-                using StreamReader sr = new StreamReader(path);
+                using StreamReader sr = new StreamReader(FilePaths.PartiesHeader);
                 while ((line = sr.ReadLine()) != null) {
 
                     if (Party.IfContainsPartyAddParty(line, namedParties)) {
@@ -91,29 +106,24 @@ namespace Trainer_Editor {
             return namedParties;
         }
 
-        public static void WriteParties(List<Trainer> trainers) {
+        public static void WritePartiesHeader(List<Trainer> trainers) {
             if (trainers == null || trainers.Count == 0 || trainers[0]?.Party?.MonList?[0] == null) {
                 MessageBox.Show("No Parties to Save.", "caption", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-
-            string path = @"C:\TrainerEditor\tests\party_test.h";
-
             try {
-                using StreamWriter sw = new StreamWriter(path);
+                using StreamWriter sw = new StreamWriter(FilePaths.PartiesHeaderTest);
                 for (int i = 0; i < trainers.Count; i++) {
                     sw.Write($"{trainers[i].Party.CreatePartyStruct()}");
                     sw.Write("\n\n");
                 }
-
             }
             catch (Exception e) {
                 Debug.WriteLine(e.Message);
             }
-
         }
 
-        public static List<Trainer> ReadTrainers() {
+        public static List<Trainer> ParseTrainersHeader() {
 
             List<Trainer> trainers = new List<Trainer>();
 
@@ -123,10 +133,8 @@ namespace Trainer_Editor {
             int open = 0;
             int closed = 0;
 
-            string path = @"C:\TrainerEditor\trainers.h";
-
             try {
-                using StreamReader sr = new StreamReader(path);
+                using StreamReader sr = new StreamReader(FilePaths.TrainersHeader);
                 while ((line = sr.ReadLine()) != null) {
                     if (RegexTrainer.IndexName.IsMatch(line)) {
 
@@ -159,16 +167,14 @@ namespace Trainer_Editor {
             return trainers;
         }
 
-        public static void WriteTrainers(List<Trainer> trainers) {
+        public static void WriteTrainersHeader(List<Trainer> trainers) {
             if (trainers == null || trainers.Count == 0) {
                 MessageBox.Show("No Trainers to Save.", "caption", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            string path = @"C:\TrainerEditor\tests\trainer_test.h";
-
             try {
-                using StreamWriter sw = new StreamWriter(path);
+                using StreamWriter sw = new StreamWriter(FilePaths.TrainersHeaderTest);
                 sw.Write(
                 "const struct Trainer gTrainers[] = {" +
                 "\n\t[TRAINER_NONE] =" +
@@ -200,7 +206,7 @@ namespace Trainer_Editor {
 
         }
 
-        public static List<Trainer> StitchLists(List<Trainer> trainers, Dictionary<string, Party> parties) {
+        public static List<Trainer> AttachPartiesToTrainers(List<Trainer> trainers, Dictionary<string, Party> parties) {
 
             for (int i = 0; i < parties.Count(); i++) {
                 trainers[i].Party = parties.GetValueOrDefault(trainers[i].PartySize);
@@ -208,46 +214,27 @@ namespace Trainer_Editor {
             return trainers;
 
         }
-
-        private static string GetConstantPath(Constant constant) {
-            switch (constant) {
-                case Constant.Species:
-                    return FilePaths.Instance.SpeciesConstants;
-                case Constant.Moves:
-                    return FilePaths.Instance.MovesConstants;
-                case Constant.Items:
-                    return FilePaths.Instance.ItemsConstants;
-                default:
-                    throw new Exception("Constant for GetConstantPath not implemented");
+        public static void DeserializeAllConstantLists(Data data) {
+            data.SpeciesList = DeserializeConstantList(Constant.Species);
+            data.MovesList = DeserializeConstantList(Constant.Moves);
+            data.ItemsList = DeserializeConstantList(Constant.Items);
+        }
+        public static void ParseAllConstantHeadersToJson() {
+            foreach (Constant constant in Enum.GetValues(typeof(Constant))) {
+                ParseConstantHeaderToJson(constant);
             }
         }
-        private static string GetHeaderPath(Constant constant) {
-            switch (constant) {
-                case Constant.Species:
-                    return FilePaths.Instance.SpeciesHeader;
-                case Constant.Moves:
-                    return FilePaths.Instance.MovesHeader;
-                case Constant.Items:
-                    return FilePaths.Instance.ItemsHeader;
-                default:
-                    throw new Exception("Constant for GetHeaderPath not implemented");
-            }
+        public static void ParseConstantHeaderToJson(Constant constant) {
+            SerializeConstantList(constant, ParseConstantHeader(constant));
         }
-
-        public static List<string> ParseHeaderWriteConstants(Constant constant) {
-
-            List<string> constants = ParseHeader(constant);
-            WriteConstants(constants, constant);
-            return ReadConstants(constant);
-        }
-        public static List<string> ParseHeader(Constant constant) {
+        private static List<string> ParseConstantHeader(Constant constant) {
             try {
-                Regex regex = ReadConstantRegex(constant);
+                Regex regex = Data.Instance.RegexConfig.ConstantRegexes[constant];
 
                 string line;
                 List<string> constants = new List<string>();
 
-                using StreamReader sr = new StreamReader(GetHeaderPath(constant));
+                using StreamReader sr = new StreamReader(Data.Instance.FilePaths.ConstantHeaders[constant]);
                 while ((line = sr.ReadLine()) != null) {
                     if (regex.IsMatch(line))
                         constants.Add(regex.Match(line).Value);
@@ -259,26 +246,24 @@ namespace Trainer_Editor {
                 throw e;
             }
         }
-        public static void WriteConstants(List<string> constants, Constant constant) {
+        private static void SerializeConstantList(Constant constant, List<string> constants) {
             try {
-                using StreamWriter sw = new StreamWriter(GetConstantPath(constant));
-                foreach (string con in constants) {
-                    sw.WriteLine(con);
-                }
+                constants.RemoveAll(s => s == string.Empty);
+                Stream stream = new FileStream(Data.Instance.FilePaths.ConstantLists[constant], FileMode.Create, FileAccess.Write);
+                using StreamWriter writer = new StreamWriter(stream);
+                JsonSerializer json = new JsonSerializer { Formatting = Formatting.Indented };
+                json.Serialize(writer, constants);
             }
             catch (Exception e) {
                 throw e;
             }
         }
-        public static List<string> ReadConstants(Constant constant) {
+        private static List<string> DeserializeConstantList(Constant constant) {
             try {
-                string line;
-                List<string> constants = new List<string>();
-
-                using StreamReader sr = new StreamReader(GetConstantPath(constant));
-                while ((line = sr.ReadLine()) != null) {
-                    constants.Add(line);
-                }
+                Stream stream = new FileStream(Data.Instance.FilePaths.ConstantLists[constant], FileMode.Open, FileAccess.Read);
+                using StreamReader reader = new StreamReader(stream);
+                JsonSerializer json = new JsonSerializer { Formatting = Formatting.Indented };
+                List<string> constants = (List<string>)json.Deserialize(reader, typeof(List<string>));
 
                 if (constant != Constant.Species)
                     constants.Add(string.Empty);
@@ -288,17 +273,18 @@ namespace Trainer_Editor {
                 throw e;
             }
         }
-        public static Regex ReadConstantRegex(Constant constant) {
-            try {
-                using StreamReader sr = new StreamReader(FilePaths.Instance.RegexConfig);
-                string regexConfig = sr.ReadToEnd();
-                
-                return new Regex(RegexConfig.Constants[constant].Match(regexConfig).Value);
-            }
-            catch (Exception e) {
+        public static void SerializeRegexConfig(RegexConfig regexConfig) {
+            Stream stream = new FileStream(@"C:\TrainerEditor\RegexConfig.json", FileMode.Create, FileAccess.Write);
+            using StreamWriter writer = new StreamWriter(stream);
+            JsonSerializer json = new JsonSerializer { Formatting = Formatting.Indented };
+            json.Serialize(writer, regexConfig);
+        }
 
-                throw e;
-            }
+        public static RegexConfig DeserializeRegexConfig() {
+            Stream stream = new FileStream(@"C:\TrainerEditor\RegexConfig.json", FileMode.Open, FileAccess.Read);
+            using StreamReader reader = new StreamReader(stream);
+            JsonSerializer json = new JsonSerializer { Formatting = Formatting.Indented };
+            return (RegexConfig)json.Deserialize(reader, typeof(RegexConfig));
         }
 
     }

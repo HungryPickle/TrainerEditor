@@ -35,9 +35,19 @@ namespace Trainer_Editor {
             }
         }
         public static Trainer CreateDummy() {
-            Trainer trainer = new Trainer();
-            trainer.Party = Party.CreateDummy();
+            Trainer trainer = new Trainer {
+                Party = Party.CreateDummy(),
+                TrainerClass = "TRAINER_CLASS_HEX_MANIAC",
+                EncounterMusic_gender = new List<string>() { "F_TRAINER_FEMALE", "TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS" },
+                TrainerPic = "TRAINER_PIC_HEX_MANIAC",
+                TrainerName = "TAMMY",
+                Items = new List<string>() { "ITEM_HYPER_POTION", "ITEM_FULL_RESTORE" },
+                DoubleBattle = "FALSE",
+                AiFlags = new List<string>() { "AI_SCRIPT_CHECK_BAD_MOVE", "AI_SCRIPT_TRY_TO_FAINT", "AI_SCRIPT_CHECK_VIABILITY" }
+            };
+            trainer.PartySize = trainer.Party.Name;
             trainer.PartyFlags = Party.TypeToPartyFlags[trainer.PartyType];
+            
             return trainer;
         }
         private Trainer() { }

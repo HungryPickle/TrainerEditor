@@ -21,6 +21,7 @@ using System.Globalization;
 using Trainer_Editor.Pages;
 using System.Windows.Controls;
 using Trainer_Editor.UserControls;
+using Trainer_Editor.Windows;
 
 namespace Trainer_Editor {
     /// <summary>
@@ -34,6 +35,8 @@ namespace Trainer_Editor {
 
     public partial class MainWindow : Window {
 
+        private RegexSettings regexSettings;
+        public RegexSettings RegexSettings { get { return regexSettings; } set => regexSettings = value; }
 
         public MainWindow() {
             InitializeComponent();
@@ -41,66 +44,58 @@ namespace Trainer_Editor {
             Data.Instance.SelectedTrainer = Trainer.CreateDummy();
             Data.Instance.SelectedMon = Data.Instance.SelectedTrainer.Party[0];
 
-            Data.Instance.SpeciesList = FileManager.ReadConstants(Constant.Species);
-            Data.Instance.ItemsList = FileManager.ReadConstants(Constant.Items);
-            Data.Instance.MovesList = FileManager.ReadConstants(Constant.Moves);
+            //FileManager.DeserializeAllConstantLists(Data.Instance);
+
+            Data.Instance.RegexConfig = FileManager.DeserializeRegexConfig();
 
             ControlNav.LoadControlNavs();
 
             DataContext = Data.Instance;
+
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e) {
-            List<Trainer> trainers = await Task.Run(() => FileManager.ReadTrainers());
+        private async void ReadTrainersAndParties_Click(object sender, RoutedEventArgs e) {
+            List<Trainer> trainers = await Task.Run(() => FileManager.ParseTrainersHeader());
             Debug.WriteLine("Trainers Read.");
 
-            Dictionary<string, Party> parties = await Task.Run(() => FileManager.ReadParties());
+            Dictionary<string, Party> parties = await Task.Run(() => FileManager.ParsePartiesHeader());
             Debug.WriteLine("Parties Read.");
 
-            trainers = await Task.Run(() => FileManager.StitchLists(trainers, parties));
+            trainers = await Task.Run(() => FileManager.AttachPartiesToTrainers(trainers, parties));
             Debug.WriteLine($"Stitch Complete.");
 
             await Task.Run(() => Data.Instance.Trainers = trainers);
         }
-        private async void Button_Click_1(object sender, RoutedEventArgs e) {
+        private async void SaveTrainersAndParties_Click(object sender, RoutedEventArgs e) {
 
             if (true) {
-                await Task.Run(() => FileManager.WriteTrainers(Data.Instance.Trainers));
+                await Task.Run(() => FileManager.WriteTrainersHeader(Data.Instance.Trainers));
                 Debug.WriteLine("Trainers Saved.");
 
-                await Task.Run(() => FileManager.WriteParties(Data.Instance.Trainers));
+                await Task.Run(() => FileManager.WritePartiesHeader(Data.Instance.Trainers));
                 Debug.WriteLine("Parties Saved.");
             }
         }
-        private async void Button_Click_2(object sender, RoutedEventArgs e) {
-            Data.Instance.SpeciesList = await Task.Run(() => FileManager.ParseHeaderWriteConstants(Constant.Species));
-            Data.Instance.ItemsList = await Task.Run(() => FileManager.ParseHeaderWriteConstants(Constant.Items));
-            Data.Instance.MovesList = await Task.Run(() => FileManager.ParseHeaderWriteConstants(Constant.Moves));
-
+        private async void ReadWriteConstants_Click(object sender, RoutedEventArgs e) {
+            await Task.Run(() => FileManager.ParseAllConstantHeadersToJson());
+            await Task.Run(() => FileManager.DeserializeAllConstantLists(Data.Instance));
 
             Debug.WriteLine("Read and Wrote Constants.");
         }
 
-
-
-
         private async void MenuOpen_Click(object sender, RoutedEventArgs e) {
-
-            //OpenFileDialog openFileDialog = new OpenFileDialog();
-            //if (openFileDialog.ShowDialog() == true)
-            //    Debug.WriteLine(openFileDialog.FileName);
 
             VistaFolderBrowserDialog d = new VistaFolderBrowserDialog();
             if (d.ShowDialog() == true)
                 Debug.WriteLine(d.SelectedPath);
 
-            List<Trainer> trainers = await Task.Run(() => FileManager.ReadTrainers());
+            List<Trainer> trainers = await Task.Run(() => FileManager.ParseTrainersHeader());
             Debug.WriteLine("Trainers Read.");
 
-            Dictionary<string, Party> parties = await Task.Run(() => FileManager.ReadParties());
+            Dictionary<string, Party> parties = await Task.Run(() => FileManager.ParsePartiesHeader());
             Debug.WriteLine("Parties Read.");
 
-            trainers = await Task.Run(() => FileManager.StitchLists(trainers, parties));
+            trainers = await Task.Run(() => FileManager.AttachPartiesToTrainers(trainers, parties));
             Debug.WriteLine($"Stitch Complete.");
 
             //await Task.Run(() => FileManager.WriteTrainers(trainers));
@@ -112,7 +107,10 @@ namespace Trainer_Editor {
             await Task.Run(() => Data.Instance.Trainers = trainers);
         }
 
-
+        private void MenuRegex_Click(object sender, RoutedEventArgs e) {
+            RegexSettings = new RegexSettings();
+            RegexSettings.ShowDialog();
+        }
 
     }
 

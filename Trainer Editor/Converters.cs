@@ -13,12 +13,13 @@ using Trainer_Editor.UserControls;
 namespace Trainer_Editor {
     public class PartyTypeRadioButtonConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
-            return value?.Equals(parameter);
+            //return value?.Equals(parameter);
+            return (PartyType)value == (PartyType)parameter;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
-            //return value?.Equals(true) == true ? parameter : Binding.DoNothing;
-            return (bool)value ? parameter : Binding.DoNothing;
+            //return (bool)value ? parameter : Binding.DoNothing;
+            return (bool)value ? (PartyType)parameter : Binding.DoNothing;
         }
     }
     public class PartyTypeEnableInputConverter : IMultiValueConverter {
@@ -128,6 +129,21 @@ namespace Trainer_Editor {
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
             throw new NotImplementedException();
+        }
+    }
+    public class RegexStringConverter : IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            return ((Regex)value)?.ToString() ?? "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+            try {
+                return new Regex((string)value);
+            }
+            catch (Exception e) {
+                MessageBox.Show($"Regex: {(string)value}\nError: {e.Message}", "Invalid Regex");
+                return new Regex("");
+            }
         }
     }
 }

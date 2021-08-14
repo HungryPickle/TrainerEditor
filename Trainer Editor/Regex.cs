@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Trainer_Editor {
@@ -10,7 +10,7 @@ namespace Trainer_Editor {
 
         //public static Regex IndexName = new Regex(@"(?<=\[)TRAINER_\w+(?=\])");
         public static Regex IndexName = new Regex(@"(?<=\[)TRAINER_(?!NONE)\w+(?=\])");
-        
+
 
         public static Regex PartyFlags = new Regex(@"(?<=\.partyFlags\s+=.+)(F_TRAINER_\w+|0)");
         public static Regex TrainerClass = new Regex(@"(?<=\.trainerClass\s+=\s+)TRAINER_CLASS_\w+(?=,)");
@@ -35,18 +35,38 @@ namespace Trainer_Editor {
 
     }
 
-    public class RegexConfig {
-        public static Regex Species = new Regex(@"(?<=---Species---(\r\n|\r|\n))[^\r\n]+");
-        public static Regex Moves = new Regex(@"(?<=---Moves---(\r\n|\r|\n))[^\r\n]+");
-        public static Regex Items = new Regex(@"(?<=---Items---(\r\n|\r|\n))[^\r\n]+");
+    public class RegexConfig : ObservableObject {
+        public static Regex SpeciesDefault { get; set; } = new Regex(@"(?<=#define\s+)SPECIES\w+(?=\s)");
+        public static Regex MovesDefault { get; set; } = new Regex(@"MOVE_\w+");
+        public static Regex ItemsDefault { get; set; } = new Regex(@"(?<=#define\s+)ITEM(\w(?!USE_|B_USE|_COUNT|FIELD_ARROW))+(?=\s)");
 
-        public static Dictionary<Constant, Regex> Constants = new Dictionary<Constant, Regex> {
-            { Constant.Species, Species },
-            { Constant.Moves, Moves },
-            { Constant.Items, Items }
+        [JsonIgnore]
+        public Dictionary<Constant, Regex> ConstantRegexes { get; set; } = new Dictionary<Constant, Regex> {
+            { Constant.Species, SpeciesDefault },
+            { Constant.Moves, MovesDefault },
+            { Constant.Items, ItemsDefault },
         };
-    }
+        public void SetRegex(Constant constant, Regex value, Regex defaultValue) {
+            if (!string.IsNullOrEmpty(value?.ToString()))
+                ConstantRegexes[constant] = value;
+            //else 
+            //    ConstantRegexes[constant] = defaultValue;
+        }
 
+        public Regex Species {
+            get { return ConstantRegexes[Constant.Species]; }
+            set { SetRegex(Constant.Species, value, SpeciesDefault); OnPropertyChanged("Species"); }
+        }
+        public Regex Moves {
+            get { return ConstantRegexes[Constant.Moves]; }
+            set { SetRegex(Constant.Moves, value, MovesDefault); OnPropertyChanged("Moves"); }
+        }
+        public Regex Items {
+            get { return ConstantRegexes[Constant.Items]; }
+            set { SetRegex(Constant.Items, value, ItemsDefault); OnPropertyChanged("Items"); }
+        }
+
+    }
     public class RegexInput {
         //public static Regex Digits = new Regex(@"[1-9][0-9]*");
         public static Regex Digits = new Regex(@"[0-9]+");

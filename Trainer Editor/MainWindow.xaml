@@ -13,13 +13,16 @@
 
     <Grid x:Name="Grid1">
         <Grid.Resources>
-
+            <local:RegexStringConverter x:Key="RegexStringConverter"/>
         </Grid.Resources>
 
-        <DockPanel VerticalAlignment="Top" Height="20">
+        <DockPanel VerticalAlignment="Top">
             <Menu>
                 <MenuItem Header="_File">
                     <MenuItem x:Name="MenuOpen" Header="_Open" Click="MenuOpen_Click"/>
+                </MenuItem>
+                <MenuItem Header="_Settings">
+                    <MenuItem x:Name="MenuRegex" Header="_Regex" Click="MenuRegex_Click"/>
                 </MenuItem>
             </Menu>
         </DockPanel>
@@ -59,16 +62,16 @@
 
         
 
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="280" Width="200">
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="200">
             <StackPanel.Resources>
                 <Style TargetType="Button">
                     <Setter Property="Height" Value="70"/>
                     <Setter Property="Width" Value="200"/>
                 </Style>
             </StackPanel.Resources>
-            <Button Content="Read Files"  Click="Button_Click"/>
-            <Button Content="Write Files" Click="Button_Click_1"/>
-            <Button Content="ReadWrite Constants" Click="Button_Click_2"/>
+            <Button Content="Read Files"  Click="ReadTrainersAndParties_Click"/>
+            <Button Content="Write Files" Click="SaveTrainersAndParties_Click"/>
+            <Button Content="ReadWrite Constants" Click="ReadWriteConstants_Click"/>
         </StackPanel>
 
 

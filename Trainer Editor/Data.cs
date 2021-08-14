@@ -17,6 +17,19 @@ namespace Trainer_Editor {
             get { return instance; }
         }
 
+        private RegexConfig regexConfig = new RegexConfig();
+        public RegexConfig RegexConfig {
+            get { return regexConfig; }
+            set { regexConfig = value; OnPropertyChanged("RegexConfig"); }
+        }
+
+        private FilePaths filePaths = new FilePaths();
+        public FilePaths FilePaths {
+            get { return filePaths; }
+            set { filePaths = value; OnPropertyChanged("FilePaths"); }
+        }
+
+
         private List<Trainer> trainers = new List<Trainer>();
         public List<Trainer> Trainers {
             get { return trainers; }
@@ -29,12 +42,6 @@ namespace Trainer_Editor {
             set { filteredTrainers = value; OnPropertyChanged("FilteredTrainers"); }
         }
 
-        private BitmapImage trainerSpriteImage;
-        public BitmapImage TrainerSpriteImage {
-            get { return trainerSpriteImage; }
-            set { trainerSpriteImage = value; OnPropertyChanged("TrainerSpriteImage"); }
-        }
-
         private Trainer selectedTrainer;
         public Trainer SelectedTrainer {
             get { return selectedTrainer; }
@@ -44,14 +51,16 @@ namespace Trainer_Editor {
 
         public ObservableCollection<Mon> SelectedParty {
             get { return SelectedTrainer.Party.MonList; }
-            set { SelectedTrainer.Party.MonList = value;
+            set {
+                SelectedTrainer.Party.MonList = value;
             }
         }
 
         private Mon selectedMon;
         public Mon SelectedMon {
             get { return selectedMon; }
-            set { selectedMon = value; OnPropertyChanged("SelectedMon");
+            set {
+                selectedMon = value; OnPropertyChanged("SelectedMon");
                 OnPropertyChanged("SelectedMonBox");
             }
         }
@@ -79,6 +88,7 @@ namespace Trainer_Editor {
         }
 
         private List<string> movesList;
+
         public List<string> MovesList {
             get { return movesList; }
             set { movesList = value; OnPropertyChanged("MovesList"); }
