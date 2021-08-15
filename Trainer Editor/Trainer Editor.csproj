@@ -5,9 +5,15 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Trainer_Editor</RootNamespace>
     <UseWPF>true</UseWPF>
+    <AssemblyName>Slowpoketail</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Config\FilePaths.json" />
+    <None Remove="Config\Regex.json" />
+    <None Remove="Constants\Items.json" />
+    <None Remove="Constants\Moves.json" />
+    <None Remove="Constants\Species.json" />
     <None Remove="Graphics\ghost.png" />
     <None Remove="Graphics\rocket.png" />
     <None Remove="Graphics\slow.png" />
@@ -19,6 +25,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Config\FilePaths.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Regex.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Constants\Items.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Constants\Species.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Graphics\ghost.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -30,6 +48,12 @@
   <ItemGroup>
     <Content Include="Graphics\slow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Constants\Moves.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

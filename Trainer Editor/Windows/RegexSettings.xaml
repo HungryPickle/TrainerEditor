@@ -28,11 +28,12 @@
                     Mode=TwoWay,
                     UpdateSourceTrigger=LostFocus}"
                     />
-            <Setter Property="Grid.ColumnSpan" Value="4"/>
+            <Setter Property="Grid.ColumnSpan" Value="2"/>
             </Style>
         </Grid.Resources>
 
         <controls:LabeledTextBox Grid.Row="0" x:Name="species" LabelText="Species Constants" Tag="{Binding RegexConfig.Species, Mode=TwoWay}"/>
+        <controls:LabeledTextBox Grid.Column="2" LabelText="Path"/>
         <controls:LabeledTextBox Grid.Row="1" x:Name="moves" LabelText="Moves Constants" Tag="{Binding RegexConfig.Moves, Mode=TwoWay}"/>
         <controls:LabeledTextBox Grid.Row="2" x:Name="items" LabelText="Items Constants" Tag="{Binding RegexConfig.Items, Mode=TwoWay}"/>
         

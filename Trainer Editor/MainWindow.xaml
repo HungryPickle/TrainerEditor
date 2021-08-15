@@ -26,10 +26,16 @@
                 </MenuItem>
             </Menu>
         </DockPanel>
+        <StatusBar VerticalAlignment="Bottom" Background="LightGray">
+            <StatusBarItem>
+                <TextBlock x:Name="statusBar" Text="StatusBar"/>
+            </StatusBarItem>
+        </StatusBar>
         
-        <UserControls:TrainerSearchUserControl x:Name="trainerSearch" HorizontalAlignment="Left" Width="260" Margin="0,20,0,0"/>
+        <UserControls:TrainerSearchUserControl x:Name="trainerSearch" HorizontalAlignment="Left" 
+            Width="260" Margin="0,20,0,20"/>
 
-        <TabControl Margin="260,20,0,0" Background="#FF121212">
+        <TabControl Margin="260,20,0,20" Background="#FF121212">
             <TabItem Header="Party">
                 <Frame>
                     <Frame.Content>
@@ -62,7 +68,7 @@
 
         
 
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="200">
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="200" Margin="0,0,0,20">
             <StackPanel.Resources>
                 <Style TargetType="Button">
                     <Setter Property="Height" Value="70"/>

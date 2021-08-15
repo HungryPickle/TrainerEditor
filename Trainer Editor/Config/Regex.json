@@ -1,0 +1,14 @@
+{
+  "Species": {
+    "Pattern": "(?<=#define\\s+)SPECIES\\w+(?=\\s)",
+    "Options": 0
+  },
+  "Moves": {
+    "Pattern": "MOVE_\\w+",
+    "Options": 0
+  },
+  "Items": {
+    "Pattern": "(?<=#define\\s+)ITEM(\\w(?!USE_|B_USE|_COUNT|FIELD_ARROW))+(?=\\s)",
+    "Options": 0
+  }
+}

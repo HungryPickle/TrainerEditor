@@ -24,7 +24,7 @@ namespace Trainer_Editor.Windows {
 
         private void saveRegex_Click(object sender, RoutedEventArgs e) {
 
-            FileManager.SerializeRegexConfig(Data.Instance.RegexConfig);
+            FileManager.SerializeRegexConfig();
             Data.Instance.RegexConfig = FileManager.DeserializeRegexConfig();
 
         }

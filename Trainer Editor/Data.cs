@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
-using Trainer_Editor.UserControls;
 using System.Linq;
+using Trainer_Editor.UserControls;
 
 namespace Trainer_Editor {
     public enum Constant {
@@ -25,7 +24,11 @@ namespace Trainer_Editor {
 
         private FilePaths filePaths = new FilePaths();
         public FilePaths FilePaths {
-            get { return filePaths; }
+            get {
+                if (string.IsNullOrEmpty(filePaths.PokeEmeraldDirectory))
+                    return null;
+                return filePaths;
+            }
             set { filePaths = value; OnPropertyChanged("FilePaths"); }
         }
 
