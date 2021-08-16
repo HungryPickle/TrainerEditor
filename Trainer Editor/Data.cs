@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Controls;
 using Trainer_Editor.UserControls;
 
 namespace Trainer_Editor {
@@ -15,23 +16,6 @@ namespace Trainer_Editor {
         public static Data Instance {
             get { return instance; }
         }
-
-        private RegexConfig regexConfig = new RegexConfig();
-        public RegexConfig RegexConfig {
-            get { return regexConfig; }
-            set { regexConfig = value; OnPropertyChanged("RegexConfig"); }
-        }
-
-        private FilePaths filePaths = new FilePaths();
-        public FilePaths FilePaths {
-            get {
-                if (string.IsNullOrEmpty(filePaths.PokeEmeraldDirectory))
-                    return null;
-                return filePaths;
-            }
-            set { filePaths = value; OnPropertyChanged("FilePaths"); }
-        }
-
 
         private List<Trainer> trainers = new List<Trainer>();
         public List<Trainer> Trainers {
@@ -50,7 +34,6 @@ namespace Trainer_Editor {
             get { return selectedTrainer; }
             set { selectedTrainer = value; OnPropertyChanged("SelectedTrainer"); }
         }
-
 
         public ObservableCollection<Mon> SelectedParty {
             get { return SelectedTrainer.Party.MonList; }
@@ -77,24 +60,23 @@ namespace Trainer_Editor {
             get { return partyBoxes; }
             set { partyBoxes = value; }
         }
-
-        private List<string> speciesList;
+        public TextBlock StatusBar { get; set; }
+        public Dictionary<Constant, List<string>> ConstantLists { get; set; } = new Dictionary<Constant, List<string>>{
+            { Constant.Species, new List<string>() },
+            { Constant.Items, new List<string>() },
+            { Constant.Moves, new List<string>() }
+        };
         public List<string> SpeciesList {
-            get { return speciesList; }
-            set { speciesList = value; OnPropertyChanged("SpeciesList"); }
+            get { return ConstantLists[Constant.Species]; }
+            set { ConstantLists[Constant.Species] = value; OnPropertyChanged("SpeciesList"); }
         }
-
-        private List<string> itemsList;
         public List<string> ItemsList {
-            get { return itemsList; }
-            set { itemsList = value; OnPropertyChanged("ItemsList"); }
+            get { return ConstantLists[Constant.Items]; }
+            set { ConstantLists[Constant.Items] = value; OnPropertyChanged("ItemsList"); }
         }
-
-        private List<string> movesList;
-
         public List<string> MovesList {
-            get { return movesList; }
-            set { movesList = value; OnPropertyChanged("MovesList"); }
+            get { return ConstantLists[Constant.Moves]; }
+            set { ConstantLists[Constant.Moves] = value; OnPropertyChanged("MovesList"); }
         }
 
     }

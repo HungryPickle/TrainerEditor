@@ -62,7 +62,42 @@ namespace Trainer_Editor {
     }
 
     public class FileManager {
-        private static List<Trainer> ParseTrainersHeader() {
+        private static FileManager instance = new FileManager();
+        public static FileManager Instance {
+            get { return instance; }
+            set { instance = value; }
+        }
+        private FilePaths filePaths = new FilePaths();
+        public FilePaths FilePaths {
+            get { return filePaths; }
+            set { filePaths = value; }
+        }
+        private RegexConfig regexConfig = new RegexConfig();
+        public RegexConfig RegexConfig {
+            get { return regexConfig; }
+            set { regexConfig = value; }
+        }
+        private bool DirectoryNotSet { 
+            get {
+                if (string.IsNullOrEmpty(FilePaths.PokeEmeraldDirectory)) {
+                    Data.Instance.StatusBar.Text = "Directory not set!";
+                    return true;
+                }
+                else
+                    return false;
+            } 
+        }
+
+        public void ParseTrainersAndParties() {
+            if (DirectoryNotSet) return;
+            List<Trainer> trainers = ParseTrainersHeader();
+            Dictionary<string,Party> parties = ParsePartiesHeader();
+            for (int i = 0; i < parties.Count(); i++) {
+                trainers[i].Party = parties.GetValueOrDefault(trainers[i].PartySize);
+            }
+            Data.Instance.Trainers = trainers;
+        }
+        private List<Trainer> ParseTrainersHeader() {
 
             List<Trainer> trainers = new List<Trainer>();
 
@@ -73,7 +108,7 @@ namespace Trainer_Editor {
             int closed = 0;
 
             try {
-                using StreamReader sr = new StreamReader(Data.Instance.FilePaths.TrainersHeader);
+                using StreamReader sr = new StreamReader(FilePaths.TrainersHeader);
                 while ((line = sr.ReadLine()) != null) {
                     if (RegexTrainer.IndexName.IsMatch(line)) {
 
@@ -106,7 +141,7 @@ namespace Trainer_Editor {
             return trainers;
         }
 
-        private static Dictionary<string,Party> ParsePartiesHeader() {
+        private Dictionary<string,Party> ParsePartiesHeader() {
 
             Dictionary<string, Party> namedParties = new Dictionary<string, Party>();
 
@@ -118,7 +153,7 @@ namespace Trainer_Editor {
             int closed = 0;
             
             try {
-                using StreamReader sr = new StreamReader(Data.Instance.FilePaths.PartiesHeader);
+                using StreamReader sr = new StreamReader(FilePaths.PartiesHeader);
                 while ((line = sr.ReadLine()) != null) {
 
                     if (Party.IfContainsPartyAddParty(line, namedParties)) {
@@ -152,9 +187,13 @@ namespace Trainer_Editor {
 
             return namedParties;
         }
-
-        public static void WriteTrainersHeader(List<Trainer> trainers) {
-            if (trainers == null || trainers.Count == 0) {
+        public void WriteTrainersAndPartiesHeaders() {
+            if (DirectoryNotSet) return;
+            WriteTrainersHeader();
+            WritePartiesHeader();
+        }
+        private void WriteTrainersHeader() {
+            if (Data.Instance.Trainers == null || Data.Instance.Trainers.Count == 0) {
                 MessageBox.Show("No Trainers to Save.", "caption", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
@@ -178,7 +217,7 @@ namespace Trainer_Editor {
                 "\n\t}," +
                 "\n");
 
-                foreach (Trainer trainer in trainers) {
+                foreach (Trainer trainer in Data.Instance.Trainers) {
                     sw.Write($"{trainer.CreateTrainerStruct()}");
                     sw.Write("\n");
                 }
@@ -192,15 +231,15 @@ namespace Trainer_Editor {
 
         }
 
-        public static void WritePartiesHeader(List<Trainer> trainers) {
-            if (trainers == null || trainers.Count == 0 || trainers[0]?.Party?.MonList?[0] == null) {
+        private void WritePartiesHeader() {
+            if (Data.Instance.Trainers == null || Data.Instance.Trainers.Count == 0 || Data.Instance.Trainers[0]?.Party?.MonList?[0] == null) {
                 MessageBox.Show("No Parties to Save.", "caption", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             try {
                 using StreamWriter sw = new StreamWriter(FilePaths.PartiesHeaderTest);
-                for (int i = 0; i < trainers.Count; i++) {
-                    sw.Write($"{trainers[i].Party.CreatePartyStruct()}");
+                for (int i = 0; i < Data.Instance.Trainers.Count; i++) {
+                    sw.Write($"{Data.Instance.Trainers[i].Party.CreatePartyStruct()}");
                     sw.Write("\n\n");
                 }
             }
@@ -209,35 +248,32 @@ namespace Trainer_Editor {
             }
         }
 
-        public static void ParseTrainersAndParties() {
-            List<Trainer> trainers = ParseTrainersHeader();
-            Dictionary<string,Party> parties = ParsePartiesHeader();
-            for (int i = 0; i < parties.Count(); i++) {
-                trainers[i].Party = parties.GetValueOrDefault(trainers[i].PartySize);
+        public void ParseAllConstants() {
+            if (DirectoryNotSet) return;
+            foreach (Constant constant in Enum.GetValues(typeof(Constant))) {
+                Data.Instance.ConstantLists[constant] = ParseConstantHeader(constant);
             }
-            Data.Instance.Trainers = trainers;
+            SerializeAllConstants();
         }
-
-        public static void DeserializeAllConstantLists() {
-            Data.Instance.SpeciesList = DeserializeConstantList(Constant.Species);
-            Data.Instance.MovesList = DeserializeConstantList(Constant.Moves);
-            Data.Instance.ItemsList = DeserializeConstantList(Constant.Items);
+        public void SerializeAllConstants() {
+            foreach (Constant constant in Enum.GetValues(typeof(Constant))) {
+                SerializeConstantList(constant, Data.Instance.ConstantLists[constant]);
+            }
+        }
+        public void DeserializeAllConstants() {
+            foreach (Constant constant in Enum.GetValues(typeof(Constant))) {
+                Data.Instance.ConstantLists[constant] = DeserializeConstantList(constant);
+            }
         }  
 
-        public static void ParseAllConstantHeadersToSerializedLists() {
-            foreach (Constant constant in Enum.GetValues(typeof(Constant))) {
-                SerializeConstantList(constant, ParseConstantHeader(constant));
-            }
-        }
-
-        private static List<string> ParseConstantHeader(Constant constant) {
+        private List<string> ParseConstantHeader(Constant constant) {
             try {
-                Regex regex = Data.Instance.RegexConfig.ConstantRegexes[constant];
+                Regex regex = RegexConfig.ConstantRegexes[constant];
 
                 string line;
                 List<string> constants = new List<string>();
 
-                using StreamReader sr = new StreamReader(Data.Instance.FilePaths.ConstantHeaders[constant]);
+                using StreamReader sr = new StreamReader(FilePaths.ConstantHeaders[constant]);
                 while ((line = sr.ReadLine()) != null) {
                     if (regex.IsMatch(line))
                         constants.Add(regex.Match(line).Value);
@@ -250,10 +286,10 @@ namespace Trainer_Editor {
             }
         }
 
-        private static void SerializeConstantList(Constant constant, List<string> constants) {
+        private void SerializeConstantList(Constant constant, List<string> constants) {
             try {
                 constants.RemoveAll(s => s == string.Empty);
-                Stream stream = new FileStream(Data.Instance.FilePaths.ConstantLists[constant], FileMode.Create, FileAccess.Write);
+                Stream stream = new FileStream(FilePaths.ConstantLists[constant], FileMode.Create, FileAccess.Write);
                 using StreamWriter writer = new StreamWriter(stream);
                 JsonSerializer json = new JsonSerializer { Formatting = Formatting.Indented };
                 json.Serialize(writer, constants);
@@ -262,9 +298,9 @@ namespace Trainer_Editor {
                 throw e;
             }
         }
-        private static List<string> DeserializeConstantList(Constant constant) {
+        private List<string> DeserializeConstantList(Constant constant) {
             try {
-                Stream stream = new FileStream(Data.Instance.FilePaths.ConstantLists[constant], FileMode.Open, FileAccess.Read);
+                Stream stream = new FileStream(FilePaths.ConstantLists[constant], FileMode.Open, FileAccess.Read);
                 using StreamReader reader = new StreamReader(stream);
                 JsonSerializer json = new JsonSerializer { Formatting = Formatting.Indented };
                 List<string> constants = (List<string>)json.Deserialize(reader, typeof(List<string>));
@@ -277,37 +313,37 @@ namespace Trainer_Editor {
                 throw e;
             }
         }
-        public static void SerializeRegexConfig() {
+        public void SerializeRegexConfig() {
             Stream stream = new FileStream(FilePaths.Regex, FileMode.Create, FileAccess.Write);
             using StreamWriter writer = new StreamWriter(stream);
             JsonSerializer json = new JsonSerializer { Formatting = Formatting.Indented };
-            json.Serialize(writer, Data.Instance.RegexConfig);
+            json.Serialize(writer, FilePaths.Regex);
         }
 
-        public static RegexConfig DeserializeRegexConfig() {
+        public void DeserializeRegexConfig() {
             try {
                 Stream stream = new FileStream(FilePaths.Regex, FileMode.Open, FileAccess.Read);
                 using StreamReader reader = new StreamReader(stream);
                 JsonSerializer json = new JsonSerializer { Formatting = Formatting.Indented };
-                return (RegexConfig)json.Deserialize(reader, typeof(RegexConfig));
+                RegexConfig = (RegexConfig)json.Deserialize(reader, typeof(RegexConfig));
             }
             catch (Exception e) {
                 throw e;
             }
         }
 
-        public static void SerializeFilePaths() {
+        public void SerializeFilePaths() {
             Stream stream = new FileStream(FilePaths.Config, FileMode.Create, FileAccess.Write);
             using StreamWriter writer = new StreamWriter(stream);
             JsonSerializer json = new JsonSerializer { Formatting = Formatting.Indented };
-            json.Serialize(writer, Data.Instance.FilePaths);
+            json.Serialize(writer, FilePaths.Config);
         }
-        public static FilePaths DeserializeFilePaths() {
+        public void DeserializeFilePaths() {
             try {
                 Stream stream = new FileStream(FilePaths.Config, FileMode.Open, FileAccess.Read);
                 using StreamReader reader = new StreamReader(stream);
                 JsonSerializer json = new JsonSerializer { Formatting = Formatting.Indented };
-                return (FilePaths)json.Deserialize(reader, typeof(FilePaths));
+                FilePaths = (FilePaths)json.Deserialize(reader, typeof(FilePaths));
             }
             catch (Exception e) {
                 throw e;

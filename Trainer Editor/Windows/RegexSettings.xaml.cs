@@ -19,20 +19,20 @@ namespace Trainer_Editor.Windows {
     public partial class RegexSettings : Window {
         public RegexSettings() {
             InitializeComponent();
-            DataContext = Data.Instance;
+            DataContext = FileManager.Instance;
         }
 
         private void saveRegex_Click(object sender, RoutedEventArgs e) {
 
-            FileManager.SerializeRegexConfig();
-            Data.Instance.RegexConfig = FileManager.DeserializeRegexConfig();
+            FileManager.Instance.SerializeRegexConfig();
+            FileManager.Instance.DeserializeRegexConfig();
 
         }
 
         private void defaultRegex_Click(object sender, RoutedEventArgs e) {
-            Data.Instance.RegexConfig.Species = RegexConfig.SpeciesDefault;
-            Data.Instance.RegexConfig.Moves = RegexConfig.MovesDefault;
-            Data.Instance.RegexConfig.Items = RegexConfig.ItemsDefault;
+            FileManager.Instance.RegexConfig.Species = RegexConfig.SpeciesDefault;
+            FileManager.Instance.RegexConfig.Moves = RegexConfig.MovesDefault;
+            FileManager.Instance.RegexConfig.Items = RegexConfig.ItemsDefault;
         }
     }
 }

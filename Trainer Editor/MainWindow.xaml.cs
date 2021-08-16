@@ -21,13 +21,16 @@ namespace Trainer_Editor {
 
         public MainWindow() {
             InitializeComponent();
+            Data.Instance.StatusBar = statusBar;
             
             Data.Instance.SelectedTrainer = Trainer.CreateDummy();
             Data.Instance.SelectedMon = Data.Instance.SelectedTrainer.Party[0];
 
-            //Data.Instance.FilePaths = FileManager.DeserializeFilePaths();
-            Data.Instance.RegexConfig = FileManager.DeserializeRegexConfig();
-            //FileManager.DeserializeAllConstantLists(Data.Instance);
+            FileManager.Instance.DeserializeFilePaths();
+            FileManager.Instance.ParseTrainersAndParties();
+            FileManager.Instance.DeserializeRegexConfig();
+            FileManager.Instance.DeserializeAllConstants();
+
             ControlNav.LoadControlNavs();
 
             DataContext = Data.Instance;
@@ -36,23 +39,19 @@ namespace Trainer_Editor {
 
         private async void ReadTrainersAndParties_Click(object sender, RoutedEventArgs e) {
 
-            await Task.Run(() => FileManager.ParseTrainersAndParties());
+            await Task.Run(() => FileManager.Instance.ParseTrainersAndParties());
         }
         private async void SaveTrainersAndParties_Click(object sender, RoutedEventArgs e) {
 
-            if (true) {
-                await Task.Run(() => FileManager.WriteTrainersHeader(Data.Instance.Trainers));
-                Debug.WriteLine("Trainers Saved.");
-
-                await Task.Run(() => FileManager.WritePartiesHeader(Data.Instance.Trainers));
-                Debug.WriteLine("Parties Saved.");
-            }
+            await Task.Run(() => FileManager.Instance.WriteTrainersAndPartiesHeaders());
+            statusBar.Text = "Trainers Saved.";
         }
         private async void ReadWriteConstants_Click(object sender, RoutedEventArgs e) {
-            await Task.Run(() => FileManager.ParseAllConstantHeadersToSerializedLists());
-            await Task.Run(() => FileManager.DeserializeAllConstantLists());
+            statusBar.Text = "Parsing for Constants...";
+            await Task.Run(() => FileManager.Instance.ParseAllConstants());
+            await Task.Run(() => FileManager.Instance.DeserializeAllConstants());
 
-            Debug.WriteLine("Read and Wrote Constants.");
+            statusBar.Text = "Parsed Constants.";
         }
 
         private async void MenuOpen_Click(object sender, RoutedEventArgs e) {
@@ -62,15 +61,15 @@ namespace Trainer_Editor {
 
             statusBar.Text = "Parsing for Trainers...";
             
-            Data.Instance.FilePaths.PokeEmeraldDirectory = folderBrowser.SelectedPath;
-            FileManager.SerializeFilePaths();
+            FileManager.Instance.FilePaths.PokeEmeraldDirectory = folderBrowser.SelectedPath;
+            FileManager.Instance.SerializeFilePaths();
 
-            await Task.Run(() => FileManager.ParseTrainersAndParties());
+            await Task.Run(() => FileManager.Instance.ParseTrainersAndParties());
 
-            await Task.Run(() => FileManager.ParseAllConstantHeadersToSerializedLists());
-            await Task.Run(() => FileManager.DeserializeAllConstantLists());
+            await Task.Run(() => FileManager.Instance.ParseAllConstants());
+            await Task.Run(() => FileManager.Instance.DeserializeAllConstants());
 
-            statusBar.Text = "Parse Complete.";
+            statusBar.Text = "Parsed Trainers.";
 
             //await Task.Run(() => FileManager.WriteTrainers(trainers));
             //Debug.WriteLine("Trainers Saved.");

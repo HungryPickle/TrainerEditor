@@ -121,7 +121,7 @@ namespace Trainer_Editor {
                 Uri uri = new Uri($"C:\\Users\\Scott\\Decomps\\pokeemerald\\graphics\\trainers\\front_pics\\{trainerPic}_front_pic.png");
                 return new BitmapImage(uri);
             }
-            catch (Exception e) {
+            catch (Exception) {
                 return Binding.DoNothing;
             }
         }
