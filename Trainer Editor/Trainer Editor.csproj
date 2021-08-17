@@ -10,10 +10,11 @@
 
   <ItemGroup>
     <None Remove="Config\FilePaths.json" />
-    <None Remove="Config\Regex.json" />
+    <None Remove="Config\RegexConstant.json" />
     <None Remove="Constants\Items.json" />
     <None Remove="Constants\Moves.json" />
     <None Remove="Constants\Species.json" />
+    <None Remove="Constants\TrainerClass.json" />
     <None Remove="Graphics\ghost.png" />
     <None Remove="Graphics\rocket.png" />
     <None Remove="Graphics\slow.png" />
@@ -28,13 +29,16 @@
     <Content Include="Config\FilePaths.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Config\Regex.json">
+    <Content Include="Config\RegexConstant.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Constants\Items.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Constants\Species.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Constants\TrainerClass.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Graphics\ghost.png">

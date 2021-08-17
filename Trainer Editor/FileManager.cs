@@ -22,8 +22,8 @@ namespace Trainer_Editor {
             get { return filePaths; }
             set { filePaths = value; }
         }
-        private RegexConfig regexConfig = new RegexConfig();
-        public RegexConfig RegexConfig {
+        private RegexConstant regexConfig = new RegexConstant();
+        public RegexConstant RegexConfig {
             get { return regexConfig; }
             set { regexConfig = value; }
         }
@@ -238,14 +238,14 @@ namespace Trainer_Editor {
         private List<string> DeserializeConstantList(Constant constant) {
             List<string> constants = Deserialize<List<string>>(FilePaths.ConstantLists[constant]);
             if (constant != Constant.Species)
-                constants.Add(string.Empty);
+                constants?.Add(string.Empty);
             return constants;
         }
         public void SerializeRegexConfig() {
             Serialize(FilePaths.RegexJson, RegexConfig);
         }
         public void DeserializeRegexConfig() {
-            RegexConfig = Deserialize<RegexConfig>(FilePaths.RegexJson);
+            RegexConfig = Deserialize<RegexConstant>(FilePaths.RegexJson);
         }
 
         public void SerializeFilePaths() {

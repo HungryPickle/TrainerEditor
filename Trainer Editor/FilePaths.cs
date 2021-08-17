@@ -14,6 +14,7 @@ namespace Trainer_Editor {
                 SpeciesHeader = value + @"\include\constants\species.h";
                 MovesHeader = value + @"\include\constants\moves.h";
                 ItemsHeader = value + @"\include\constants\items.h";
+                TrainerClassHeader = value + @"\include\constants\trainers.h";
             }
         }
         public string TrainersHeader { get; set; } = "";
@@ -21,6 +22,7 @@ namespace Trainer_Editor {
         public string SpeciesHeader { get; set; } = "";
         public string MovesHeader { get; set; } = "";
         public string ItemsHeader { get; set; } = "";
+        public string TrainerClassHeader { get; set; } = "";
         
         public string GetConstantHeader(Constant constant) {
             switch (constant) {
@@ -30,6 +32,8 @@ namespace Trainer_Editor {
                     return MovesHeader;
                 case Constant.Items:
                     return ItemsHeader;
+                case Constant.TrainerClass:
+                    return TrainerClassHeader;
                 default:
                     MessageBox.Show("CostantHeader not implemented in FilePaths.GetConstantHeader");
                     return string.Empty;
@@ -39,11 +43,12 @@ namespace Trainer_Editor {
         public Dictionary<Constant, string> ConstantLists { get; set; } = new Dictionary<Constant, string>() {
             {Constant.Species, $"{Directory.GetCurrentDirectory()}\\Constants\\Species.json" },
             {Constant.Moves, $"{Directory.GetCurrentDirectory()}\\Constants\\Moves.json" },
-            {Constant.Items, $"{Directory.GetCurrentDirectory()}\\Constants\\Items.json" }
+            {Constant.Items, $"{Directory.GetCurrentDirectory()}\\Constants\\Items.json" },
+            {Constant.TrainerClass, $"{Directory.GetCurrentDirectory()}\\Constants\\TrainerClass.json" }
         };
 
         public static readonly string FilePathsJson = $"{Directory.GetCurrentDirectory()}\\Config\\FilePaths.json";
-        public static readonly string RegexJson = $"{Directory.GetCurrentDirectory()}\\Config\\Regex.json";
+        public static readonly string RegexJson = $"{Directory.GetCurrentDirectory()}\\Config\\RegexConstant.json";
         public static string TrainersHeaderTest { get; set; } = @"C:\TrainerEditor\tests\trainer_test.h";
         public static string PartiesHeaderTest { get; set; } = @"C:\TrainerEditor\tests\party_test.h";
 

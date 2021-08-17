@@ -32,9 +32,9 @@ namespace Trainer_Editor.Windows {
         }
 
         private void defaultRegex_Click(object sender, RoutedEventArgs e) {
-            FileManager.Instance.RegexConfig.Species = RegexConfig.SpeciesDefault;
-            FileManager.Instance.RegexConfig.Moves = RegexConfig.MovesDefault;
-            FileManager.Instance.RegexConfig.Items = RegexConfig.ItemsDefault;
+            FileManager.Instance.RegexConfig.Species = RegexConstant.SpeciesDefault;
+            FileManager.Instance.RegexConfig.Moves = RegexConstant.MovesDefault;
+            FileManager.Instance.RegexConfig.Items = RegexConstant.ItemsDefault;
         }
     }
 }

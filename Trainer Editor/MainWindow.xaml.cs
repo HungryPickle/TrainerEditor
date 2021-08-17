@@ -31,6 +31,10 @@ namespace Trainer_Editor {
             FileManager.Instance.DeserializeAllConstants();
             FileManager.Instance.ParseTrainersAndParties();
 
+            //Debug @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            FileManager.Instance.FilePaths.PokeEmeraldDirectory = @"C:\Users\Scott\Decomps\pokeemerald";
+            FileManager.Instance.ParseTrainersAndParties();
+
             ControlNav.LoadControlNavs();
 
             DataContext = Data.Instance;

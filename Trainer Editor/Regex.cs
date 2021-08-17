@@ -35,11 +35,12 @@ namespace Trainer_Editor {
 
     }
 
-    public class RegexConfig : ObservableObject {
+    public class RegexConstant : ObservableObject {
 
         public static Regex SpeciesDefault { get; set; } = new Regex(@"(?<=#define\s+)SPECIES\w+(?=\s)");
         public static Regex MovesDefault { get; set; } = new Regex(@"MOVE_\w+");
         public static Regex ItemsDefault { get; set; } = new Regex(@"(?<=#define\s+)ITEM(\w(?!USE_|B_USE|_COUNT|FIELD_ARROW))+(?=\s)");
+        public static Regex TrainerClassDefault { get; set; } = new Regex(@"(?<=#define\s+)TRAINER_CLASS_\w+");
 
         public Regex GetConstantRegex(Constant constant) {
             switch (constant) {
@@ -49,6 +50,8 @@ namespace Trainer_Editor {
                     return Moves;
                 case Constant.Items:
                     return Items;
+                case Constant.TrainerClass:
+                    return TrainerClass;
                 default:
                     MessageBox.Show("Constant not implemented in RegexConfig.GetConstantRegex");
                     return null;
@@ -57,31 +60,41 @@ namespace Trainer_Editor {
         private Regex items = ItemsDefault;
         private Regex moves = MovesDefault;
         private Regex species = SpeciesDefault;
+        private Regex trainerClass = TrainerClassDefault;
 
         public Regex Species {
             get => species;
-            set { 
-                if (!string.IsNullOrEmpty(value?.ToString())) 
-                    species = value; 
-                OnPropertyChanged("Species"); 
+            set {
+                SetRegex(Species, ref species, value);
             }
         }
         public Regex Moves {
             get => moves;
             set {
                 if (!string.IsNullOrEmpty(value?.ToString()))
-                    moves = value; 
-                OnPropertyChanged("Moves"); }
+                    moves = value;
+                OnPropertyChanged("Moves");
+            }
         }
         public Regex Items {
             get => items;
             set {
                 if (!string.IsNullOrEmpty(value?.ToString()))
-                    items = value; 
-                OnPropertyChanged("Items"); 
+                    items = value;
+                OnPropertyChanged("Items");
             }
         }
 
+        public Regex TrainerClass {
+            get => trainerClass;
+            set => SetRegex(TrainerClass, ref trainerClass, value);
+        }
+        private void SetRegex(Regex property, ref Regex field, Regex value ) {
+            if (!string.IsNullOrEmpty(value?.ToString())) {
+                field = value;
+                OnPropertyChanged(nameof(property));
+            }
+        }
     }
     public class RegexInput {
         //public static Regex Digits = new Regex(@"[1-9][0-9]*");

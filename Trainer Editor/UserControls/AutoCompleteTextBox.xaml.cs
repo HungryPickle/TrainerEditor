@@ -156,6 +156,10 @@ namespace Trainer_Editor.UserControls {
                     break;
             }
         }
+        private void TextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            FilteredSource = ListSource;
+            popup.IsOpen = true;
+        }
 
         private void PopUp_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             popup.IsOpen = false;
@@ -172,6 +176,7 @@ namespace Trainer_Editor.UserControls {
         private void PopUp_Closed(object sender, EventArgs e) {
             textbox.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
         }
+
     }
 
 }

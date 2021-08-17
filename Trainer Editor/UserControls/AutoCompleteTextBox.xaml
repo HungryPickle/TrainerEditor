@@ -19,7 +19,7 @@
                 Text="{Binding ListItem, Mode=TwoWay, UpdateSourceTrigger=Explicit}" 
                 FontSize="{Binding TextBoxFontSize}"
                 Background="{Binding TextBoxBackground}"
-                TextChanged="TextBox_TextChanged"  PreviewKeyDown="TextBox_PreviewKeyDown" 
+                TextChanged="TextBox_TextChanged"  PreviewKeyDown="TextBox_PreviewKeyDown" MouseDoubleClick="TextBox_MouseDoubleClick"
                 Padding="2,2,2,2"/>
             <Popup Name="popup" 
                    HorizontalAlignment="Center" 

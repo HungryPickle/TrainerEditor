@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Trainer_Editor.Pages"
+      xmlns:controls="clr-namespace:Trainer_Editor.UserControls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="TrainerPage">
@@ -28,10 +29,16 @@
         </Grid.RowDefinitions>
 
         <Image x:Name="TrainerSprite" Margin="10,0,0,0" Grid.Row="0" Grid.Column="0" 
-                Height="64" Width="64"
-                UseLayoutRounding="True"
-                Source="{Binding SelectedTrainer.TrainerPic, Converter={StaticResource TrainerSpriteConverter},
-                FallbackValue={StaticResource RocketBitmap}}"/>
-        
+            Height="64" Width="64"
+            UseLayoutRounding="True"
+            Source="{Binding SelectedTrainer.TrainerPic, Converter={StaticResource TrainerSpriteConverter},
+            FallbackValue={StaticResource RocketBitmap}}"/>
+        <controls:AutoCompleteTextBox Grid.Row="1" LabelContent="TrainerClass"
+            ListItem="{Binding SelectedTrainer.TrainerClass, Mode=TwoWay}"
+            ListSource="{Binding TrainerClassList, Mode=OneWay}"/>
+        <ComboBox Grid.Row="2" Width="210"
+            SelectedItem="{Binding SelectedTrainer.TrainerClass, Mode=TwoWay}" 
+            ItemsSource="{Binding TrainerClassList, Mode=OneWay}"/>
+
     </Grid>
 </Page>

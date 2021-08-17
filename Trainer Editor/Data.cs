@@ -7,7 +7,7 @@ using Trainer_Editor.UserControls;
 
 namespace Trainer_Editor {
     public enum Constant {
-        Species, Moves, Items
+        Species, Moves, Items, TrainerClass
     };
     public class Data : ObservableObject {
 
@@ -74,6 +74,8 @@ namespace Trainer_Editor {
                     return MovesList;
                 case Constant.Items:
                     return ItemsList;
+                case Constant.TrainerClass:
+                    return TrainerClassList;
                 default:
                     MessageBox.Show("Constant not implemented in Data.GetConstantList");
                     return null;
@@ -89,6 +91,9 @@ namespace Trainer_Editor {
                     break;
                 case Constant.Items:
                     ItemsList = constantList;
+                    break;
+                case Constant.TrainerClass:
+                    TrainerClassList = constantList;
                     break;
                 default:
                     MessageBox.Show("Constant not implemented in Data.GetConstantList");
@@ -106,6 +111,12 @@ namespace Trainer_Editor {
         public List<string> MovesList {
             get => movesList;
             set { movesList = value; OnPropertyChanged("MovesList"); }
+        }
+        private List<string> trainerClassList;
+
+        public List<string> TrainerClassList {
+            get => trainerClassList;
+            set { trainerClassList = value; OnPropertyChanged("TrainerClassList"); }
         }
 
     }
