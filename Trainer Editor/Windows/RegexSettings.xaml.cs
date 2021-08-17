@@ -26,6 +26,8 @@ namespace Trainer_Editor.Windows {
 
             FileManager.Instance.SerializeRegexConfig();
             FileManager.Instance.DeserializeRegexConfig();
+            FileManager.Instance.ParseAllConstants();
+            FileManager.Instance.SerializeAllConstants();
 
         }
 

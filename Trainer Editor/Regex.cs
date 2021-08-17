@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace Trainer_Editor {
     public class RegexTrainer {
@@ -35,34 +36,50 @@ namespace Trainer_Editor {
     }
 
     public class RegexConfig : ObservableObject {
+
         public static Regex SpeciesDefault { get; set; } = new Regex(@"(?<=#define\s+)SPECIES\w+(?=\s)");
         public static Regex MovesDefault { get; set; } = new Regex(@"MOVE_\w+");
         public static Regex ItemsDefault { get; set; } = new Regex(@"(?<=#define\s+)ITEM(\w(?!USE_|B_USE|_COUNT|FIELD_ARROW))+(?=\s)");
 
-        [JsonIgnore]
-        public Dictionary<Constant, Regex> ConstantRegexes { get; set; } = new Dictionary<Constant, Regex> {
-            { Constant.Species, SpeciesDefault },
-            { Constant.Moves, MovesDefault },
-            { Constant.Items, ItemsDefault },
-        };
-        public void SetRegex(Constant constant, Regex value, Regex defaultValue) {
-            if (!string.IsNullOrEmpty(value?.ToString()))
-                ConstantRegexes[constant] = value;
-            //else 
-            //    ConstantRegexes[constant] = defaultValue;
+        public Regex GetConstantRegex(Constant constant) {
+            switch (constant) {
+                case Constant.Species:
+                    return Species;
+                case Constant.Moves:
+                    return Moves;
+                case Constant.Items:
+                    return Items;
+                default:
+                    MessageBox.Show("Constant not implemented in RegexConfig.GetConstantRegex");
+                    return null;
+            }
         }
+        private Regex items = ItemsDefault;
+        private Regex moves = MovesDefault;
+        private Regex species = SpeciesDefault;
 
         public Regex Species {
-            get { return ConstantRegexes[Constant.Species]; }
-            set { SetRegex(Constant.Species, value, SpeciesDefault); OnPropertyChanged("Species"); }
+            get => species;
+            set { 
+                if (!string.IsNullOrEmpty(value?.ToString())) 
+                    species = value; 
+                OnPropertyChanged("Species"); 
+            }
         }
         public Regex Moves {
-            get { return ConstantRegexes[Constant.Moves]; }
-            set { SetRegex(Constant.Moves, value, MovesDefault); OnPropertyChanged("Moves"); }
+            get => moves;
+            set {
+                if (!string.IsNullOrEmpty(value?.ToString()))
+                    moves = value; 
+                OnPropertyChanged("Moves"); }
         }
         public Regex Items {
-            get { return ConstantRegexes[Constant.Items]; }
-            set { SetRegex(Constant.Items, value, ItemsDefault); OnPropertyChanged("Items"); }
+            get => items;
+            set {
+                if (!string.IsNullOrEmpty(value?.ToString()))
+                    items = value; 
+                OnPropertyChanged("Items"); 
+            }
         }
 
     }
