@@ -32,7 +32,7 @@
                 <Setter Property="LabelVisibility" Value="Collapsed"/>
                 <Setter Property="IsEnabled" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag, Converter={StaticResource DisableEmptyPartySlotConverter}}"/>
                 <Setter Property="ListItem" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag.Species, Mode=TwoWay}"/>
-                <Setter Property="ListSource" Value="{Binding SpeciesList, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Setter Property="ListSource" Value="{Binding Species.List, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Setter Property="TextBoxBackground">
                     <Setter.Value>
                         <MultiBinding Converter="{StaticResource HighlightSelectedMonConverter}">

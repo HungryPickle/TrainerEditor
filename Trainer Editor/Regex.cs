@@ -42,15 +42,15 @@ namespace Trainer_Editor {
         public static Regex ItemsDefault { get; set; } = new Regex(@"(?<=#define\s+)ITEM(\w(?!USE_|B_USE|_COUNT|FIELD_ARROW))+(?=\s)");
         public static Regex TrainerClassDefault { get; set; } = new Regex(@"(?<=#define\s+)TRAINER_CLASS_\w+");
 
-        public Regex GetConstantRegex(Constant constant) {
+        public Regex GetConstantRegex(Constants constant) {
             switch (constant) {
-                case Constant.Species:
+                case Constants.Species:
                     return Species;
-                case Constant.Moves:
+                case Constants.Moves:
                     return Moves;
-                case Constant.Items:
+                case Constants.Items:
                     return Items;
-                case Constant.TrainerClass:
+                case Constants.TrainerClass:
                     return TrainerClass;
                 default:
                     MessageBox.Show("Constant not implemented in RegexConfig.GetConstantRegex");

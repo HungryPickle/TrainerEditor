@@ -22,11 +22,6 @@ namespace Trainer_Editor {
             get { return filePaths; }
             set { filePaths = value; }
         }
-        private RegexConstant regexConfig = new RegexConstant();
-        public RegexConstant RegexConfig {
-            get { return regexConfig; }
-            set { regexConfig = value; }
-        }
         private bool DirectoryNotSet { 
             get {
                 if (string.IsNullOrEmpty(FilePaths.PokeEmeraldDirectory)) {
@@ -195,66 +190,55 @@ namespace Trainer_Editor {
                 Debug.WriteLine(e.Message);
             }
         }
-
         public void ParseAllConstants() {
             if (DirectoryNotSet) return;
-            foreach (Constant constant in Enum.GetValues(typeof(Constant))) {
-                Data.Instance.SetConstantList(constant, ParseConstantHeader(constant));
+            foreach (Constants type in Enum.GetValues(typeof(Constants))) {
+                ParseConstantHeader(Data.Instance.GetConstant(type));
             }
         }
-        public void SerializeAllConstants() {
-            foreach (Constant constant in Enum.GetValues(typeof(Constant))) {
-                SerializeConstantList(constant, Data.Instance.GetConstantList(constant));
-            }
-        }
-        public void DeserializeAllConstants() {
-            foreach (Constant constant in Enum.GetValues(typeof(Constant))) {
-                Data.Instance.SetConstantList(constant, DeserializeConstantList(constant));
-            }
-        }  
-
-        private List<string> ParseConstantHeader(Constant constant) {
+        private void ParseConstantHeader(Constant constant) {
             try {
-                Regex regex = RegexConfig.GetConstantRegex(constant);
                 string line;
-                List<string> constants = new List<string>();
+                List<string> constantList = new List<string>();
 
-                using StreamReader sr = new StreamReader(FilePaths.GetConstantHeader(constant));
+                using StreamReader sr = new StreamReader(constant.HeaderPath);
                 while ((line = sr.ReadLine()) != null) {
-                    if (regex.IsMatch(line))
-                        constants.Add(regex.Match(line).Value);
+                    if (constant.Regex.IsMatch(line))
+                        constantList.Add(constant.Regex.Match(line).Value);
                 }
-                return constants;
+                constant.List = constantList;
             }
             catch (Exception e) {
                 throw e;
             }
         }
-
-        private void SerializeConstantList(Constant constant, List<string> constants) {
-            constants.RemoveAll(s => s == string.Empty);
-            Serialize(FilePaths.ConstantLists[constant], constants);
+        public void SerializeAllConstants() {
+            foreach (Constants type in Enum.GetValues(typeof(Constants))) {
+                SerializeConstant(Data.Instance.GetConstant(type));
+            }
         }
-        private List<string> DeserializeConstantList(Constant constant) {
-            List<string> constants = Deserialize<List<string>>(FilePaths.ConstantLists[constant]);
-            if (constant != Constant.Species)
-                constants?.Add(string.Empty);
-            return constants;
+        private void SerializeConstant(Constant constant) {
+            constant.List.RemoveAll(s => s == string.Empty);
+            Serialize(constant.JsonPath, constant);
         }
-        public void SerializeRegexConfig() {
-            Serialize(FilePaths.RegexJson, RegexConfig);
+        public void DeserializeAllConstants() {
+            foreach (Constants type in Enum.GetValues(typeof(Constants))) {
+                Data.Instance.SetConstant(DeserializeConstant(type));
+            }
         }
-        public void DeserializeRegexConfig() {
-            RegexConfig = Deserialize<RegexConstant>(FilePaths.RegexJson);
+        private Constant DeserializeConstant(Constants type) {
+            Constant constant = Deserialize<Constant>(Data.Instance.GetConstant(type).JsonPath);
+            constant.SetRegexToDefault();
+            if (type != Constants.Species)
+                constant.List?.Add(string.Empty);
+            return constant;
         }
-
         public void SerializeFilePaths() {
-            Serialize(FilePaths.FilePathsJson, FilePaths);
+            Serialize(FilePaths.JsonPath, FilePaths);
         }
         public void DeserializeFilePaths() {
-            FilePaths = Deserialize<FilePaths>(FilePaths.FilePathsJson);
+            FilePaths = Deserialize<FilePaths>(FilePaths.JsonPath);
         }
-
         private void Serialize<T>(string path, T obj) {
             try {
                 Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write);

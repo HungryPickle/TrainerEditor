@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <None Remove="Config\FilePaths.json" />
-    <None Remove="Config\RegexConstant.json" />
     <None Remove="Constants\Items.json" />
     <None Remove="Constants\Moves.json" />
     <None Remove="Constants\Species.json" />
@@ -27,9 +26,6 @@
 
   <ItemGroup>
     <Content Include="Config\FilePaths.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Config\RegexConstant.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Constants\Items.json">

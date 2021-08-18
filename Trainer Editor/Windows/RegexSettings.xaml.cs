@@ -24,17 +24,15 @@ namespace Trainer_Editor.Windows {
 
         private void saveRegex_Click(object sender, RoutedEventArgs e) {
 
-            FileManager.Instance.SerializeRegexConfig();
-            FileManager.Instance.DeserializeRegexConfig();
             FileManager.Instance.ParseAllConstants();
             FileManager.Instance.SerializeAllConstants();
 
         }
 
         private void defaultRegex_Click(object sender, RoutedEventArgs e) {
-            FileManager.Instance.RegexConfig.Species = RegexConstant.SpeciesDefault;
-            FileManager.Instance.RegexConfig.Moves = RegexConstant.MovesDefault;
-            FileManager.Instance.RegexConfig.Items = RegexConstant.ItemsDefault;
+            foreach (Constants type in Enum.GetValues(typeof(Constants))) {
+                Data.Instance.GetConstant(type).SetRegexToDefault();
+            }
         }
     }
 }

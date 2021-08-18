@@ -35,10 +35,10 @@
             FallbackValue={StaticResource RocketBitmap}}"/>
         <controls:AutoCompleteTextBox Grid.Row="1" LabelContent="TrainerClass"
             ListItem="{Binding SelectedTrainer.TrainerClass, Mode=TwoWay}"
-            ListSource="{Binding TrainerClassList, Mode=OneWay}"/>
+            ListSource="{Binding TrainerClass.List, Mode=OneWay}"/>
         <ComboBox Grid.Row="2" Width="210"
             SelectedItem="{Binding SelectedTrainer.TrainerClass, Mode=TwoWay}" 
-            ItemsSource="{Binding TrainerClassList, Mode=OneWay}"/>
+            ItemsSource="{Binding TrainerClass.List, Mode=OneWay}"/>
 
     </Grid>
 </Page>

@@ -74,7 +74,7 @@
 
             <UserControls:AutoCompleteTextBox x:Name="heldItemBox" LabelContent="Held Item" Width="120" 
                 ListItem="{Binding SelectedMon.HeldItem, Mode=TwoWay}" 
-                ListSource="{Binding ItemsList, Mode=OneWay}" 
+                ListSource="{Binding Items.List, Mode=OneWay}" 
                 Tag="{x:Static global:Input.HeldItem}"/>
         </StackPanel>
 

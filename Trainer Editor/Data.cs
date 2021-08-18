@@ -6,9 +6,7 @@ using System.Windows.Controls;
 using Trainer_Editor.UserControls;
 
 namespace Trainer_Editor {
-    public enum Constant {
-        Species, Moves, Items, TrainerClass
-    };
+
     public class Data : ObservableObject {
 
         private Data() { }
@@ -57,67 +55,50 @@ namespace Trainer_Editor {
         }
 
         private List<AutoCompleteTextBox> partyBoxes;
-        private List<string> speciesList;
-        private List<string> itemsList;
-        private List<string> movesList;
 
         public List<AutoCompleteTextBox> PartyBoxes {
             get { return partyBoxes; }
             set { partyBoxes = value; }
         }
         public TextBlock StatusBar { get; set; }
-        public List<string> GetConstantList(Constant constant) {
-            switch (constant) {
-                case Constant.Species:
-                    return SpeciesList;
-                case Constant.Moves:
-                    return MovesList;
-                case Constant.Items:
-                    return ItemsList;
-                case Constant.TrainerClass:
-                    return TrainerClassList;
+
+        public Constant Species { get; set; } = new Constant(Constants.Species);
+        public Constant Moves { get; set; } = new Constant(Constants.Moves);
+        public Constant Items { get; set; } = new Constant(Constants.Items);
+        public Constant TrainerClass { get; set; } = new Constant(Constants.TrainerClass);
+        public Constant GetConstant(Constants type) {
+            switch (type) {
+                case Constants.Species:
+                    return Species;
+                case Constants.Moves:
+                    return Moves;
+                case Constants.Items:
+                    return Items;
+                case Constants.TrainerClass:
+                    return TrainerClass;
                 default:
-                    MessageBox.Show("Constant not implemented in Data.GetConstantList");
+                    MessageBox.Show("Constant not implemented in Data.GetConstant.");
                     return null;
             }
         }
-        public void SetConstantList(Constant constant, List<string> constantList) {
-            switch (constant) {
-                case Constant.Species:
-                    SpeciesList = constantList;
+        public void SetConstant(Constant constant) {
+            switch (constant.Type) {
+                case Constants.Species:
+                    Species = constant;
                     break;
-                case Constant.Moves:
-                    MovesList = constantList;
+                case Constants.Moves:
+                    Moves = constant;
                     break;
-                case Constant.Items:
-                    ItemsList = constantList;
+                case Constants.Items:
+                    Items = constant;
                     break;
-                case Constant.TrainerClass:
-                    TrainerClassList = constantList;
+                case Constants.TrainerClass:
+                    TrainerClass = constant;
                     break;
                 default:
-                    MessageBox.Show("Constant not implemented in Data.GetConstantList");
+                    MessageBox.Show("Constant not implemented in Data.SetConstant.");
                     break;
             }
         }
-        public List<string> SpeciesList {
-            get => speciesList;
-            set { speciesList = value; OnPropertyChanged("SpeciesList"); }
-        }
-        public List<string> ItemsList {
-            get => itemsList;
-            set { itemsList = value; OnPropertyChanged("ItemsList"); }
-        }
-        public List<string> MovesList {
-            get => movesList;
-            set { movesList = value; OnPropertyChanged("MovesList"); }
-        }
-        private List<string> trainerClassList;
-
-        public List<string> TrainerClassList {
-            get => trainerClassList;
-            set { trainerClassList = value; OnPropertyChanged("TrainerClassList"); }
-        }
-
     }
 }

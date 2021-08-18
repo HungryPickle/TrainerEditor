@@ -27,9 +27,7 @@ namespace Trainer_Editor {
             Data.Instance.SelectedMon = Data.Instance.SelectedTrainer.Party[0];
 
             FileManager.Instance.DeserializeFilePaths();
-            FileManager.Instance.DeserializeRegexConfig();
-            FileManager.Instance.DeserializeAllConstants();
-            FileManager.Instance.ParseTrainersAndParties();
+            //FileManager.Instance.DeserializeAllConstants();
 
             //Debug @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
             FileManager.Instance.FilePaths.PokeEmeraldDirectory = @"C:\Users\Scott\Decomps\pokeemerald";
