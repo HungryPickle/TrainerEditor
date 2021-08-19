@@ -19,7 +19,7 @@ namespace Trainer_Editor.Windows {
     public partial class RegexSettings : Window {
         public RegexSettings() {
             InitializeComponent();
-            DataContext = FileManager.Instance;
+            DataContext = Data.Instance;
         }
 
         private void saveRegex_Click(object sender, RoutedEventArgs e) {

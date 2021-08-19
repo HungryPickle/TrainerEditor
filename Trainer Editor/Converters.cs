@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -97,10 +98,10 @@ namespace Trainer_Editor {
                 Uri uri = new Uri($"C:\\Users\\Scott\\Decomps\\pokeemerald\\graphics\\pokemon\\{species}\\front.png");
                 return new BitmapImage(uri);
             }
-            catch (Exception e) {
-                MessageBox.Show(e.Message, "caption", MessageBoxButton.OK, MessageBoxImage.Error);
-                return new BitmapImage(new Uri($"{Directory.GetCurrentDirectory()}\\Graphics\\ghost.png"));
-                //return Binding.DoNothing;
+            catch (Exception ) {
+                //MessageBox.Show(e.Message, "PokemonSpriteConverter", MessageBoxButton.OK, MessageBoxImage.Error);
+                //return new BitmapImage(new Uri($"{Directory.GetCurrentDirectory()}\\Graphics\\ghost.png"));
+                return Binding.DoNothing;
             }
         }
 

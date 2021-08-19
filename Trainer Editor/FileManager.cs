@@ -228,9 +228,7 @@ namespace Trainer_Editor {
         }
         private Constant DeserializeConstant(Constants type) {
             Constant constant = Deserialize<Constant>(Data.Instance.GetConstant(type).JsonPath);
-            constant.SetRegexToDefault();
-            if (type != Constants.Species)
-                constant.List?.Add(string.Empty);
+            constant.AddEmptyStringToNullableConstant();
             return constant;
         }
         public void SerializeFilePaths() {

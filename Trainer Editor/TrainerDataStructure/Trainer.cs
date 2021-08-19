@@ -5,12 +5,14 @@ using System.Text.RegularExpressions;
 namespace Trainer_Editor {
     public class Trainer : ObservableObject {
         private Party party;
+        private string trainerPic;
+        private string trainerClass;
 
         public string IndexName { get; set; }
         public List<string> PartyFlags { get; set; }
-        public string TrainerClass { get; set; }
+        public string TrainerClass { get => trainerClass; set { trainerClass = value; OnPropertyChanged("TrainerClass"); } }
         public List<string> EncounterMusic_gender { get; set; }
-        public string TrainerPic { get; set; }
+        public string TrainerPic { get => trainerPic; set { trainerPic = value; OnPropertyChanged("TrainerPic"); } }
         public string TrainerName { get; set; }
         public List<string> Items { get; set; }
         public string DoubleBattle { get; set; }
@@ -18,7 +20,7 @@ namespace Trainer_Editor {
         public string PartySize { get; set; }
         public Party Party {
             get => party;
-            set { party = value; } 
+            set { party = value; }
         }
 
         public PartyType PartyType {
@@ -44,7 +46,7 @@ namespace Trainer_Editor {
             };
             trainer.PartySize = trainer.Party.Name;
             trainer.PartyFlags = Party.TypeToPartyFlags[trainer.PartyType];
-            
+
             return trainer;
         }
         private Trainer() { }

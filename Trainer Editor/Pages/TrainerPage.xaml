@@ -33,12 +33,12 @@
             UseLayoutRounding="True"
             Source="{Binding SelectedTrainer.TrainerPic, Converter={StaticResource TrainerSpriteConverter},
             FallbackValue={StaticResource RocketBitmap}}"/>
-        <controls:AutoCompleteTextBox Grid.Row="1" LabelContent="TrainerClass"
+        <controls:AutoCompleteTextBox LabelContent="TrainerClass" Grid.Row="2" Width="225"
             ListItem="{Binding SelectedTrainer.TrainerClass, Mode=TwoWay}"
             ListSource="{Binding TrainerClass.List, Mode=OneWay}"/>
-        <ComboBox Grid.Row="2" Width="210"
-            SelectedItem="{Binding SelectedTrainer.TrainerClass, Mode=TwoWay}" 
-            ItemsSource="{Binding TrainerClass.List, Mode=OneWay}"/>
+        <controls:AutoCompleteTextBox LabelContent="TrainerPic" Grid.Row="3"
+            ListItem="{Binding SelectedTrainer.TrainerPic, Mode=TwoWay}"
+            ListSource="{Binding TrainerPic.List, Mode=OneWay}"/>
 
     </Grid>
 </Page>

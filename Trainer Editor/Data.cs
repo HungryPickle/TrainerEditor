@@ -51,7 +51,7 @@ namespace Trainer_Editor {
         }
 
         public AutoCompleteTextBox SelectedMonBox {
-            get { return PartyBoxes.FirstOrDefault(b => (Mon)b.Tag == SelectedMon); }
+            get { return PartyBoxes?.FirstOrDefault(b => (Mon)b.Tag == SelectedMon); }
         }
 
         private List<AutoCompleteTextBox> partyBoxes;
@@ -62,10 +62,16 @@ namespace Trainer_Editor {
         }
         public TextBlock StatusBar { get; set; }
 
-        public Constant Species { get; set; } = new Constant(Constants.Species);
-        public Constant Moves { get; set; } = new Constant(Constants.Moves);
-        public Constant Items { get; set; } = new Constant(Constants.Items);
-        public Constant TrainerClass { get; set; } = new Constant(Constants.TrainerClass);
+        private Constant species = new Constant(Constants.Species);
+        private Constant moves = new Constant(Constants.Moves);
+        private Constant items = new Constant(Constants.Items);
+        private Constant trainerClass = new Constant(Constants.TrainerClass);
+        private Constant trainerPic = new Constant(Constants.TrainerPic);
+        public Constant Species { get => species; set { species = value; OnPropertyChanged("Species"); } }
+        public Constant Moves { get => moves; set { moves = value; OnPropertyChanged("Moves"); } }
+        public Constant Items { get => items; set { items = value; OnPropertyChanged("Items"); } }
+        public Constant TrainerClass { get => trainerClass; set { trainerClass = value; OnPropertyChanged("TrainerClass"); } }
+        public Constant TrainerPic { get => trainerPic; set { trainerPic = value; OnPropertyChanged("TrainerPic"); } }
         public Constant GetConstant(Constants type) {
             switch (type) {
                 case Constants.Species:
@@ -76,6 +82,8 @@ namespace Trainer_Editor {
                     return Items;
                 case Constants.TrainerClass:
                     return TrainerClass;
+                case Constants.TrainerPic:
+                    return TrainerPic;
                 default:
                     MessageBox.Show("Constant not implemented in Data.GetConstant.");
                     return null;
@@ -94,6 +102,9 @@ namespace Trainer_Editor {
                     break;
                 case Constants.TrainerClass:
                     TrainerClass = constant;
+                    break;
+                case Constants.TrainerPic:
+                    TrainerPic = constant;
                     break;
                 default:
                     MessageBox.Show("Constant not implemented in Data.SetConstant.");

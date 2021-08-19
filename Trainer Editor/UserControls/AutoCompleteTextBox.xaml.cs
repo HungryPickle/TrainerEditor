@@ -146,6 +146,7 @@ namespace Trainer_Editor.UserControls {
                 case Key.RightShift:
                 case Key.LeftCtrl:
                 case Key.RightCtrl:
+                case Key.Tab:
                     break;
                 default:
                     if (isFirstKey) {

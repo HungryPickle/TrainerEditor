@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace Trainer_Editor {
     public enum Constants {
-        Species, Moves, Items, TrainerClass
+        Species, Moves, Items, TrainerClass, TrainerPic
     };
     public class Constant : ObservableObject {
         public Constant() { }
@@ -30,6 +30,10 @@ namespace Trainer_Editor {
                     break;
                 case Constants.TrainerClass:
                     DefaultRegex = new Regex(@"(?<=#define\s+)TRAINER_CLASS_\w+");
+                    PartialHeaderPath = @"\include\constants\trainers.h";
+                    break;
+                case Constants.TrainerPic:
+                    DefaultRegex = new Regex(@"(?<=#define\s+)TRAINER_PIC_\w+(?=\s)");
                     PartialHeaderPath = @"\include\constants\trainers.h";
                     break;
                 default:
@@ -56,12 +60,23 @@ namespace Trainer_Editor {
             }
         }
         private List<string> list;
+        [JsonProperty(Order = 2)]
         public List<string> List {
             get => list;
             set { list = value; OnPropertyChanged("List"); }
         }
         public void SetRegexToDefault() {
             Regex = DefaultRegex;
+        }
+        public void AddEmptyStringToNullableConstant() {
+            switch (Type) {
+                case Constants.Moves:
+                case Constants.Items:
+                    List.Add(string.Empty);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

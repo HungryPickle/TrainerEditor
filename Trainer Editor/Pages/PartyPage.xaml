@@ -13,14 +13,21 @@
     <Grid >
         <Grid.Resources>
 
-            <global:PartyTypeRadioButtonConverter x:Key="PartyTypeRadioButtonConverter"/>
-
-            <Style TargetType="UserControls:AutoCompleteTextBox" BasedOn="{StaticResource PartyType}"/>
             <BitmapImage x:Key="GhostBitmap" UriSource="/Graphics/ghost.png"/>
             <BitmapImage x:Key="RocketBitmap" UriSource="/Graphics/rocket.png"/>
+            <global:PartyTypeRadioButtonConverter x:Key="PartyTypeRadioButtonConverter"/>
+            <Style TargetType="Image">
+                <Setter Property="Height" Value="64"/>
+                <Setter Property="Width" Value="64"/>
+                <Setter Property="UseLayoutRounding" Value="True"/>
+                <Setter Property="Source" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag.Species, 
+                    Converter={StaticResource PokemonSpriteConverter}}"/>
+            </Style>
+            <Style TargetType="UserControls:AutoCompleteTextBox" BasedOn="{StaticResource PartyType}"/>
 
         </Grid.Resources>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
@@ -33,28 +40,25 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
-            <Image x:Name="PokemonSprite"
-                 Height="64" Width="64"
-                UseLayoutRounding="True"
-                Source="{Binding SelectedMon.Species, Converter={StaticResource PokemonSpriteConverter}, 
-                FallbackValue={StaticResource GhostBitmap}}"/>
-            
-            <Image x:Name="TrainerSprite" Margin="10,0,0,0" 
-                Height="64" Width="64"
-                UseLayoutRounding="True"
-                Source="{Binding SelectedTrainer.TrainerPic, Converter={StaticResource TrainerSpriteConverter},
-                FallbackValue={StaticResource RocketBitmap}}"/>
-            
-        </StackPanel>
-        
         <StackPanel Grid.ColumnSpan="4" Orientation="Horizontal" Margin="10,10,10,10" >
             <RadioButton Content="NoItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonNoItemDefaultMoves}}"></RadioButton>
             <RadioButton Content="ItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonItemDefaultMoves}}"></RadioButton>
             <RadioButton Content="NoItemCustomMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonNoItemCustomMoves}}"></RadioButton>
             <RadioButton Content="ItemCustomMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonItemCustomMoves}}"></RadioButton>
         </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="3">
+            <Image x:Name="TrainerSprite" Margin="10,0,0,0" 
+                Source="{Binding SelectedTrainer.TrainerPic, Converter={StaticResource TrainerSpriteConverter},
+                FallbackValue={StaticResource RocketBitmap}}"/>
+            <Image Tag="{Binding SelectedTrainer.Party[0]}"/>
+            <Image Tag="{Binding SelectedTrainer.Party[1]}"/>
+            <Image Tag="{Binding SelectedTrainer.Party[2]}"/>
+            <Image Tag="{Binding SelectedTrainer.Party[3]}"/>
+            <Image Tag="{Binding SelectedTrainer.Party[4]}"/>
+            <Image Tag="{Binding SelectedTrainer.Party[5]}"/>
+        </StackPanel>
+        
 
         <UserControls:PartyUserControl x:Name="party" Grid.Column="0" Grid.Row="2" 
             Width="170" />
@@ -77,6 +81,6 @@
                 ListSource="{Binding Items.List, Mode=OneWay}" 
                 Tag="{x:Static global:Input.HeldItem}"/>
         </StackPanel>
-
+    
     </Grid>
 </Page>

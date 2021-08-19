@@ -112,6 +112,7 @@ namespace Trainer_Editor {
                 case Key.RightAlt:
                 case Key.LeftCtrl:
                 case Key.RightCtrl:
+                case Key.Tab:
                     e.Handled = true;
                     break;
                 default:
@@ -145,7 +146,7 @@ namespace Trainer_Editor {
         static void AutoCompleteTextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
             AutoCompleteTextBox control = sender as AutoCompleteTextBox;
 
-            if (!control.popup.IsOpen && IsCaretAtTextBoxEdge(control.textbox, e.Key)) {
+            if (!control.popup.IsOpen) {
 
                 Navs[sender as Control].MoveFocus(control, e);
             }
