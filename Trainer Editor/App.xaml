@@ -15,11 +15,10 @@
 
         <local:RegexStringConverter x:Key="RegexStringConverter"/>
 
-
-        <Style TargetType="{x:Type UserControls:AutoCompleteTextBox}" x:Key="PartyType">
+        <Style TargetType="{x:Type UserControl}" x:Key="PartyType">
             <Setter Property="IsEnabled">
                 <Setter.Value>
-                    <MultiBinding Converter="{StaticResource PartyTypeEnableInputConverter}" >
+                    <MultiBinding Converter="{StaticResource PartyTypeEnableInputConverter}">
                         <Binding Path="SelectedTrainer.Party.Type"/>
                         <Binding RelativeSource="{RelativeSource Self}" Path="Tag"/>
                     </MultiBinding>
@@ -38,6 +37,9 @@
         <Style TargetType="TextBox" BasedOn="{StaticResource DefaultCaretEnd}">
             <EventSetter Event="GotKeyboardFocus" Handler="TextBox_GotKeyboardFocus"/>
             <EventSetter Event="LostKeyboardFocus" Handler="TextBox_LostKeyboardFocus"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Opacity" Value="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource DisabledInputOpacityConverter}}"/>
         </Style>
         
         <Style TargetType="ListBox">

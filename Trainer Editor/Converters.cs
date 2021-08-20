@@ -11,6 +11,11 @@ using System.Windows.Media.Imaging;
 using Trainer_Editor.UserControls;
 
 namespace Trainer_Editor {
+
+    public enum Input {
+        HeldItem, Moves, IVs
+    }
+
     public class PartyTypeRadioButtonConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             //return value?.Equals(parameter);
@@ -28,12 +33,14 @@ namespace Trainer_Editor {
         public static Dictionary<Input, bool> TrainerMonItemDefaultMoves = new Dictionary<Input, bool> { { Input.HeldItem, true }, { Input.Moves, false } };
         public static Dictionary<Input, bool> TrainerMonNoItemCustomMoves = new Dictionary<Input, bool> { { Input.HeldItem, false }, { Input.Moves, true } };
         public static Dictionary<Input, bool> TrainerMonItemCustomMoves = new Dictionary<Input, bool> { { Input.HeldItem, true }, { Input.Moves, true } };
-
+        public static Dictionary<Input, bool> TrainerMonCustom = new Dictionary<Input, bool> { { Input.HeldItem, true }, { Input.Moves, true }, { Input.IVs, true } };
+        
         public static Dictionary<PartyType, Dictionary<Input, bool>> IsInputEnabled = new Dictionary<PartyType, Dictionary<Input, bool>> {
             { PartyType.TrainerMonNoItemDefaultMoves, TrainerMonNoItemDefaultMoves },
             { PartyType.TrainerMonItemDefaultMoves, TrainerMonItemDefaultMoves },
             { PartyType.TrainerMonNoItemCustomMoves, TrainerMonNoItemCustomMoves },
-            { PartyType.TrainerMonItemCustomMoves, TrainerMonItemCustomMoves }
+            { PartyType.TrainerMonItemCustomMoves, TrainerMonItemCustomMoves },
+            { PartyType.TrainerMonCustom, TrainerMonCustom }
         };
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
@@ -44,7 +51,7 @@ namespace Trainer_Editor {
             PartyType partyType = (PartyType)values[0];
             Input input = (Input)values[1];
 
-            return IsInputEnabled[partyType][input];
+            return IsInputEnabled[partyType].GetValueOrDefault(input);
 
         }
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) {

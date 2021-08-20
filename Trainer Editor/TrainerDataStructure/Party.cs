@@ -13,7 +13,8 @@ namespace Trainer_Editor {
         TrainerMonNoItemDefaultMoves,
         TrainerMonItemDefaultMoves,
         TrainerMonNoItemCustomMoves,
-        TrainerMonItemCustomMoves
+        TrainerMonItemCustomMoves,
+        TrainerMonCustom
     };
 
     public class Party : ObservableObject {
@@ -22,13 +23,15 @@ namespace Trainer_Editor {
             { PartyType.TrainerMonNoItemDefaultMoves.ToString(), PartyType.TrainerMonNoItemDefaultMoves },
             { PartyType.TrainerMonItemDefaultMoves.ToString(), PartyType.TrainerMonItemDefaultMoves },
             { PartyType.TrainerMonNoItemCustomMoves.ToString(), PartyType.TrainerMonNoItemCustomMoves },
-            { PartyType.TrainerMonItemCustomMoves.ToString(), PartyType.TrainerMonItemCustomMoves }
+            { PartyType.TrainerMonItemCustomMoves.ToString(), PartyType.TrainerMonItemCustomMoves },
+            { PartyType.TrainerMonCustom.ToString(), PartyType.TrainerMonCustom }
         };
         public static readonly Dictionary<PartyType, List<string>> TypeToPartyFlags = new Dictionary<PartyType, List<string>> {
             { PartyType.TrainerMonNoItemDefaultMoves, new List<string>{ "0" } },
             { PartyType.TrainerMonItemDefaultMoves, new List<string>{ "F_TRAINER_PARTY_HELD_ITEM" } },
             { PartyType.TrainerMonNoItemCustomMoves, new List<string>{ "F_TRAINER_PARTY_CUSTOM_MOVESET" } },
-            { PartyType.TrainerMonItemCustomMoves, new List<string>{ "F_TRAINER_PARTY_HELD_ITEM", "F_TRAINER_PARTY_CUSTOM_MOVESET" } }
+            { PartyType.TrainerMonItemCustomMoves, new List<string>{ "F_TRAINER_PARTY_HELD_ITEM", "F_TRAINER_PARTY_CUSTOM_MOVESET" } },
+            { PartyType.TrainerMonCustom, new List<string>{"F_TRAINER_PARTY_CUSTOM"} }
         };
 
         private PartyType type;

@@ -12,11 +12,6 @@ namespace Trainer_Editor {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     /// 
-    public enum Input {
-        Moves, HeldItem
-    };
-
-
     public partial class MainWindow : Window {
 
         public MainWindow() {

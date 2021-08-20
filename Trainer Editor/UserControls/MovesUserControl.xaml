@@ -10,10 +10,9 @@
     <Grid>
         <StackPanel>
             <StackPanel.Resources>
-                <Style TargetType="local:AutoCompleteTextBox" BasedOn="{StaticResource PartyType}">
+                <Style TargetType="local:AutoCompleteTextBox">
                     <Setter Property="LabelVisibility" Value="Collapsed"/>
                     <Setter Property="ListSource" Value="{Binding Moves.List, Mode=OneWay}"/>
-                    <Setter Property="Tag" Value="{x:Static global:Input.Moves}"/>
                 </Style>
             </StackPanel.Resources>
             <Label Content="Moveset"/>

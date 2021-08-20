@@ -41,10 +41,11 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <StackPanel Grid.ColumnSpan="4" Orientation="Horizontal" Margin="10,10,10,10" >
-            <RadioButton Content="NoItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonNoItemDefaultMoves}}"></RadioButton>
-            <RadioButton Content="ItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonItemDefaultMoves}}"></RadioButton>
-            <RadioButton Content="NoItemCustomMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonNoItemCustomMoves}}"></RadioButton>
-            <RadioButton Content="ItemCustomMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonItemCustomMoves}}"></RadioButton>
+            <RadioButton Content="NoItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonNoItemDefaultMoves}}"/>
+            <RadioButton Content="ItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonItemDefaultMoves}}"/>
+            <RadioButton Content="NoItemCustomMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonNoItemCustomMoves}}"/>
+            <RadioButton Content="ItemCustomMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonItemCustomMoves}}"/>
+            <RadioButton Content="Custom" IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonCustom}}"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="3">
@@ -60,11 +61,10 @@
         </StackPanel>
         
 
-        <UserControls:PartyUserControl x:Name="party" Grid.Column="0" Grid.Row="2" 
-            Width="170" />
+        <UserControls:PartyUserControl x:Name="party" Grid.Column="0" Grid.Row="2" Width="170" />
 
-        <UserControls:MovesUserControl x:Name="moves" Grid.Column="1" Grid.Row="2"
-            Width="150" VerticalAlignment="Center" />
+        <UserControls:MovesUserControl x:Name="moves" Grid.Column="1" Grid.Row="2" Width="150" VerticalAlignment="Center" 
+            Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Moves}"/>
 
 
         <StackPanel Grid.Row="3"  >
@@ -81,8 +81,9 @@
                 ListSource="{Binding Items.List, Mode=OneWay}" 
                 Tag="{x:Static global:Input.HeldItem}"/>
         </StackPanel>
-            
-        <UserControls:StatsUserControl Grid.Row="4" Stats="{Binding SelectedMon.IVs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            
+
+        <UserControls:IVsUserControl Grid.Row="4" Style="{StaticResource PartyType}" Tag="{x:Static global:Input.IVs}"
+            Margin="0,5,0,0"/>
+
     </Grid>
 </Page>

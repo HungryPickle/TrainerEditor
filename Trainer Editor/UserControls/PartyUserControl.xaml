@@ -50,7 +50,7 @@
         
         <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="6">
             <UserControls:AutoCompleteTextBox x:Name="mon0" Tag="{Binding SelectedTrainer.Party[0]}"/>
-            <UserControls:AutoCompleteTextBox x:Name="mon1" Tag="{Binding SelectedTrainer.Party[1], Mode=TwoWay}"/>
+            <UserControls:AutoCompleteTextBox x:Name="mon1" Tag="{Binding SelectedTrainer.Party[1]}"/>
             <UserControls:AutoCompleteTextBox x:Name="mon2" Tag="{Binding SelectedTrainer.Party[2]}"/>
             <UserControls:AutoCompleteTextBox x:Name="mon3" Tag="{Binding SelectedTrainer.Party[3]}"/>
             <UserControls:AutoCompleteTextBox x:Name="mon4" Tag="{Binding SelectedTrainer.Party[4]}"/>
