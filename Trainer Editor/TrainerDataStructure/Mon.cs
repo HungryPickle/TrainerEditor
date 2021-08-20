@@ -20,6 +20,7 @@ namespace Trainer_Editor {
         private string lvl;
         private string heldItem;
         private List<string> moves = new List<string> { "", "", "", "" };
+        private List<Stat> ivs = new List<Stat>(6) { new Stat(), new Stat(), new Stat(), new Stat(), new Stat(), new Stat()};
 
         public string Species {
             get { return species; }
@@ -62,6 +63,10 @@ namespace Trainer_Editor {
                 OnPropertyChanged("Moves");
             }
         }
+        public List<Stat> IVs {
+            get => ivs;
+            set => ivs = value;
+        }
 
         public string SpeciesMember {
             get => string.IsNullOrEmpty(Species) ? "" : $"\n\t.species = {Species},";
@@ -95,6 +100,17 @@ namespace Trainer_Editor {
 
             return new List<string>(RegexMon.Moves.Matches(monStruct).Select(m => m.Value));
 
+        }
+    }
+    public class Stat : ObservableObject {
+        public Stat() { }
+        public Stat(string text) {
+            Text = text;
+        }
+        private string text = "0";
+        public string Text {
+            get { return text; }
+            set { text = RegexInput.Digits.Match(value).Value; OnPropertyChanged("Text"); }
         }
     }
 }

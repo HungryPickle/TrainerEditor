@@ -35,6 +35,17 @@ namespace Trainer_Editor.UserControls {
         public static readonly DependencyProperty TextBoxTextProperty =
             DependencyProperty.Register("TextBoxText", typeof(string), typeof(LabeledTextBox), new PropertyMetadata(string.Empty));
 
+
+        public TextAlignment TextBoxTextAlignment {
+            get { return (TextAlignment)GetValue(TextBoxTextAlignmentProperty); }
+            set { SetValue(TextBoxTextAlignmentProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for TextBoxTextAlignment.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TextBoxTextAlignmentProperty =
+            DependencyProperty.Register("TextBoxTextAlignment", typeof(TextAlignment), typeof(LabeledTextBox), new PropertyMetadata(TextAlignment.Left));
+
+
         public LabeledTextBox() {
             InitializeComponent();
         }

@@ -81,6 +81,8 @@
                 ListSource="{Binding Items.List, Mode=OneWay}" 
                 Tag="{x:Static global:Input.HeldItem}"/>
         </StackPanel>
-    
+            
+        <UserControls:StatsUserControl Grid.Row="4" Stats="{Binding SelectedMon.IVs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            
     </Grid>
 </Page>

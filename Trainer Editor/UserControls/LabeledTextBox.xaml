@@ -10,8 +10,9 @@
         <StackPanel>
             <Label Content="{Binding LabelText, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
             <TextBox x:Name="textbox"
-                Text="{Binding TextBoxText, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     
+                Text="{Binding TextBoxText, RelativeSource={RelativeSource AncestorType=UserControl},
+                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                TextAlignment="{Binding TextBoxTextAlignment, RelativeSource={RelativeSource AncestorType=UserControl}}"
                 />
         </StackPanel>
     </Grid>
