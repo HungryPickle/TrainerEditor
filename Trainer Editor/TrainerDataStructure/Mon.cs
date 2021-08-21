@@ -37,7 +37,7 @@ namespace Trainer_Editor {
                 case PartyType.TrainerMonCustom:
                     heldItem = RegexMon.HeldItem.Match(monStruct).Value;
                     moves = RegexMon.MatchMoves(monStruct);
-                    lvlOffset = RegexMon.LevelOffset.Match(monStruct).Value;
+                    lvlOffset = RegexMon.LvlOffset.Match(monStruct).Value;
                     ivs = RegexMon.MatchStats(monStruct);
                     break;
                 default:
@@ -134,7 +134,7 @@ namespace Trainer_Editor {
             get => string.IsNullOrEmpty(Species) ? "" : $"\n\t.species = {Species},";
         }
         public string LvlMember {
-            get => string.IsNullOrEmpty(Lvl) ? "" : $"\n\t.lvl = {LvlOffset}{Lvl},";
+            get => string.IsNullOrEmpty(Lvl) ? "" : $"\n\t.lvl = {LvlOffset} {Lvl},";
         }
         public string IvMember {
             get => string.IsNullOrEmpty(Iv) ? "" : $"\n\t.iv = {Iv},";

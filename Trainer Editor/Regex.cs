@@ -33,7 +33,6 @@ namespace Trainer_Editor {
         public static Regex LvlOffset = new Regex(@"(?<=\.lvl\s+=\s+)PLAYER_LEVEL_OFFSET\s+(\-|\+)");
         public static Regex Species = new Regex(@"(?<=\.species\s+=\s+)SPECIES_\w+");
         public static Regex HeldItem = new Regex(@"(?<=\.heldItem\s+=\s+)ITEM_\w+");
-        public static Regex LevelOffset = new Regex(@"(?<=\.lvl\s+=\s+)PLAYER_LEVEL_OFFSET\s+(\-|\+)\s+");
 
         private static Regex Moves = new Regex(@"(?<=\.moves\s+=.+)MOVE_\w+");
         private static Regex IVs = new Regex(@"(?<=.ivs\s+=.+)[0-9]+");

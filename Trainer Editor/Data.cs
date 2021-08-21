@@ -62,8 +62,8 @@ namespace Trainer_Editor {
         }
         public TextBlock StatusBar { get; set; }
         public List<string> LevelOffsets { get; set; } = new List<string>{
-            "PLAYER_LEVEL_OFFSET + ",
-            "PLAYER_LEVEL_OFFSET - ",
+            "PLAYER_LEVEL_OFFSET +",
+            "PLAYER_LEVEL_OFFSET -",
             ""
         };
 
