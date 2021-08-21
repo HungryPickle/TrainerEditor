@@ -13,7 +13,7 @@
                 Text="{Binding TextBoxText, RelativeSource={RelativeSource AncestorType=UserControl},
                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 TextAlignment="{Binding TextBoxTextAlignment, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                />
+                Padding="2,2,2,2"/>
         </StackPanel>
     </Grid>
 </UserControl>

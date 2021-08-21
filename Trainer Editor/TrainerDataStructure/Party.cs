@@ -83,61 +83,13 @@ namespace Trainer_Editor {
         }
 
         public void AddMonFromStruct(string monStruct) {
-
-            Mon mon = new Mon();
-            mon.Iv = RegexMon.IV.Match(monStruct).Value;
-            mon.Lvl = RegexMon.Lvl.Match(monStruct).Value;
-            mon.Species = RegexMon.Species.Match(monStruct).Value;
-
-            switch (Type) {
-                case PartyType.TrainerMonNoItemDefaultMoves:
-                    break;
-                case PartyType.TrainerMonItemDefaultMoves:
-                    mon.HeldItem = RegexMon.HeldItem.Match(monStruct).Value;
-                    break;
-                case PartyType.TrainerMonNoItemCustomMoves:
-                    mon.Moves = Mon.MatchMoves(monStruct);
-                    break;
-                case PartyType.TrainerMonItemCustomMoves:
-                    mon.HeldItem = RegexMon.HeldItem.Match(monStruct).Value;
-                    mon.Moves = Mon.MatchMoves(monStruct);
-                    break;
-                default:
-                    break;
-            }
-
-            MonList.Add(mon);
-        }
-
-        private string CreateMonStruct(Mon mon) {
-            string monStruct = $"\n\t{{" +
-            mon.IvMember +
-            mon.LvlMember +
-            mon.SpeciesMember;
-            switch (Type) {
-                case PartyType.TrainerMonNoItemDefaultMoves:
-                    break;
-                case PartyType.TrainerMonItemDefaultMoves:
-                    monStruct += mon.HeldItemMember;
-                    break;
-                case PartyType.TrainerMonNoItemCustomMoves:
-                    monStruct += mon.MovesMember;
-                    break;
-                case PartyType.TrainerMonItemCustomMoves:
-                    monStruct += mon.HeldItemMember + mon.MovesMember;
-                    break;
-                default:
-                    break;
-            }
-            monStruct += $"\n\t}}";
-
-            return monStruct;
+            MonList.Add(new Mon(Type, monStruct));
         }
 
         public string CreatePartyStruct() {
             string partyStruct = $"static const struct {Type} {Name}[] = {{";
             for (int i = 0; i < MonList.Count; i++) {
-                partyStruct += CreateMonStruct(MonList[i]);
+                partyStruct += MonList[i].CreateStruct(Type);
                 if (i < MonList.Count - 1)
                     partyStruct += ",";
             }

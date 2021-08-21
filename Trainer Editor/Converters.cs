@@ -13,7 +13,7 @@ using Trainer_Editor.UserControls;
 namespace Trainer_Editor {
 
     public enum Input {
-        HeldItem, Moves, IVs
+        HeldItem, Moves, IVs, LevelOffset
     }
 
     public class PartyTypeRadioButtonConverter : IValueConverter {
@@ -29,11 +29,11 @@ namespace Trainer_Editor {
     }
     public class PartyTypeEnableInputConverter : IMultiValueConverter {
 
-        public static Dictionary<Input, bool> TrainerMonNoItemDefaultMoves = new Dictionary<Input, bool> { { Input.HeldItem, false }, { Input.Moves, false } };
-        public static Dictionary<Input, bool> TrainerMonItemDefaultMoves = new Dictionary<Input, bool> { { Input.HeldItem, true }, { Input.Moves, false } };
-        public static Dictionary<Input, bool> TrainerMonNoItemCustomMoves = new Dictionary<Input, bool> { { Input.HeldItem, false }, { Input.Moves, true } };
+        public static Dictionary<Input, bool> TrainerMonNoItemDefaultMoves = new Dictionary<Input, bool> { };
+        public static Dictionary<Input, bool> TrainerMonItemDefaultMoves = new Dictionary<Input, bool> { { Input.HeldItem, true } };
+        public static Dictionary<Input, bool> TrainerMonNoItemCustomMoves = new Dictionary<Input, bool> { { Input.Moves, true } };
         public static Dictionary<Input, bool> TrainerMonItemCustomMoves = new Dictionary<Input, bool> { { Input.HeldItem, true }, { Input.Moves, true } };
-        public static Dictionary<Input, bool> TrainerMonCustom = new Dictionary<Input, bool> { { Input.HeldItem, true }, { Input.Moves, true }, { Input.IVs, true } };
+        public static Dictionary<Input, bool> TrainerMonCustom = new Dictionary<Input, bool> { { Input.HeldItem, true }, { Input.Moves, true }, { Input.IVs, true }, { Input.LevelOffset, true } };
         
         public static Dictionary<PartyType, Dictionary<Input, bool>> IsInputEnabled = new Dictionary<PartyType, Dictionary<Input, bool>> {
             { PartyType.TrainerMonNoItemDefaultMoves, TrainerMonNoItemDefaultMoves },

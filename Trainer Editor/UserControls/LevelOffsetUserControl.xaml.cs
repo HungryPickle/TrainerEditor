@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,18 +10,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Trainer_Editor.UserControls;
 
-namespace Trainer_Editor.Pages {
+namespace Trainer_Editor.UserControls {
     /// <summary>
-    /// Interaction logic for PartyPage.xaml
+    /// Interaction logic for LevelOffsetUserControl.xaml
     /// </summary>
-    public partial class PartyPage : Page {
-
-        public PartyPage() {
+    public partial class LevelOffsetUserControl : UserControl {
+        
+        public LevelOffsetUserControl() {
             InitializeComponent();
-            DataContext = Data.Instance;
+            
         }
-
     }
 }

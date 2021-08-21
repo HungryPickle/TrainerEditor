@@ -15,9 +15,69 @@ namespace Trainer_Editor {
             Iv = "0";
             Lvl = "2";
         }
+        public Mon (PartyType partyType, string monStruct) {
+
+            iv = RegexMon.IV.Match(monStruct).Value;
+            lvl = RegexMon.Lvl.Match(monStruct).Value;
+            species = RegexMon.Species.Match(monStruct).Value;
+
+            switch (partyType) {
+                case PartyType.TrainerMonNoItemDefaultMoves:
+                    break;
+                case PartyType.TrainerMonItemDefaultMoves:
+                    heldItem = RegexMon.HeldItem.Match(monStruct).Value;
+                    break;
+                case PartyType.TrainerMonNoItemCustomMoves:
+                    moves = RegexMon.MatchMoves(monStruct);
+                    break;
+                case PartyType.TrainerMonItemCustomMoves:
+                    heldItem = RegexMon.HeldItem.Match(monStruct).Value;
+                    moves = RegexMon.MatchMoves(monStruct);
+                    break;
+                case PartyType.TrainerMonCustom:
+                    heldItem = RegexMon.HeldItem.Match(monStruct).Value;
+                    moves = RegexMon.MatchMoves(monStruct);
+                    lvlOffset = RegexMon.LevelOffset.Match(monStruct).Value;
+                    ivs = RegexMon.MatchStats(monStruct);
+                    break;
+                default:
+                    break;
+            }
+        
+        }
+
+        public string CreateStruct(PartyType partyType) {
+            string monStruct = $"\n\t{{" +
+            IvMember +
+            LvlMember +
+            SpeciesMember;
+            switch (partyType) {
+                case PartyType.TrainerMonNoItemDefaultMoves:
+                    break;
+                case PartyType.TrainerMonItemDefaultMoves:
+                    monStruct += HeldItemMember;
+                    break;
+                case PartyType.TrainerMonNoItemCustomMoves:
+                    monStruct += MovesMember;
+                    break;
+                case PartyType.TrainerMonItemCustomMoves:
+                    monStruct += HeldItemMember + MovesMember;
+                    break;
+                case PartyType.TrainerMonCustom:
+                    monStruct += HeldItemMember + MovesMember + IVsMember;
+                    break;
+                default:
+                    break;
+            }
+            monStruct += $"\n\t}}";
+
+            return monStruct;
+        }
+
         private string species;
         private string iv;
         private string lvl;
+        private string lvlOffset = "";
         private string heldItem;
         private List<string> moves = new List<string> { "", "", "", "" };
         private List<Stat> ivs = new List<Stat>(6) { new Stat(), new Stat(), new Stat(), new Stat(), new Stat(), new Stat()};
@@ -35,19 +95,25 @@ namespace Trainer_Editor {
         public string Iv {
             get { return iv; }
             set {
-                string match = RegexInput.Digits.Match(value).Value;
-                //match = string.IsNullOrWhiteSpace(match) ? "0" : match;
-                //iv = int.Parse(match) < 255 ? match : "255";
-                iv = match;
+                iv = RegexInput.Digits.Match(value).Value;
                 OnPropertyChanged("Iv");
             }
+        }
+        public List<Stat> IVs {
+            get => ivs;
+            set => ivs = value;
         }
         public string Lvl {
             get { return lvl; }
             set {
-                lvl = RegexInput.Digits.Match(value).Value;
+                string input = RegexInput.Digits.Match(value).Value;
+                lvl = string.IsNullOrEmpty(input) ? "1" : input;
                 OnPropertyChanged("Lvl");
             }
+        }
+        public string LvlOffset {
+            get { return lvlOffset; }
+            set { lvlOffset = value; OnPropertyChanged("LvlOffset"); }
         }
         public string HeldItem {
             get => heldItem;
@@ -63,16 +129,12 @@ namespace Trainer_Editor {
                 OnPropertyChanged("Moves");
             }
         }
-        public List<Stat> IVs {
-            get => ivs;
-            set => ivs = value;
-        }
 
         public string SpeciesMember {
             get => string.IsNullOrEmpty(Species) ? "" : $"\n\t.species = {Species},";
         }
         public string LvlMember {
-            get => string.IsNullOrEmpty(Lvl) ? "" : $"\n\t.lvl = {Lvl},";
+            get => string.IsNullOrEmpty(Lvl) ? "" : $"\n\t.lvl = {LvlOffset}{Lvl},";
         }
         public string IvMember {
             get => string.IsNullOrEmpty(Iv) ? "" : $"\n\t.iv = {Iv},";
@@ -91,16 +153,25 @@ namespace Trainer_Editor {
                         movesText += ", ";
                     movesText += Moves[i];
                 }
-
                 return $"\n\t.moves = {{{movesText}}},";
             }
         }
+        public string IVsMember {
+            get {
+                string ivsText = "";
+                if (IVs.All(i => i.Text == "0"))
+                    return ivsText;
 
-        public static List<string> MatchMoves(string monStruct) {
-
-            return new List<string>(RegexMon.Moves.Matches(monStruct).Select(m => m.Value));
-
+                for (int i = 0; i < IVs.Count; i++) {
+                    if (i > 0)
+                        ivsText += ", ";
+                    ivsText += IVs[i].Text;
+                }
+                return $"\n\t.ivs = {{{ivsText}}},";
+            }
         }
+
+        
     }
     public class Stat : ObservableObject {
         public Stat() { }
@@ -110,7 +181,10 @@ namespace Trainer_Editor {
         private string text = "0";
         public string Text {
             get { return text; }
-            set { text = RegexInput.Digits.Match(value).Value; OnPropertyChanged("Text"); }
+            set { 
+                string input = RegexInput.Digits.Match(value).Value;
+                text = string.IsNullOrEmpty(input) ? "0" : input;
+                OnPropertyChanged("Text"); }
         }
     }
 }

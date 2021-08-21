@@ -15,7 +15,7 @@
 
         <local:RegexStringConverter x:Key="RegexStringConverter"/>
 
-        <Style TargetType="{x:Type UserControl}" x:Key="PartyType">
+        <Style TargetType="{x:Type Control}" x:Key="PartyType">
             <Setter Property="IsEnabled">
                 <Setter.Value>
                     <MultiBinding Converter="{StaticResource PartyTypeEnableInputConverter}">
@@ -24,6 +24,7 @@
                     </MultiBinding>
                 </Setter.Value>
             </Setter>
+            <Setter Property="Opacity" Value="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource DisabledInputOpacityConverter}}"/>
         </Style>
 
         <Style TargetType="Label">
@@ -32,16 +33,12 @@
         
         <Style TargetType="TextBox" x:Key="DefaultCaretEnd">
             <EventSetter Event="GotKeyboardFocus" Handler="TextBoxCaret_GotKeyboardFocus"/>
-            <Setter Property="Opacity" Value="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource DisabledInputOpacityConverter}}"/>
         </Style>
         <Style TargetType="TextBox" BasedOn="{StaticResource DefaultCaretEnd}">
             <EventSetter Event="GotKeyboardFocus" Handler="TextBox_GotKeyboardFocus"/>
             <EventSetter Event="LostKeyboardFocus" Handler="TextBox_LostKeyboardFocus"/>
         </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="Opacity" Value="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource DisabledInputOpacityConverter}}"/>
-        </Style>
-        
+
         <Style TargetType="ListBox">
             <Setter Property="Foreground" Value="WhiteSmoke"/>
             <Setter Property="Background" Value="Black"/>

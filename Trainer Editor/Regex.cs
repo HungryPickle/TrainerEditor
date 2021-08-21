@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 
@@ -28,11 +29,30 @@ namespace Trainer_Editor {
     public class RegexMon {
 
         public static Regex IV = new Regex(@"(?<=\.iv\s+=\s+).+(?=,)");
-        public static Regex Lvl = new Regex(@"(?<=\.lvl\s+=\s+).+(?=,)");
+        public static Regex Lvl = new Regex(@"(?<=\.lvl\s+=.+)[0-9]+(?=,)");
+        public static Regex LvlOffset = new Regex(@"(?<=\.lvl\s+=\s+)PLAYER_LEVEL_OFFSET\s+(\-|\+)");
         public static Regex Species = new Regex(@"(?<=\.species\s+=\s+)SPECIES_\w+");
         public static Regex HeldItem = new Regex(@"(?<=\.heldItem\s+=\s+)ITEM_\w+");
-        public static Regex Moves = new Regex(@"(?<=\.moves\s+=.+)MOVE_\w+");
+        public static Regex LevelOffset = new Regex(@"(?<=\.lvl\s+=\s+)PLAYER_LEVEL_OFFSET\s+(\-|\+)\s+");
 
+        private static Regex Moves = new Regex(@"(?<=\.moves\s+=.+)MOVE_\w+");
+        private static Regex IVs = new Regex(@"(?<=.ivs\s+=.+)[0-9]+");
+        public static List<string> MatchMoves(string monStruct) {
+            List<string> moves = new List<string> { "", "", "", "" };
+            List<string> matches = new List<string>(RegexMon.Moves.Matches(monStruct).Select(m => m.Value));
+            for (int i = 0; i < matches.Count; i++) {
+                moves[i] = matches[i];
+            }
+            return moves;
+        }
+        public static List<Stat> MatchStats(string monStruct) {
+            List<Stat> stats = new List<Stat> { new Stat(), new Stat(), new Stat(), new Stat(), new Stat(), new Stat() };
+            List<string> matches = new List<string>(RegexMon.IVs.Matches(monStruct).Select(m => m.Value));
+            for (int i = 0; i < matches.Count; i++) {
+                stats[i].Text = matches[i];
+            }
+            return stats;
+        }
     }
 
     public class RegexConstant : ObservableObject {

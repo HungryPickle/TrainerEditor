@@ -26,12 +26,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <local:LabeledTextBox LabelText="  HP " Grid.Column="0" TextBoxText="{Binding Stats[0].Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        <local:LabeledTextBox LabelText=" Atk " Grid.Column="1" TextBoxText="{Binding Stats[1].Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <local:LabeledTextBox LabelText=" Def " Grid.Column="2" TextBoxText="{Binding Stats[2].Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <local:LabeledTextBox LabelText=" Spe " Grid.Column="3" TextBoxText="{Binding Stats[3].Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <local:LabeledTextBox LabelText="SpAtk" Grid.Column="4" TextBoxText="{Binding Stats[4].Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <local:LabeledTextBox LabelText="SpDef" Grid.Column="5" TextBoxText="{Binding Stats[5].Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <local:LabeledTextBox LabelText="  HP " Grid.Column="0" TextBoxText="{Binding Stats[0].Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+        <local:LabeledTextBox LabelText=" Atk " Grid.Column="1" TextBoxText="{Binding Stats[1].Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+        <local:LabeledTextBox LabelText=" Def " Grid.Column="2" TextBoxText="{Binding Stats[2].Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+        <local:LabeledTextBox LabelText=" Spe " Grid.Column="3" TextBoxText="{Binding Stats[3].Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+        <local:LabeledTextBox LabelText="SpAtk" Grid.Column="4" TextBoxText="{Binding Stats[4].Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+        <local:LabeledTextBox LabelText="SpDef" Grid.Column="5" TextBoxText="{Binding Stats[5].Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
         
 
     </Grid>

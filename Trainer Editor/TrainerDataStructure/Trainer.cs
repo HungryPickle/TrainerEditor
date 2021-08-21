@@ -7,17 +7,25 @@ namespace Trainer_Editor {
         private Party party;
         private string trainerPic;
         private string trainerClass;
+        private List<string> partyFlags;
+        private string indexName;
+        private List<string> encounterMusic_gender;
+        private string trainerName;
+        private List<string> items;
+        private string doubleBattle;
+        private List<string> aiFlags;
+        private string partySize;
 
-        public string IndexName { get; set; }
-        public List<string> PartyFlags { get; set; }
+        public string IndexName { get => indexName; set => indexName = value; }
+        public List<string> PartyFlags { get => partyFlags; set => partyFlags = value; }
         public string TrainerClass { get => trainerClass; set { trainerClass = value; OnPropertyChanged("TrainerClass"); } }
-        public List<string> EncounterMusic_gender { get; set; }
+        public List<string> EncounterMusic_gender { get => encounterMusic_gender; set => encounterMusic_gender = value; }
         public string TrainerPic { get => trainerPic; set { trainerPic = value; OnPropertyChanged("TrainerPic"); } }
-        public string TrainerName { get; set; }
-        public List<string> Items { get; set; }
-        public string DoubleBattle { get; set; }
-        public List<string> AiFlags { get; set; }
-        public string PartySize { get; set; }
+        public string TrainerName { get => trainerName; set => trainerName = value; }
+        public List<string> Items { get => items; set => items = value; }
+        public string DoubleBattle { get => doubleBattle; set => doubleBattle = value; }
+        public List<string> AiFlags { get => aiFlags; set => aiFlags = value; }
+        public string PartySize { get => partySize; set => partySize = value; }
         public Party Party {
             get => party;
             set { party = value; }
@@ -53,17 +61,17 @@ namespace Trainer_Editor {
 
         public Trainer(string nameLine, string trainerStruct) {
 
-            IndexName = RegexTrainer.IndexName.Match(nameLine).Value;
+            indexName = RegexTrainer.IndexName.Match(nameLine).Value;
 
-            PartyFlags = MatchList(RegexTrainer.PartyFlags, trainerStruct);
-            TrainerClass = RegexTrainer.TrainerClass.Match(trainerStruct).Value;
-            EncounterMusic_gender = MatchList(RegexTrainer.EncounterMusic_Gender, trainerStruct);
-            TrainerPic = RegexTrainer.TrainerPic.Match(trainerStruct).Value;
-            TrainerName = RegexTrainer.TrainerName.Match(trainerStruct).Value;
-            Items = MatchList(RegexTrainer.Items, trainerStruct);
-            DoubleBattle = RegexTrainer.DoubleBattle.Match(trainerStruct).Value;
-            AiFlags = MatchList(RegexTrainer.AiFlags, trainerStruct);
-            PartySize = RegexTrainer.PartySize.Match(trainerStruct).Value;
+            partyFlags = MatchList(RegexTrainer.PartyFlags, trainerStruct);
+            trainerClass = RegexTrainer.TrainerClass.Match(trainerStruct).Value;
+            encounterMusic_gender = MatchList(RegexTrainer.EncounterMusic_Gender, trainerStruct);
+            trainerPic = RegexTrainer.TrainerPic.Match(trainerStruct).Value;
+            trainerName = RegexTrainer.TrainerName.Match(trainerStruct).Value;
+            items = MatchList(RegexTrainer.Items, trainerStruct);
+            doubleBattle = RegexTrainer.DoubleBattle.Match(trainerStruct).Value;
+            aiFlags = MatchList(RegexTrainer.AiFlags, trainerStruct);
+            partySize = RegexTrainer.PartySize.Match(trainerStruct).Value;
         }
         public static List<string> MatchList(Regex member, string trainerStruct) {
 
