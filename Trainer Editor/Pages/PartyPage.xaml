@@ -39,6 +39,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.ColumnSpan="4" Orientation="Horizontal" Margin="10,10,10,10" >
             <RadioButton Content="NoItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonNoItemDefaultMoves}}"/>
@@ -66,27 +67,21 @@
         <UserControls:MovesUserControl x:Name="moves" Grid.Column="1" Grid.Row="2" Width="150" VerticalAlignment="Center" 
             Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Moves}"/>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="3">
-            <UserControls:LevelOffsetUserControl Grid.Row="3" Tag="{x:Static global:Input.LevelOffset}" Style="{StaticResource PartyType}"/>
-            <UserControls:LabeledTextBox x:Name="lvlBox" LabelText="Level (1-100)"  Width="100"  Grid.Row="3" HorizontalAlignment="Left" Margin="5,0,0,0"
+        <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center">
+            <UserControls:LevelOffsetUserControl Grid.Row="3" Tag="{x:Static global:Input.Custom}" Style="{StaticResource PartyType}"/>
+            <UserControls:LabeledTextBox x:Name="lvlBox" LabelText="Level (1-100)"  Width="100"  Grid.Row="3" Margin="5,0,0,0"
                 TextBoxText="{Binding SelectedMon.Lvl, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
             
         </StackPanel>
-        
-        <StackPanel Grid.Row="4"   Orientation="Horizontal">
-            <UserControls:AutoCompleteTextBox x:Name="heldItemBox" LabelContent="Held Item" Width="120" 
-                ListItem="{Binding SelectedMon.HeldItem, Mode=TwoWay}" 
-                ListSource="{Binding Items.List, Mode=OneWay}" 
-                Tag="{x:Static global:Input.HeldItem}"
-                Style="{StaticResource PartyType}"/>
+        <UserControls:AutoCompleteTextBox x:Name="heldItemBox" LabelContent="Held Item" Width="120" Grid.Row="3" Grid.Column="1"
+            ListItem="{Binding SelectedMon.HeldItem, Mode=TwoWay}" ListSource="{Binding Items.List, Mode=OneWay}" 
+            Tag="{x:Static global:Input.HeldItem}" Style="{StaticResource PartyType}"/>
+    
+        <UserControls:LabeledTextBox x:Name="ivBox" LabelText="IV (0-255)"  Width="100" Margin="5,0,0,0" Grid.Row="4"
+            TextBoxText="{Binding SelectedMon.Iv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-            <UserControls:LabeledTextBox x:Name="ivBox" LabelText="IV (0-255)"  Width="100" Margin="5,0,0,0" 
-                TextBoxText="{Binding SelectedMon.Iv, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-        </StackPanel>
-
-        <UserControls:IVsUserControl Grid.Row="5" Style="{StaticResource PartyType}" Tag="{x:Static global:Input.IVs}"
-            Margin="0,5,0,0"/>
+        <UserControls:IVsUserControl Grid.Row="5" Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Custom}" Margin="0,5,0,0" HorizontalAlignment="Center"/>
+        <UserControls:EVsUserControl Grid.Row="6" Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Custom}" Margin="0,5,0,0" HorizontalAlignment="Center"/>
 
     </Grid>
 </Page>

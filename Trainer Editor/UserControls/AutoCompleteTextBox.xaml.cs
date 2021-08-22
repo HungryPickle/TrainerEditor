@@ -139,14 +139,7 @@ namespace Trainer_Editor.UserControls {
                         listbox1.Focus();
                     }
                     break;
-                case Key.Up:
-                case Key.Left:
-                case Key.Right:
-                case Key.LeftShift:
-                case Key.RightShift:
-                case Key.LeftCtrl:
-                case Key.RightCtrl:
-                case Key.Tab:
+                case Key k when (k > Key.Back && k < Key.A) || (k >= Key.F1 && k <= Key.Oem1):
                     break;
                 default:
                     if (isFirstKey) {

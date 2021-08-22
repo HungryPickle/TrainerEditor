@@ -35,7 +35,8 @@ namespace Trainer_Editor {
         public static Regex HeldItem = new Regex(@"(?<=\.heldItem\s+=\s+)ITEM_\w+");
 
         private static Regex Moves = new Regex(@"(?<=\.moves\s+=.+)MOVE_\w+");
-        private static Regex IVs = new Regex(@"(?<=.ivs\s+=.+)[0-9]+");
+        public static Regex IVs = new Regex(@"(?<=.ivs\s+=.+)[0-9]+");
+        public static Regex EVs = new Regex(@"(?<=.evs\s+=.+)[0-9]+");
         public static List<string> MatchMoves(string monStruct) {
             List<string> moves = new List<string> { "", "", "", "" };
             List<string> matches = new List<string>(RegexMon.Moves.Matches(monStruct).Select(m => m.Value));
@@ -44,9 +45,9 @@ namespace Trainer_Editor {
             }
             return moves;
         }
-        public static List<Stat> MatchStats(string monStruct) {
+        public static List<Stat> MatchStats(string monStruct, Regex stat) {
             List<Stat> stats = new List<Stat> { new Stat(), new Stat(), new Stat(), new Stat(), new Stat(), new Stat() };
-            List<string> matches = new List<string>(RegexMon.IVs.Matches(monStruct).Select(m => m.Value));
+            List<string> matches = new List<string>(stat.Matches(monStruct).Select(m => m.Value));
             for (int i = 0; i < matches.Count; i++) {
                 stats[i].Text = matches[i];
             }

@@ -61,4 +61,17 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="UserControls\EVsUserControl .xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="UserControls\EVsUserControl .xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>

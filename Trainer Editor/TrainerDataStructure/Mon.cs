@@ -38,7 +38,8 @@ namespace Trainer_Editor {
                     heldItem = RegexMon.HeldItem.Match(monStruct).Value;
                     moves = RegexMon.MatchMoves(monStruct);
                     lvlOffset = RegexMon.LvlOffset.Match(monStruct).Value;
-                    ivs = RegexMon.MatchStats(monStruct);
+                    ivs = RegexMon.MatchStats(monStruct, RegexMon.IVs);
+                    evs = RegexMon.MatchStats(monStruct, RegexMon.EVs);
                     break;
                 default:
                     break;
@@ -64,7 +65,7 @@ namespace Trainer_Editor {
                     monStruct += HeldItemMember + MovesMember;
                     break;
                 case PartyType.TrainerMonCustom:
-                    monStruct += HeldItemMember + MovesMember + IVsMember;
+                    monStruct += HeldItemMember + MovesMember + IVsMember + EVsMember;
                     break;
                 default:
                     break;
@@ -80,7 +81,8 @@ namespace Trainer_Editor {
         private string lvlOffset = "";
         private string heldItem;
         private List<string> moves = new List<string> { "", "", "", "" };
-        private List<Stat> ivs = new List<Stat>(6) { new Stat(), new Stat(), new Stat(), new Stat(), new Stat(), new Stat()};
+        private List<Stat> ivs = new List<Stat>(6) { new Stat(), new Stat(), new Stat(), new Stat(), new Stat(), new Stat() };
+        private List<Stat> evs = new List<Stat>(6) { new Stat(), new Stat(), new Stat(), new Stat(), new Stat(), new Stat() };
 
         public string Species {
             get { return species; }
@@ -99,10 +101,8 @@ namespace Trainer_Editor {
                 OnPropertyChanged("Iv");
             }
         }
-        public List<Stat> IVs {
-            get => ivs;
-            set => ivs = value;
-        }
+        public List<Stat> IVs { get => ivs; set => ivs = value; }
+        public List<Stat> EVs { get => evs; set => evs = value; }
         public string Lvl {
             get { return lvl; }
             set {
@@ -157,20 +157,11 @@ namespace Trainer_Editor {
             }
         }
         public string IVsMember {
-            get {
-                string ivsText = "";
-                if (IVs.All(i => i.Text == "0"))
-                    return ivsText;
-
-                for (int i = 0; i < IVs.Count; i++) {
-                    if (i > 0)
-                        ivsText += ", ";
-                    ivsText += IVs[i].Text;
-                }
-                return $"\n\t.ivs = {{{ivsText}}},";
-            }
+            get { return Stat.IsListEmpty(IVs) ? "" : $"\n\t.ivs = {{{Stat.ListToText(IVs)}}},"; }
         }
-
+        public string EVsMember { 
+            get { return Stat.IsListEmpty(EVs) ? "" : $"\n\t.evs = {{{Stat.ListToText(EVs)}}},"; } 
+        }
         
     }
     public class Stat : ObservableObject {
@@ -185,6 +176,18 @@ namespace Trainer_Editor {
                 string input = RegexInput.Digits.Match(value).Value;
                 text = string.IsNullOrEmpty(input) ? "0" : input;
                 OnPropertyChanged("Text"); }
+        }
+        public static bool IsListEmpty(List<Stat> stats) {
+            return stats.All(s => s.Text == "0") ? true : false;
+        }
+        public static string ListToText(List<Stat> stats) {
+            string statsText = "";
+            for (int i = 0; i < stats.Count; i++) {
+                if (i > 0)
+                    statsText += ", ";
+                statsText += stats[i].Text;
+            }
+            return statsText;
         }
     }
 }

@@ -36,7 +36,7 @@
             Width="260" Margin="0,20,0,20"/>
 
         <TabControl Margin="260,20,0,20" Background="#FF121212">
-            <TabItem Header="Party">
+            <TabItem Header="Party" >
                 <Frame>
                     <Frame.Content>
                         <Pages:PartyPage x:Name="partyPage"/>
@@ -64,10 +64,6 @@
             
         </TabControl>
                 
-
-
-        
-
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="200" Margin="0,0,0,20">
             <StackPanel.Resources>
                 <Style TargetType="Button">
