@@ -61,22 +61,19 @@ namespace Trainer_Editor {
             set { partyBoxes = value; }
         }
         public TextBlock StatusBar { get; set; }
-        public List<string> LevelOffsets { get; set; } = new List<string>{
-            "PLAYER_LEVEL_OFFSET +",
-            "PLAYER_LEVEL_OFFSET -",
-            ""
-        };
 
         private Constant species = new Constant(Constants.Species);
         private Constant moves = new Constant(Constants.Moves);
         private Constant items = new Constant(Constants.Items);
         private Constant trainerClass = new Constant(Constants.TrainerClass);
         private Constant trainerPic = new Constant(Constants.TrainerPic);
+        private Constant trainerEncounterMusic = new Constant(Constants.TrainerEncounterMusic);
         public Constant Species { get => species; set { species = value; OnPropertyChanged("Species"); } }
         public Constant Moves { get => moves; set { moves = value; OnPropertyChanged("Moves"); } }
         public Constant Items { get => items; set { items = value; OnPropertyChanged("Items"); } }
         public Constant TrainerClass { get => trainerClass; set { trainerClass = value; OnPropertyChanged("TrainerClass"); } }
         public Constant TrainerPic { get => trainerPic; set { trainerPic = value; OnPropertyChanged("TrainerPic"); } }
+        public Constant TrainerEncounterMusic { get => trainerEncounterMusic; set { trainerEncounterMusic = value; OnPropertyChanged("TrainerEncounterMusic"); } }
         public Constant GetConstant(Constants type) {
             switch (type) {
                 case Constants.Species:
@@ -89,6 +86,8 @@ namespace Trainer_Editor {
                     return TrainerClass;
                 case Constants.TrainerPic:
                     return TrainerPic;
+                case Constants.TrainerEncounterMusic:
+                    return TrainerEncounterMusic;
                 default:
                     MessageBox.Show("Constant not implemented in Data.GetConstant.");
                     return null;
@@ -97,19 +96,22 @@ namespace Trainer_Editor {
         public void SetConstant(Constant constant) {
             switch (constant.Type) {
                 case Constants.Species:
-                    Species = constant;
+                    Species = constant; 
                     break;
                 case Constants.Moves:
-                    Moves = constant;
+                    Moves = constant; 
                     break;
                 case Constants.Items:
-                    Items = constant;
+                    Items = constant; 
                     break;
                 case Constants.TrainerClass:
-                    TrainerClass = constant;
+                    TrainerClass = constant; 
                     break;
                 case Constants.TrainerPic:
-                    TrainerPic = constant;
+                    TrainerPic = constant; 
+                    break;
+                case Constants.TrainerEncounterMusic:
+                    TrainerEncounterMusic = constant; 
                     break;
                 default:
                     MessageBox.Show("Constant not implemented in Data.SetConstant.");

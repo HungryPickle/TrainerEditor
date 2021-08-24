@@ -21,7 +21,7 @@
         <Label Content="IVs"/>
         <local:StatsUserControl Grid.Row="1" Grid.ColumnSpan="3" Stats="{Binding SelectedMon.IVs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Content="Hidden Power" Grid.Column="1" HorizontalContentAlignment="Right"/>
-        <ComboBox x:Name="combobox" Grid.Row="0" Grid.Column="3" ItemsSource="{Binding Spreads}" DisplayMemberPath="Type" 
+        <ComboBox x:Name="combobox" Grid.Row="0" Grid.Column="3" ItemsSource="{x:Static local:HPSpread.Spreads}" DisplayMemberPath="Type" 
             VerticalAlignment="Top" SelectionChanged="combobox_SelectionChanged" 
             HorizontalContentAlignment="Center" MinWidth="75" MaxDropDownHeight="500"/>
 

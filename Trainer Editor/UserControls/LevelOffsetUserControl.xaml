@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Trainer_Editor.UserControls"
+             xmlns:global="clr-namespace:Trainer_Editor"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -13,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <Label Content="Level Offset"/>
-        <ComboBox Grid.Row="1" ItemsSource="{Binding LevelOffsets}" SelectedItem="{Binding SelectedMon.LvlOffset}" Width="160"/>
+        <ComboBox Grid.Row="1" ItemsSource="{x:Static global:Mon.LevelOffsets}" SelectedItem="{Binding SelectedMon.LvlOffset}" Width="160"/>
 
     </Grid>
 </UserControl>

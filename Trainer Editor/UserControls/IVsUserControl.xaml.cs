@@ -17,26 +17,6 @@ namespace Trainer_Editor.UserControls {
     /// </summary>
     public partial class IVsUserControl : UserControl {
 
-        public List<HPSpread> Spreads { get; set; } = new List<HPSpread> {
-            new HPSpread("Max","31","31","31","31","31","31"),
-            new HPSpread("Zero","0","0","0","0","0","0"),
-            new HPSpread("Bug","31","31","31","30","31","30"),
-            new HPSpread("Dark","31","31","31","31","31","31"),
-            new HPSpread("Dragon","30","31","31","31","31","31"),
-            new HPSpread("Electric","31","31","31","31","30","31"),
-            new HPSpread("Fighting","31","31","30","30","30","30"),
-            new HPSpread("Fire","31","30","31","30","30","31"),
-            new HPSpread("Flying","31","31","31","30","30","30"),
-            new HPSpread("Ghost","31","30","31","31","31","30"),
-            new HPSpread("Grass","30","31","31","31","30","31"),
-            new HPSpread("Ground","31","31","31","31","30","30"),
-            new HPSpread("Ice","31","31","31","30","31","31"),
-            new HPSpread("Poison","31","31","30","31","30","30"),
-            new HPSpread("Psychic","30","31","31","30","31","31"),
-            new HPSpread("Rock","31","31","30","30","31","30"),
-            new HPSpread("Steel","31","31","31","31","31","30"),
-            new HPSpread("Water","31","31","31","30","30","31")
-        };
         public IVsUserControl() {
             InitializeComponent();
             combobox.DataContext = this;
@@ -57,5 +37,25 @@ namespace Trainer_Editor.UserControls {
         }
         public string Type { get; set; }
         public List<string> IVs { get; set; }
+        public static List<HPSpread> Spreads { get; set; } = new List<HPSpread> {
+            new HPSpread("Max","31","31","31","31","31","31"),
+            new HPSpread("Zero","0","0","0","0","0","0"),
+            new HPSpread("Bug","31","31","31","30","31","30"),
+            new HPSpread("Dark","31","31","31","31","31","31"),
+            new HPSpread("Dragon","30","31","31","31","31","31"),
+            new HPSpread("Electric","31","31","31","31","30","31"),
+            new HPSpread("Fighting","31","31","30","30","30","30"),
+            new HPSpread("Fire","31","30","31","30","30","31"),
+            new HPSpread("Flying","31","31","31","30","30","30"),
+            new HPSpread("Ghost","31","30","31","31","31","30"),
+            new HPSpread("Grass","30","31","31","31","30","31"),
+            new HPSpread("Ground","31","31","31","31","30","30"),
+            new HPSpread("Ice","31","31","31","30","31","31"),
+            new HPSpread("Poison","31","31","30","31","30","30"),
+            new HPSpread("Psychic","30","31","31","30","31","31"),
+            new HPSpread("Rock","31","31","30","30","31","30"),
+            new HPSpread("Steel","31","31","31","31","31","30"),
+            new HPSpread("Water","31","31","31","30","30","31")
+        };
     }
 }

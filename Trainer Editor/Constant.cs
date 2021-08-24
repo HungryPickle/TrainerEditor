@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace Trainer_Editor {
     public enum Constants {
-        Species, Moves, Items, TrainerClass, TrainerPic
+        Species, Moves, Items, TrainerClass, TrainerPic, TrainerEncounterMusic
     };
     public class Constant : ObservableObject {
         public Constant() { }
@@ -34,6 +34,10 @@ namespace Trainer_Editor {
                     break;
                 case Constants.TrainerPic:
                     DefaultRegex = new Regex(@"(?<=#define\s+)TRAINER_PIC_\w+(?=\s)");
+                    PartialHeaderPath = @"\include\constants\trainers.h";
+                    break;
+                case Constants.TrainerEncounterMusic:
+                    DefaultRegex = new Regex(@"TRAINER_ENCOUNTER_MUSIC_\w+");
                     PartialHeaderPath = @"\include\constants\trainers.h";
                     break;
                 default:
@@ -68,7 +72,7 @@ namespace Trainer_Editor {
         public void SetRegexToDefault() {
             Regex = DefaultRegex;
         }
-        public void AddEmptyStringToNullableConstant() {
+        public void AddEmptyStringToZeroDefaultConstant() {
             switch (Type) {
                 case Constants.Moves:
                 case Constants.Items:

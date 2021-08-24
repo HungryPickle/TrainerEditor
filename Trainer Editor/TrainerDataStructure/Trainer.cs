@@ -9,7 +9,8 @@ namespace Trainer_Editor {
         private string trainerClass;
         private List<string> partyFlags;
         private string indexName;
-        private List<string> encounterMusic_gender;
+        private string encounterGender = "";
+        private string encounterMusic;
         private string trainerName;
         private List<string> items;
         private string doubleBattle;
@@ -19,7 +20,10 @@ namespace Trainer_Editor {
         public string IndexName { get => indexName; set => indexName = value; }
         public List<string> PartyFlags { get => partyFlags; set => partyFlags = value; }
         public string TrainerClass { get => trainerClass; set { trainerClass = value; OnPropertyChanged("TrainerClass"); } }
-        public List<string> EncounterMusic_gender { get => encounterMusic_gender; set => encounterMusic_gender = value; }
+
+        public string EncounterMusic { get => encounterMusic; set { encounterMusic = value; OnPropertyChanged("EncounterMusic"); } }
+        public static List<string> EncounterGenders { get; set; } = new List<string> { "F_TRAINER_FEMALE", "" };
+        public string EncounterGender { get => encounterGender; set { encounterGender = value; OnPropertyChanged("EncounterGender"); } }
         public string TrainerPic { get => trainerPic; set { trainerPic = value; OnPropertyChanged("TrainerPic"); } }
         public string TrainerName { get => trainerName; set => trainerName = value; }
         public List<string> Items { get => items; set => items = value; }
@@ -45,7 +49,8 @@ namespace Trainer_Editor {
             Trainer trainer = new Trainer {
                 Party = Party.CreateDummy(),
                 TrainerClass = "TRAINER_CLASS_HEX_MANIAC",
-                EncounterMusic_gender = new List<string>() { "F_TRAINER_FEMALE", "TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS" },
+                EncounterGender = "F_TRAINER_FEMALE",
+                EncounterMusic = "TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS",
                 TrainerPic = "TRAINER_PIC_HEX_MANIAC",
                 TrainerName = "TAMMY",
                 Items = new List<string>() { "ITEM_HYPER_POTION", "ITEM_FULL_RESTORE" },
@@ -65,7 +70,8 @@ namespace Trainer_Editor {
 
             partyFlags = MatchList(RegexTrainer.PartyFlags, trainerStruct);
             trainerClass = RegexTrainer.TrainerClass.Match(trainerStruct).Value;
-            encounterMusic_gender = MatchList(RegexTrainer.EncounterMusic_Gender, trainerStruct);
+            encounterGender = RegexTrainer.EncounterGender.Match(trainerStruct).Value;
+            encounterMusic = RegexTrainer.EncounterMusic.Match(trainerStruct).Value;
             trainerPic = RegexTrainer.TrainerPic.Match(trainerStruct).Value;
             trainerName = RegexTrainer.TrainerName.Match(trainerStruct).Value;
             items = MatchList(RegexTrainer.Items, trainerStruct);
@@ -101,17 +107,8 @@ namespace Trainer_Editor {
 
         public string EncounterMusic_genderMember {
             get {
-                string encounterMusic_gender = "";
-                if (EncounterMusic_gender == null)
-                    return encounterMusic_gender;
-
-                for (int i = 0; i < EncounterMusic_gender.Count; i++) {
-                    if (i > 0)
-                        encounterMusic_gender += " | " + EncounterMusic_gender[i];
-                    else
-                        encounterMusic_gender += EncounterMusic_gender[i];
-                }
-                return $"\n\t\t.encounterMusic_gender = {encounterMusic_gender},";
+                string gender = string.IsNullOrEmpty(EncounterGender) ? "" : EncounterGender + " | ";
+                return $"\n\t\t.encounterMusic_gender = {gender}{EncounterMusic},";
             }
         }
         public string TrainerPicMember {

@@ -10,7 +10,7 @@
       d:DesignHeight="630" d:DesignWidth="1120"
       Title="PartyPage">
 
-    <Grid >
+    <Grid>
         <Grid.Resources>
 
             <BitmapImage x:Key="GhostBitmap" UriSource="/Graphics/ghost.png"/>
@@ -67,12 +67,13 @@
         <UserControls:MovesUserControl x:Name="moves" Grid.Column="1" Grid.Row="2" Width="150" VerticalAlignment="Center" 
             Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Moves}"/>
 
+            
         <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center">
             <UserControls:LevelOffsetUserControl Grid.Row="3" Tag="{x:Static global:Input.Custom}" Style="{StaticResource PartyType}"/>
             <UserControls:LabeledTextBox x:Name="lvlBox" LabelText="Level (1-100)"  Width="100"  Grid.Row="3" Margin="5,0,0,0"
                 TextBoxText="{Binding SelectedMon.Lvl, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
-            
         </StackPanel>
+            
         <UserControls:AutoCompleteTextBox x:Name="heldItemBox" LabelContent="Held Item" Width="120" Grid.Row="3" Grid.Column="1"
             ListItem="{Binding SelectedMon.HeldItem, Mode=TwoWay}" ListSource="{Binding Items.List, Mode=OneWay}" 
             Tag="{x:Static global:Input.HeldItem}" Style="{StaticResource PartyType}"/>

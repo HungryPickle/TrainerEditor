@@ -13,13 +13,12 @@ using System.Windows.Shapes;
 
 namespace Trainer_Editor.UserControls {
     /// <summary>
-    /// Interaction logic for LevelOffsetUserControl.xaml
+    /// Interaction logic for TrainerEncounterMusicUserControl.xaml
     /// </summary>
-    public partial class LevelOffsetUserControl : UserControl {
+    public partial class TrainerEncounterMusicUserControl : UserControl {
 
-        public LevelOffsetUserControl() {
+        public TrainerEncounterMusicUserControl() {
             InitializeComponent();
-            
         }
     }
 }

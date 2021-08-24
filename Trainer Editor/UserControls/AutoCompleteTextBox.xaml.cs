@@ -89,6 +89,7 @@ namespace Trainer_Editor.UserControls {
 
 
         private bool isFirstKey = true;
+        
         public AutoCompleteTextBox() {
             InitializeComponent();
         }

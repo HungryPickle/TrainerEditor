@@ -47,6 +47,9 @@
         <Style TargetType="RadioButton">
             <Setter Property="Foreground" Value="WhiteSmoke"/>
         </Style>
+        <Style TargetType="GroupBox">
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+        </Style>
 
         
     </Application.Resources>

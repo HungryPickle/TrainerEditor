@@ -21,7 +21,7 @@
         <Label Content="EVs"/>
         <local:StatsUserControl Grid.Row="1" Grid.ColumnSpan="3" Stats="{Binding SelectedMon.EVs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Content="Spread" Grid.Column="1" HorizontalContentAlignment="Right"/>
-        <ComboBox x:Name="combobox" Grid.Row="0" Grid.Column="3" ItemsSource="{Binding Spreads}" DisplayMemberPath="Type" 
+        <ComboBox x:Name="combobox" Grid.Row="0" Grid.Column="3" ItemsSource="{x:Static local:EVSpread.Spreads}" DisplayMemberPath="Type" 
             VerticalAlignment="Top" SelectionChanged="combobox_SelectionChanged" 
             HorizontalContentAlignment="Center" MinWidth="95" MaxDropDownHeight="500"/>
 

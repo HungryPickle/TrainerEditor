@@ -115,6 +115,12 @@ namespace Trainer_Editor {
             get { return lvlOffset; }
             set { lvlOffset = value; OnPropertyChanged("LvlOffset"); }
         }
+        public static List<string> LevelOffsets { get; set; } = new List<string>{
+            "PLAYER_LEVEL_OFFSET + ",
+            "PLAYER_LEVEL_OFFSET - ",
+            ""
+        };
+
         public string HeldItem {
             get => heldItem;
             set {
@@ -134,7 +140,7 @@ namespace Trainer_Editor {
             get => string.IsNullOrEmpty(Species) ? "" : $"\n\t.species = {Species},";
         }
         public string LvlMember {
-            get => string.IsNullOrEmpty(Lvl) ? "" : $"\n\t.lvl = {LvlOffset} {Lvl},";
+            get => string.IsNullOrEmpty(Lvl) ? "" : $"\n\t.lvl = {LvlOffset}{Lvl},";
         }
         public string IvMember {
             get => string.IsNullOrEmpty(Iv) ? "" : $"\n\t.iv = {Iv},";

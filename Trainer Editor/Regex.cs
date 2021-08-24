@@ -15,7 +15,8 @@ namespace Trainer_Editor {
 
         public static Regex PartyFlags = new Regex(@"(?<=\.partyFlags\s+=.+)(F_TRAINER_\w+|0)");
         public static Regex TrainerClass = new Regex(@"(?<=\.trainerClass\s+=\s+)TRAINER_CLASS_\w+(?=,)");
-        public static Regex EncounterMusic_Gender = new Regex(@"(?<=\.encounterMusic_gender\s+=.+)\w+");
+        public static Regex EncounterGender = new Regex(@"(?<=\.encounterMusic_gender\s+=\s+)F_TRAINER_\w+");
+        public static Regex EncounterMusic = new Regex(@"(?<=\.encounterMusic_gender\s+=.+)TRAINER_ENCOUNTER_MUSIC_\w+");
         public static Regex TrainerPic = new Regex(@"(?<=\.trainerPic\s+=\s+).+(?=,)");
         public static Regex TrainerName = new Regex(@"(?<=\.trainerName\s+=.+"").+(?=""\W,)");
         public static Regex Items = new Regex(@"(?<=\.items\s+=\s+.+)ITEM_\w+");
@@ -30,7 +31,7 @@ namespace Trainer_Editor {
 
         public static Regex IV = new Regex(@"(?<=\.iv\s+=\s+).+(?=,)");
         public static Regex Lvl = new Regex(@"(?<=\.lvl\s+=.+)[0-9]+(?=,)");
-        public static Regex LvlOffset = new Regex(@"(?<=\.lvl\s+=\s+)PLAYER_LEVEL_OFFSET\s+(\-|\+)");
+        public static Regex LvlOffset = new Regex(@"(?<=\.lvl\s+=\s+)PLAYER_LEVEL_OFFSET\s(\-|\+)\s");
         public static Regex Species = new Regex(@"(?<=\.species\s+=\s+)SPECIES_\w+");
         public static Regex HeldItem = new Regex(@"(?<=\.heldItem\s+=\s+)ITEM_\w+");
 
@@ -52,68 +53,6 @@ namespace Trainer_Editor {
                 stats[i].Text = matches[i];
             }
             return stats;
-        }
-    }
-
-    public class RegexConstant : ObservableObject {
-
-        public static Regex SpeciesDefault { get; set; } = new Regex(@"(?<=#define\s+)SPECIES\w+(?=\s)");
-        public static Regex MovesDefault { get; set; } = new Regex(@"MOVE_\w+");
-        public static Regex ItemsDefault { get; set; } = new Regex(@"(?<=#define\s+)ITEM(\w(?!USE_|B_USE|_COUNT|FIELD_ARROW))+(?=\s)");
-        public static Regex TrainerClassDefault { get; set; } = new Regex(@"(?<=#define\s+)TRAINER_CLASS_\w+");
-
-        public Regex GetConstantRegex(Constants constant) {
-            switch (constant) {
-                case Constants.Species:
-                    return Species;
-                case Constants.Moves:
-                    return Moves;
-                case Constants.Items:
-                    return Items;
-                case Constants.TrainerClass:
-                    return TrainerClass;
-                default:
-                    MessageBox.Show("Constant not implemented in RegexConfig.GetConstantRegex");
-                    return null;
-            }
-        }
-        private Regex items = ItemsDefault;
-        private Regex moves = MovesDefault;
-        private Regex species = SpeciesDefault;
-        private Regex trainerClass = TrainerClassDefault;
-
-        public Regex Species {
-            get => species;
-            set {
-                SetRegex(Species, ref species, value);
-            }
-        }
-        public Regex Moves {
-            get => moves;
-            set {
-                if (!string.IsNullOrEmpty(value?.ToString()))
-                    moves = value;
-                OnPropertyChanged("Moves");
-            }
-        }
-        public Regex Items {
-            get => items;
-            set {
-                if (!string.IsNullOrEmpty(value?.ToString()))
-                    items = value;
-                OnPropertyChanged("Items");
-            }
-        }
-
-        public Regex TrainerClass {
-            get => trainerClass;
-            set => SetRegex(TrainerClass, ref trainerClass, value);
-        }
-        private void SetRegex(Regex property, ref Regex field, Regex value ) {
-            if (!string.IsNullOrEmpty(value?.ToString())) {
-                field = value;
-                OnPropertyChanged(nameof(property));
-            }
         }
     }
     public class RegexInput {
