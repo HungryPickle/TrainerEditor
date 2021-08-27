@@ -7,24 +7,25 @@
              xmlns:global="clr-namespace:Trainer_Editor"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        
-        <Label Content="EVs"/>
-        <local:StatsUserControl Grid.Row="1" Grid.ColumnSpan="3" Stats="{Binding SelectedMon.EVs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Label Content="Spread" Grid.Column="1" HorizontalContentAlignment="Right"/>
-        <ComboBox x:Name="combobox" Grid.Row="0" Grid.Column="3" ItemsSource="{x:Static local:EVSpread.Spreads}" DisplayMemberPath="Type" 
-            VerticalAlignment="Top" SelectionChanged="combobox_SelectionChanged" 
-            HorizontalContentAlignment="Center" MinWidth="95" MaxDropDownHeight="500"/>
+    <GroupBox Header="EVs">
+        <Grid Margin="2,2,2,2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <local:StatsUserControl Grid.Row="1" Grid.ColumnSpan="3" Stats="{Binding SelectedMon.EVs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Spread" Grid.Column="1" HorizontalContentAlignment="Right"/>
+            <ComboBox x:Name="combobox" Grid.Row="0" Grid.Column="3" ItemsSource="{x:Static local:EVSpread.Spreads}" DisplayMemberPath="Type" 
+                VerticalAlignment="Top" SelectionChanged="combobox_SelectionChanged" 
+                HorizontalContentAlignment="Center" MinWidth="95" MaxDropDownHeight="500"/>
 
 
-    </Grid>
+        </Grid>
+    </GroupBox>
 </UserControl>

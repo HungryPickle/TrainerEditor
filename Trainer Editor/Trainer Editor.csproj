@@ -10,9 +10,12 @@
 
   <ItemGroup>
     <None Remove="Config\FilePaths.json" />
+    <None Remove="Constants\Balls.json" />
     <None Remove="Constants\Items.json" />
     <None Remove="Constants\Moves.json" />
+    <None Remove="Constants\Natures.json" />
     <None Remove="Constants\Species.json" />
+    <None Remove="Constants\TrainerAiFlag.json" />
     <None Remove="Constants\TrainerClass.json" />
     <None Remove="Constants\TrainerEncounterMusic.json" />
     <None Remove="Constants\TrainerPic.json" />
@@ -28,6 +31,12 @@
 
   <ItemGroup>
     <Content Include="Config\FilePaths.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Constants\Natures.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Constants\TrainerAiFlag.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Constants\Items.json">
@@ -61,6 +70,12 @@
 
   <ItemGroup>
     <Content Include="Constants\Moves.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Constants\Balls.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -36,7 +36,8 @@ namespace Trainer_Editor.UserControls {
         }
         public string Type { get; set; }
         public List<string> EVs { get; set; }
-        public static List<EVSpread> Spreads { get; set; } = new List<EVSpread> {
+
+        public static readonly List<EVSpread> Spreads = new List<EVSpread> {
             new EVSpread("Max","255","255","255","255","255","255"),
             new EVSpread("Zero","0","0","0","0","0","0"),
             new EVSpread("Atk & Spe","4","252","0","252","0","0"),

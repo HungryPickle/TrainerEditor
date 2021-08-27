@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace Trainer_Editor {
     public enum Constants {
-        Species, Moves, Items, TrainerClass, TrainerPic, TrainerEncounterMusic
+        Species, Moves, Items, TrainerClass, TrainerPic, TrainerEncounterMusic, TrainerAiFlag, Balls, Natures
     };
     public class Constant : ObservableObject {
         public Constant() { }
@@ -39,6 +39,18 @@ namespace Trainer_Editor {
                 case Constants.TrainerEncounterMusic:
                     DefaultRegex = new Regex(@"TRAINER_ENCOUNTER_MUSIC_\w+");
                     PartialHeaderPath = @"\include\constants\trainers.h";
+                    break;
+                case Constants.TrainerAiFlag:
+                    DefaultRegex = new Regex(@"(?<=#define\s+)AI_SCRIPT_\w+");
+                    PartialHeaderPath = @"\include\constants\battle_ai.h";
+                    break;
+                case Constants.Balls:
+                    DefaultRegex = new Regex(@"(?<=#define\s+)ITEM(\w(?!SMOKE|LIGHT|TM30))+BALL");
+                    PartialHeaderPath = @"\include\constants\items.h";
+                    break;
+                case Constants.Natures:
+                    DefaultRegex = new Regex(@"(?<=#define\s+)NATURE(\w(?!HARDY\s))+");
+                    PartialHeaderPath = @"\include\constants\pokemon.h";
                     break;
                 default:
                     break;
@@ -76,6 +88,8 @@ namespace Trainer_Editor {
             switch (Type) {
                 case Constants.Moves:
                 case Constants.Items:
+                case Constants.Balls:
+                case Constants.Natures:
                     List.Add(string.Empty);
                     break;
                 default:

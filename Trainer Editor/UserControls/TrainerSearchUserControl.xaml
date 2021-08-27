@@ -10,15 +10,12 @@
         <Grid.Resources>
 
         </Grid.Resources>
-        <TextBox x:Name="textbox"  Height="20" VerticalAlignment="Top" 
+        <TextBox x:Name="textbox"  Height="20" VerticalAlignment="Top"
             TextChanged="TextBox_TextChanged" 
             PreviewKeyDown="TextBox_PreviewKeyDown"/>
         <ListBox x:Name="listbox" Margin="0,20,0,0"  
             ItemsSource="{Binding FilteredTrainers}"  
             DisplayMemberPath="IndexName"
             SelectionChanged="ListBox_SelectionChanged"/>
-        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom">
-
-        </StackPanel>
     </Grid>
 </UserControl>

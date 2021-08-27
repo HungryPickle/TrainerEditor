@@ -5,8 +5,9 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Trainer_Editor.Pages"
       xmlns:controls="clr-namespace:Trainer_Editor.UserControls"
+      xmlns:global="clr-namespace:Trainer_Editor"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="630" d:DesignWidth="1120"
       Title="TrainerPage">
 
     <Grid>
@@ -26,6 +27,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            
         </Grid.RowDefinitions>
 
         <Image x:Name="TrainerSprite" Margin="10,0,0,0" Grid.Row="0" Grid.Column="0" 
@@ -40,6 +42,10 @@
             ListItem="{Binding SelectedTrainer.TrainerPic, Mode=TwoWay}"
             ListSource="{Binding TrainerPic.List, Mode=OneWay}"/>
         <controls:TrainerEncounterMusicUserControl Grid.Row="3"/>
-
+        <controls:TrainerAiFlagsUserControl Grid.Row="4" Height="280" MinWidth="250" HorizontalAlignment="Center"/>
+        <controls:LabeledTextBox LabelText="TrainerName" Grid.Row="0" Grid.Column="1" MinWidth="140"
+            TextBoxText="{Binding SelectedTrainer.TrainerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <controls:TrainerItemsUserControl Grid.Row="4" Grid.Column="1"/>
+        <CheckBox Content="Double Battle" IsChecked="{Binding SelectedTrainer.DoubleBattleBool, Mode=TwoWay}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"/>
     </Grid>
 </Page>

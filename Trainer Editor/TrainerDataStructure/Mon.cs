@@ -15,31 +15,38 @@ namespace Trainer_Editor {
             Iv = "0";
             Lvl = "2";
         }
-        public Mon (PartyType partyType, string monStruct) {
+        public PartyTypes PartyType { get; set; }
+        public Mon (PartyTypes partyType, string monStruct) {
 
+            PartyType = partyType;
             iv = RegexMon.IV.Match(monStruct).Value;
             lvl = RegexMon.Lvl.Match(monStruct).Value;
             species = RegexMon.Species.Match(monStruct).Value;
 
             switch (partyType) {
-                case PartyType.TrainerMonNoItemDefaultMoves:
+                case PartyTypes.TrainerMonNoItemDefaultMoves:
                     break;
-                case PartyType.TrainerMonItemDefaultMoves:
+                case PartyTypes.TrainerMonItemDefaultMoves:
                     heldItem = RegexMon.HeldItem.Match(monStruct).Value;
                     break;
-                case PartyType.TrainerMonNoItemCustomMoves:
+                case PartyTypes.TrainerMonNoItemCustomMoves:
                     moves = RegexMon.MatchMoves(monStruct);
                     break;
-                case PartyType.TrainerMonItemCustomMoves:
+                case PartyTypes.TrainerMonItemCustomMoves:
                     heldItem = RegexMon.HeldItem.Match(monStruct).Value;
                     moves = RegexMon.MatchMoves(monStruct);
                     break;
-                case PartyType.TrainerMonCustom:
+                case PartyTypes.TrainerMonCustom:
                     heldItem = RegexMon.HeldItem.Match(monStruct).Value;
                     moves = RegexMon.MatchMoves(monStruct);
                     lvlOffset = RegexMon.LvlOffset.Match(monStruct).Value;
                     ivs = RegexMon.MatchStats(monStruct, RegexMon.IVs);
                     evs = RegexMon.MatchStats(monStruct, RegexMon.EVs);
+                    gender = RegexMon.Gender.Match(monStruct).Value;
+                    nickName = RegexMon.Nickname.Match(monStruct).Value;
+                    ball = RegexMon.Ball.Match(monStruct).Value;
+                    ability = RegexMon.Ability.Match(monStruct).Value;
+                    nature = RegexMon.Nature.Match(monStruct).Value;
                     break;
                 default:
                     break;
@@ -47,25 +54,27 @@ namespace Trainer_Editor {
         
         }
 
-        public string CreateStruct(PartyType partyType) {
+        public string CreateStruct(PartyTypes partyType) {
             string monStruct = $"\n\t{{" +
             IvMember +
             LvlMember +
             SpeciesMember;
             switch (partyType) {
-                case PartyType.TrainerMonNoItemDefaultMoves:
+                case PartyTypes.TrainerMonNoItemDefaultMoves:
                     break;
-                case PartyType.TrainerMonItemDefaultMoves:
+                case PartyTypes.TrainerMonItemDefaultMoves:
                     monStruct += HeldItemMember;
                     break;
-                case PartyType.TrainerMonNoItemCustomMoves:
+                case PartyTypes.TrainerMonNoItemCustomMoves:
                     monStruct += MovesMember;
                     break;
-                case PartyType.TrainerMonItemCustomMoves:
+                case PartyTypes.TrainerMonItemCustomMoves:
                     monStruct += HeldItemMember + MovesMember;
                     break;
-                case PartyType.TrainerMonCustom:
-                    monStruct += HeldItemMember + MovesMember + IVsMember + EVsMember;
+                case PartyTypes.TrainerMonCustom:
+                    monStruct += HeldItemMember + MovesMember + IVsMember 
+                        + EVsMember + GenderMember + NicknameMember + BallMember
+                        + AbilityMember + NatureMember;
                     break;
                 default:
                     break;
@@ -78,11 +87,16 @@ namespace Trainer_Editor {
         private string species;
         private string iv;
         private string lvl;
-        private string lvlOffset = "";
+        private string lvlOffset;
         private string heldItem;
         private List<string> moves = new List<string> { "", "", "", "" };
         private List<Stat> ivs = new List<Stat>(6) { new Stat(), new Stat(), new Stat(), new Stat(), new Stat(), new Stat() };
         private List<Stat> evs = new List<Stat>(6) { new Stat(), new Stat(), new Stat(), new Stat(), new Stat(), new Stat() };
+        private string gender;
+        private string nickName;
+        private string ball;
+        private string ability;
+        private string nature;
 
         public string Species {
             get { return species; }
@@ -101,8 +115,6 @@ namespace Trainer_Editor {
                 OnPropertyChanged("Iv");
             }
         }
-        public List<Stat> IVs { get => ivs; set => ivs = value; }
-        public List<Stat> EVs { get => evs; set => evs = value; }
         public string Lvl {
             get { return lvl; }
             set {
@@ -115,7 +127,7 @@ namespace Trainer_Editor {
             get { return lvlOffset; }
             set { lvlOffset = value; OnPropertyChanged("LvlOffset"); }
         }
-        public static List<string> LevelOffsets { get; set; } = new List<string>{
+        public static readonly List<string> LvlOffsets = new List<string>{
             "PLAYER_LEVEL_OFFSET + ",
             "PLAYER_LEVEL_OFFSET - ",
             ""
@@ -135,6 +147,30 @@ namespace Trainer_Editor {
                 OnPropertyChanged("Moves");
             }
         }
+        public List<Stat> IVs { get => ivs; set { ivs = value; OnPropertyChanged("IVs"); } }
+        public List<Stat> EVs { get => evs; set { evs = value; OnPropertyChanged("EVs"); } }
+        public string Gender { get => gender; set { gender = value; OnPropertyChanged("Gender"); } }
+        public static readonly List<string> Genders = new List<string> {
+            "MON_FEMALE",
+            "MON_MALE_TRAINERMON",
+            ""
+        };
+        public string Nickname { 
+            get => nickName; 
+            set { 
+                nickName = value.Length > 10 ? value.Substring(0, 10) : value;
+                OnPropertyChanged("NickName");
+            } 
+        }
+        public string Ball { get => ball; set { ball = value; OnPropertyChanged("Ball"); } }
+        public string Ability { get => ability; set { ability = value; OnPropertyChanged("Ability"); } }
+        public static readonly List<string> Abilities = new List<string> {
+            "ABILITY_SLOT_1",
+            "ABILITY_SLOT_2",
+            "ABILITY_HIDDEN",
+            ""
+        };
+        public string Nature { get => nature; set { nature = value; OnPropertyChanged("Nature"); } }
 
         public string SpeciesMember {
             get => string.IsNullOrEmpty(Species) ? "" : $"\n\t.species = {Species},";
@@ -146,7 +182,10 @@ namespace Trainer_Editor {
             get => string.IsNullOrEmpty(Iv) ? "" : $"\n\t.iv = {Iv},";
         }
         public string HeldItemMember {
-            get => string.IsNullOrEmpty(HeldItem) ? "" : $"\n\t.heldItem = {HeldItem},";
+            get {
+                string comma = PartyType != PartyTypes.TrainerMonItemDefaultMoves ? "," : "";
+                return string.IsNullOrEmpty(HeldItem) ? "" : $"\n\t.heldItem = {HeldItem}{comma}"; 
+            }
         }
         public string MovesMember {
             get {
@@ -154,12 +193,13 @@ namespace Trainer_Editor {
                 if (Moves.All(m => string.IsNullOrEmpty(m)))
                     return movesText;
 
-                for (int i = 0; i < Moves.Count && !string.IsNullOrEmpty(Moves[i]); i++) {
-                    if (i > 0)
-                        movesText += ", ";
-                    movesText += Moves[i];
+                foreach(string move in Moves) {
+                    if (string.IsNullOrEmpty(move))
+                        continue;
+                    movesText += string.IsNullOrEmpty(movesText) ? move : ", " + move;
                 }
-                return $"\n\t.moves = {{{movesText}}},";
+                string comma = PartyType == PartyTypes.TrainerMonCustom ? "," : "";
+                return $"\n\t.moves = {{{movesText}}}{comma}";
             }
         }
         public string IVsMember {
@@ -168,7 +208,21 @@ namespace Trainer_Editor {
         public string EVsMember { 
             get { return Stat.IsListEmpty(EVs) ? "" : $"\n\t.evs = {{{Stat.ListToText(EVs)}}},"; } 
         }
-        
+        public string GenderMember {
+            get { return string.IsNullOrEmpty(Gender) ? "" : $"\n\t.gender = {Gender},"; }
+        }
+        public string NicknameMember {
+            get { return string.IsNullOrEmpty(Nickname) ? "" : $"\n\t.nickname = _(\"{Nickname}\"),"; }
+        }
+        public string BallMember {
+            get { return string.IsNullOrEmpty(Ball) ? "" : $"\n\t.ball = {Ball},"; }
+        }
+        public string AbilityMember {
+            get { return string.IsNullOrEmpty(Ability) ? "" : $"\n\t.ability = {Ability},"; }
+        }
+        public string NatureMember {
+            get { return string.IsNullOrEmpty(Nature) ? "" : $"\n\t.nature = {Nature},"; }
+        }
     }
     public class Stat : ObservableObject {
         public Stat() { }

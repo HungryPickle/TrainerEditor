@@ -15,9 +15,9 @@ namespace Trainer_Editor.UserControls {
     /// <summary>
     /// Interaction logic for LevelOffsetUserControl.xaml
     /// </summary>
-    public partial class LevelOffsetUserControl : UserControl {
+    public partial class LevelUserControl : UserControl {
 
-        public LevelOffsetUserControl() {
+        public LevelUserControl() {
             InitializeComponent();
             
         }

@@ -7,24 +7,24 @@
              xmlns:global="clr-namespace:Trainer_Editor"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        
-        <Label Content="IVs"/>
-        <local:StatsUserControl Grid.Row="1" Grid.ColumnSpan="3" Stats="{Binding SelectedMon.IVs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Label Content="Hidden Power" Grid.Column="1" HorizontalContentAlignment="Right"/>
-        <ComboBox x:Name="combobox" Grid.Row="0" Grid.Column="3" ItemsSource="{x:Static local:HPSpread.Spreads}" DisplayMemberPath="Type" 
-            VerticalAlignment="Top" SelectionChanged="combobox_SelectionChanged" 
-            HorizontalContentAlignment="Center" MinWidth="75" MaxDropDownHeight="500"/>
+    <GroupBox Header="IVs" Grid.RowSpan="2" Grid.ColumnSpan="3">
+        <Grid Margin="2,2,2,2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+                
+            <Label Content="Hidden Power" Grid.Column="1" HorizontalContentAlignment="Right"/>
+            <ComboBox x:Name="combobox" Grid.Row="0" Grid.Column="2" ItemsSource="{x:Static local:HPSpread.Spreads}" DisplayMemberPath="Type" 
+                VerticalAlignment="Top" SelectionChanged="combobox_SelectionChanged" 
+                HorizontalContentAlignment="Center" MinWidth="75" MaxDropDownHeight="500"/>
+            <local:StatsUserControl Grid.Row="1" Grid.ColumnSpan="3" Stats="{Binding SelectedMon.IVs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-
-    </Grid>
+        </Grid>
+    </GroupBox>
 </UserControl>

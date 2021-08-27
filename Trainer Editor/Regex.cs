@@ -26,6 +26,18 @@ namespace Trainer_Editor {
         public static Regex Party = new Regex(@"(?<=\.party\s+=.+)sParty_\w+");
 
         //public static Regex Trainer = new Regex(@"\[TRAINER[\s\S]+?(?=\s+\[TRAINER)|(?<=},\s+)\[TRAINER[\s\S]+(?=};)");
+        public static List<string> MatchList(Regex member, string trainerStruct) {
+
+            return new List<string>(member.Matches(trainerStruct).Select(m => m.Value));
+        }
+        public static List<string> MatchItems(string trainerStruct) {
+            List<string> items = new List<string> { "", "", "", "" };
+            List<string> matches = new List<string>(RegexTrainer.Items.Matches(trainerStruct).Select(m => m.Value));
+            for (int i = 0; i < matches.Count; i++) {
+                items[i] = matches[i];
+            }
+            return items;
+        }
     }
     public class RegexMon {
 
@@ -34,6 +46,12 @@ namespace Trainer_Editor {
         public static Regex LvlOffset = new Regex(@"(?<=\.lvl\s+=\s+)PLAYER_LEVEL_OFFSET\s(\-|\+)\s");
         public static Regex Species = new Regex(@"(?<=\.species\s+=\s+)SPECIES_\w+");
         public static Regex HeldItem = new Regex(@"(?<=\.heldItem\s+=\s+)ITEM_\w+");
+        public static Regex Gender = new Regex(@"(?<=\.gender\s+=\s+)(MON_FEMALE|MON_MALE_TRAINERMON)");
+        public static Regex Nickname = new Regex(@"(?<=\.nickname\s+=.+"").+(?=""\W,)");
+        public static Regex Ball = new Regex(@"(?<=\.ball\s+=\s+)ITEM_\w+BALL");
+        public static Regex Ability = new Regex(@"(?<=\.ability\s+=\s+)ABILITY_\w+");
+        public static Regex Nature = new Regex(@"(?<=\.nature\s+=\s+)NATURE_\w+");
+        
 
         private static Regex Moves = new Regex(@"(?<=\.moves\s+=.+)MOVE_\w+");
         public static Regex IVs = new Regex(@"(?<=.ivs\s+=.+)[0-9]+");

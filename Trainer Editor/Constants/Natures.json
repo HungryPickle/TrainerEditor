@@ -1,0 +1,39 @@
+{
+  "Type": 8,
+  "PartialHeaderPath": "\\include\\constants\\pokemon.h",
+  "DefaultRegex": {
+    "Pattern": "(?<=#define\\s+)NATURE(\\w(?!HARDY\\s))+",
+    "Options": 0
+  },
+  "Regex": {
+    "Pattern": "(?<=#define\\s+)NATURE(\\w(?!HARDY\\s))+",
+    "Options": 0
+  },
+  "List": [
+    "NATURE_LONELY",
+    "NATURE_BRAVE",
+    "NATURE_ADAMANT",
+    "NATURE_NAUGHTY",
+    "NATURE_BOLD",
+    "NATURE_DOCILE",
+    "NATURE_RELAXED",
+    "NATURE_IMPISH",
+    "NATURE_LAX",
+    "NATURE_TIMID",
+    "NATURE_HASTY",
+    "NATURE_SERIOUS",
+    "NATURE_JOLLY",
+    "NATURE_NAIVE",
+    "NATURE_MODEST",
+    "NATURE_MILD",
+    "NATURE_QUIET",
+    "NATURE_BASHFUL",
+    "NATURE_RASH",
+    "NATURE_CALM",
+    "NATURE_GENTLE",
+    "NATURE_SASSY",
+    "NATURE_CAREFUL",
+    "NATURE_QUIRKY",
+    "NATURE_HARDY_TRAINERMON"
+  ]
+}

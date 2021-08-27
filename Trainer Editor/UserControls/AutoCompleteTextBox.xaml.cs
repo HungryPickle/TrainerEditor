@@ -129,7 +129,9 @@ namespace Trainer_Editor.UserControls {
                     e.Handled = true;
                     break;
                 case Key.Enter:
-                    if (FilteredSource?.FirstOrDefault() != null) {
+                    if (string.IsNullOrEmpty(textbox.Text))
+                        textbox.Text = "";
+                    else if (FilteredSource?.FirstOrDefault() != null) {
                         textbox.Text = FilteredSource.FirstOrDefault();
                     }
                     popup.IsOpen = false;

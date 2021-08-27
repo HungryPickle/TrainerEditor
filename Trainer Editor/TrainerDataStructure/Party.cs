@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Trainer_Editor {
-    public enum PartyType {
+    public enum PartyTypes {
         TrainerMonNoItemDefaultMoves,
         TrainerMonItemDefaultMoves,
         TrainerMonNoItemCustomMoves,
@@ -19,26 +19,29 @@ namespace Trainer_Editor {
 
     public class Party : ObservableObject {
 
-        private static readonly Dictionary<string, PartyType> TypeStringToType = new Dictionary<string, PartyType>{
-            { PartyType.TrainerMonNoItemDefaultMoves.ToString(), PartyType.TrainerMonNoItemDefaultMoves },
-            { PartyType.TrainerMonItemDefaultMoves.ToString(), PartyType.TrainerMonItemDefaultMoves },
-            { PartyType.TrainerMonNoItemCustomMoves.ToString(), PartyType.TrainerMonNoItemCustomMoves },
-            { PartyType.TrainerMonItemCustomMoves.ToString(), PartyType.TrainerMonItemCustomMoves },
-            { PartyType.TrainerMonCustom.ToString(), PartyType.TrainerMonCustom }
+        private static readonly Dictionary<string, PartyTypes> TypeStringToType = new Dictionary<string, PartyTypes>{
+            { PartyTypes.TrainerMonNoItemDefaultMoves.ToString(), PartyTypes.TrainerMonNoItemDefaultMoves },
+            { PartyTypes.TrainerMonItemDefaultMoves.ToString(), PartyTypes.TrainerMonItemDefaultMoves },
+            { PartyTypes.TrainerMonNoItemCustomMoves.ToString(), PartyTypes.TrainerMonNoItemCustomMoves },
+            { PartyTypes.TrainerMonItemCustomMoves.ToString(), PartyTypes.TrainerMonItemCustomMoves },
+            { PartyTypes.TrainerMonCustom.ToString(), PartyTypes.TrainerMonCustom }
         };
-        public static readonly Dictionary<PartyType, List<string>> TypeToPartyFlags = new Dictionary<PartyType, List<string>> {
-            { PartyType.TrainerMonNoItemDefaultMoves, new List<string>{ "0" } },
-            { PartyType.TrainerMonItemDefaultMoves, new List<string>{ "F_TRAINER_PARTY_HELD_ITEM" } },
-            { PartyType.TrainerMonNoItemCustomMoves, new List<string>{ "F_TRAINER_PARTY_CUSTOM_MOVESET" } },
-            { PartyType.TrainerMonItemCustomMoves, new List<string>{ "F_TRAINER_PARTY_HELD_ITEM", "F_TRAINER_PARTY_CUSTOM_MOVESET" } },
-            { PartyType.TrainerMonCustom, new List<string>{"F_TRAINER_PARTY_CUSTOM"} }
+        public static readonly Dictionary<PartyTypes, List<string>> TypeToPartyFlags = new Dictionary<PartyTypes, List<string>> {
+            { PartyTypes.TrainerMonNoItemDefaultMoves, new List<string>{ "0" } },
+            { PartyTypes.TrainerMonItemDefaultMoves, new List<string>{ "F_TRAINER_PARTY_HELD_ITEM" } },
+            { PartyTypes.TrainerMonNoItemCustomMoves, new List<string>{ "F_TRAINER_PARTY_CUSTOM_MOVESET" } },
+            { PartyTypes.TrainerMonItemCustomMoves, new List<string>{ "F_TRAINER_PARTY_HELD_ITEM", "F_TRAINER_PARTY_CUSTOM_MOVESET" } },
+            { PartyTypes.TrainerMonCustom, new List<string>{"F_TRAINER_PARTY_CUSTOM"} }
         };
 
-        private PartyType type;
-        public PartyType Type {
+        private PartyTypes type;
+        public PartyTypes Type {
             get => type;
             set {
                 type = value;
+                foreach(Mon mon in MonList) {
+                    mon.PartyType = value;
+                }
                 OnPropertyChanged("Type");
             }
         }
@@ -71,14 +74,14 @@ namespace Trainer_Editor {
         }
 
         public static Party CreateDummy() {
-            Party party = new Party(PartyType.TrainerMonNoItemDefaultMoves, "DUMMY_PARTY");
+            Party party = new Party(PartyTypes.TrainerMonNoItemDefaultMoves, "DUMMY_PARTY");
             party.MonList.Add(new Mon("SPECIES_NONE"));
             return party;
         }
-        public Party(PartyType type, string name) {
+        public Party(PartyTypes type, string name) {
+            MonList = new ObservableCollection<Mon>();
             Type = type;
             Name = name;
-            MonList = new ObservableCollection<Mon>();
             MonList.CollectionChanged += new NotifyCollectionChangedEventHandler(PartyChanged);
         }
 
@@ -100,7 +103,7 @@ namespace Trainer_Editor {
         public static bool IfContainsPartyAddParty(string line, Dictionary<string, Party> parties) {
 
             string name = RegexTrainer.PartyName.Match(line).Value;
-            PartyType type;
+            PartyTypes type;
 
             if (TypeStringToType.TryGetValue(RegexTrainer.PartyType.Match(line).Value, out type)) {
                 parties.Add(name, new Party(type, name));

@@ -38,7 +38,7 @@ namespace Trainer_Editor {
             KeyEventHandler autoPreview = new KeyEventHandler(AutoCompleteTextBox_PreviewKeyDown);
             KeyEventHandler textPreview = new KeyEventHandler(TextBox_PreviewKeyDown);
 
-            LabeledTextBox lvl = AddEvent(m.partyPage.lvlBox, labelPreview);
+            LabeledTextBox lvl = AddEvent(m.partyPage.lvlControl.lvlBox, labelPreview);
             LabeledTextBox iv = AddEvent(m.partyPage.ivBox, labelPreview);
 
             AutoCompleteTextBox move0 = AddEvent(m.partyPage.moves.move0, autoPreview);

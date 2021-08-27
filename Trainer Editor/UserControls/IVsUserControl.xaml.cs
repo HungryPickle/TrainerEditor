@@ -37,7 +37,8 @@ namespace Trainer_Editor.UserControls {
         }
         public string Type { get; set; }
         public List<string> IVs { get; set; }
-        public static List<HPSpread> Spreads { get; set; } = new List<HPSpread> {
+
+        public static readonly List<HPSpread> Spreads = new List<HPSpread> {
             new HPSpread("Max","31","31","31","31","31","31"),
             new HPSpread("Zero","0","0","0","0","0","0"),
             new HPSpread("Bug","31","31","31","30","31","30"),

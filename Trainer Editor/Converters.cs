@@ -19,12 +19,12 @@ namespace Trainer_Editor {
     public class PartyTypeRadioButtonConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             //return value?.Equals(parameter);
-            return (PartyType)value == (PartyType)parameter;
+            return (PartyTypes)value == (PartyTypes)parameter;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             //return (bool)value ? parameter : Binding.DoNothing;
-            return (bool)value ? (PartyType)parameter : Binding.DoNothing;
+            return (bool)value ? (PartyTypes)parameter : Binding.DoNothing;
         }
     }
     public class PartyTypeEnableInputConverter : IMultiValueConverter {
@@ -35,20 +35,20 @@ namespace Trainer_Editor {
         public static Dictionary<Input, bool> TrainerMonItemCustomMoves = new Dictionary<Input, bool> { { Input.HeldItem, true }, { Input.Moves, true } };
         public static Dictionary<Input, bool> TrainerMonCustom = new Dictionary<Input, bool> { { Input.HeldItem, true }, { Input.Moves, true }, { Input.Custom, true } };
         
-        public static Dictionary<PartyType, Dictionary<Input, bool>> IsInputEnabled = new Dictionary<PartyType, Dictionary<Input, bool>> {
-            { PartyType.TrainerMonNoItemDefaultMoves, TrainerMonNoItemDefaultMoves },
-            { PartyType.TrainerMonItemDefaultMoves, TrainerMonItemDefaultMoves },
-            { PartyType.TrainerMonNoItemCustomMoves, TrainerMonNoItemCustomMoves },
-            { PartyType.TrainerMonItemCustomMoves, TrainerMonItemCustomMoves },
-            { PartyType.TrainerMonCustom, TrainerMonCustom }
+        public static Dictionary<PartyTypes, Dictionary<Input, bool>> IsInputEnabled = new Dictionary<PartyTypes, Dictionary<Input, bool>> {
+            { PartyTypes.TrainerMonNoItemDefaultMoves, TrainerMonNoItemDefaultMoves },
+            { PartyTypes.TrainerMonItemDefaultMoves, TrainerMonItemDefaultMoves },
+            { PartyTypes.TrainerMonNoItemCustomMoves, TrainerMonNoItemCustomMoves },
+            { PartyTypes.TrainerMonItemCustomMoves, TrainerMonItemCustomMoves },
+            { PartyTypes.TrainerMonCustom, TrainerMonCustom }
         };
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
 
-            if (!(values[0] is PartyType && values[1] is Input))
+            if (!(values[0] is PartyTypes && values[1] is Input))
                 return false;
 
-            PartyType partyType = (PartyType)values[0];
+            PartyTypes partyType = (PartyTypes)values[0];
             Input input = (Input)values[1];
 
             return IsInputEnabled[partyType].GetValueOrDefault(input);
@@ -103,7 +103,7 @@ namespace Trainer_Editor {
                 Regex trim = new Regex(@"(?<=SPECIES_)\w+");
                 species = trim.Match(species).Value.ToLower();
                 Uri uri = new Uri($"C:\\Users\\Scott\\Decomps\\pokeemerald\\graphics\\pokemon\\{species}\\front.png");
-                return new BitmapImage(uri);
+                return new CroppedBitmap(new BitmapImage(uri), new Int32Rect(0,0,64,64));
             }
             catch (Exception ) {
                 //MessageBox.Show(e.Message, "PokemonSpriteConverter", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -151,6 +151,20 @@ namespace Trainer_Editor {
                 MessageBox.Show($"Regex: {(string)value}\nError: {e.Message}", "Invalid Regex");
                 return new Regex("");
             }
+        }
+    }
+    public class AiFlagsConverter : IMultiValueConverter {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
+            string flag = values[0] as string; 
+            List<string> aiFlags = values[1] as List<string>;
+            if (flag == null || aiFlags == null)
+                return Binding.DoNothing;
+            return aiFlags.Contains(flag) ? true : false;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) {
+
+            return new object[] { Binding.DoNothing, Binding.DoNothing };
         }
     }
 }

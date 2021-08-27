@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -12,7 +13,7 @@ namespace Trainer_Editor {
         private string encounterGender = "";
         private string encounterMusic;
         private string trainerName;
-        private List<string> items;
+        private List<string> items = new List<string>{ "", "", "", "" };
         private string doubleBattle;
         private List<string> aiFlags;
         private string partySize;
@@ -22,12 +23,21 @@ namespace Trainer_Editor {
         public string TrainerClass { get => trainerClass; set { trainerClass = value; OnPropertyChanged("TrainerClass"); } }
 
         public string EncounterMusic { get => encounterMusic; set { encounterMusic = value; OnPropertyChanged("EncounterMusic"); } }
-        public static List<string> EncounterGenders { get; set; } = new List<string> { "F_TRAINER_FEMALE", "" };
+        public static readonly List<string> EncounterGenders = new List<string> { "F_TRAINER_FEMALE", "" };
         public string EncounterGender { get => encounterGender; set { encounterGender = value; OnPropertyChanged("EncounterGender"); } }
         public string TrainerPic { get => trainerPic; set { trainerPic = value; OnPropertyChanged("TrainerPic"); } }
-        public string TrainerName { get => trainerName; set => trainerName = value; }
+        public string TrainerName { 
+            get => trainerName; 
+            set { 
+                trainerName = value.Length > 11 ? value.Substring(0, 11) : value; 
+                OnPropertyChanged("TrainerName"); 
+            } 
+        }
         public List<string> Items { get => items; set => items = value; }
-        public string DoubleBattle { get => doubleBattle; set => doubleBattle = value; }
+        public bool DoubleBattleBool {
+            get { return doubleBattle == "TRUE" ? true : false; }
+            set { doubleBattle = value ? "TRUE" : "FALSE"; }
+        }
         public List<string> AiFlags { get => aiFlags; set => aiFlags = value; }
         public string PartySize { get => partySize; set => partySize = value; }
         public Party Party {
@@ -35,7 +45,7 @@ namespace Trainer_Editor {
             set { party = value; }
         }
 
-        public PartyType PartyType {
+        public PartyTypes PartyType {
             get {
                 return Party.Type;
             }
@@ -47,18 +57,18 @@ namespace Trainer_Editor {
         }
         public static Trainer CreateDummy() {
             Trainer trainer = new Trainer {
-                Party = Party.CreateDummy(),
-                TrainerClass = "TRAINER_CLASS_HEX_MANIAC",
-                EncounterGender = "F_TRAINER_FEMALE",
-                EncounterMusic = "TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS",
-                TrainerPic = "TRAINER_PIC_HEX_MANIAC",
-                TrainerName = "TAMMY",
-                Items = new List<string>() { "ITEM_HYPER_POTION", "ITEM_FULL_RESTORE" },
-                DoubleBattle = "FALSE",
-                AiFlags = new List<string>() { "AI_SCRIPT_CHECK_BAD_MOVE", "AI_SCRIPT_TRY_TO_FAINT", "AI_SCRIPT_CHECK_VIABILITY" }
+                party = Party.CreateDummy(),
+                trainerClass = "TRAINER_CLASS_HEX_MANIAC",
+                encounterGender = "F_TRAINER_FEMALE",
+                encounterMusic = "TRAINER_ENCOUNTER_MUSIC_SUSPICIOUS",
+                trainerPic = "TRAINER_PIC_HEX_MANIAC",
+                trainerName = "TAMMY",
+                items = new List<string>() { "ITEM_HYPER_POTION", "ITEM_FULL_RESTORE", "", "" },
+                doubleBattle = "FALSE",
+                aiFlags = new List<string>() { "AI_SCRIPT_CHECK_BAD_MOVE", "AI_SCRIPT_TRY_TO_FAINT", "AI_SCRIPT_CHECK_VIABILITY" }
             };
-            trainer.PartySize = trainer.Party.Name;
-            trainer.PartyFlags = Party.TypeToPartyFlags[trainer.PartyType];
+            trainer.partySize = trainer.Party.Name;
+            trainer.partyFlags = Party.TypeToPartyFlags[trainer.PartyType];
 
             return trainer;
         }
@@ -68,35 +78,45 @@ namespace Trainer_Editor {
 
             indexName = RegexTrainer.IndexName.Match(nameLine).Value;
 
-            partyFlags = MatchList(RegexTrainer.PartyFlags, trainerStruct);
+            partyFlags = RegexTrainer.MatchList(RegexTrainer.PartyFlags, trainerStruct);
             trainerClass = RegexTrainer.TrainerClass.Match(trainerStruct).Value;
             encounterGender = RegexTrainer.EncounterGender.Match(trainerStruct).Value;
             encounterMusic = RegexTrainer.EncounterMusic.Match(trainerStruct).Value;
             trainerPic = RegexTrainer.TrainerPic.Match(trainerStruct).Value;
             trainerName = RegexTrainer.TrainerName.Match(trainerStruct).Value;
-            items = MatchList(RegexTrainer.Items, trainerStruct);
+            items = RegexTrainer.MatchItems(trainerStruct);
             doubleBattle = RegexTrainer.DoubleBattle.Match(trainerStruct).Value;
-            aiFlags = MatchList(RegexTrainer.AiFlags, trainerStruct);
+            aiFlags = RegexTrainer.MatchList(RegexTrainer.AiFlags, trainerStruct);
             partySize = RegexTrainer.PartySize.Match(trainerStruct).Value;
         }
-        public static List<string> MatchList(Regex member, string trainerStruct) {
+        public string CreateTrainerStruct() {
+            string partyStruct = $"\n\t[{IndexName}] =" +
+                "\n\t{" +
+                PartyFlagsMember +
+                TrainerClassMember +
+                EncounterMusic_genderMember +
+                TrainerPicMember +
+                TrainerNameMember +
+                ItemsMember +
+                DoubleBattleMember +
+                AiFlagsMember +
+                PartySizeMember +
+                PartyMember +
+                "\n\t},";
 
-            return new List<string>(member.Matches(trainerStruct).Select(m => m.Value));
+            return partyStruct;
         }
+        
         public string TrainerIndexNameMember {
             get => string.IsNullOrEmpty(IndexName) ? "" : $"[{IndexName}] =";
         }
         public string PartyFlagsMember {
             get {
                 string partyFlags = "";
-                if (PartyFlags == null)
-                    return partyFlags;
-
                 for (int i = 0; i < PartyFlags.Count; i++) {
                     if (i > 0)
-                        partyFlags += " | " + PartyFlags[i];
-                    else
-                        partyFlags += PartyFlags[i];
+                        partyFlags += " | ";
+                    partyFlags += PartyFlags[i];
                 }
                 return $"\n\t\t.partyFlags = {partyFlags},";
             }
@@ -119,33 +139,30 @@ namespace Trainer_Editor {
         }
         public string ItemsMember {
             get {
-                string items = "";
-
-                for (int i = 0; i < Items.Count; i++) {
-                    if (i > 0)
-                        items += ", " + Items[i];
-                    else
-                        items += Items[i];
+                string itemsText = "";
+                foreach (string item in Items) {
+                    if (string.IsNullOrEmpty(item))
+                        continue;
+                    itemsText += string.IsNullOrEmpty(itemsText) ? item : ", " + item;
                 }
-                return $"\n\t\t.items = {{{items}}},";
+                return $"\n\t\t.items = {{{itemsText}}},";
             }
         }
         public string DoubleBattleMember {
-            get => string.IsNullOrEmpty(DoubleBattle) ? "" : $"\n\t\t.doubleBattle = {DoubleBattle},";
+            get => $"\n\t\t.doubleBattle = {doubleBattle},"; 
         }
         public string AiFlagsMember {
             get {
-                string aiFlags = "";
-                if (AiFlags == null)
-                    return aiFlags;
+                string flagsText = "";
 
-                for (int i = 0; i < AiFlags.Count; i++) {
-                    if (i > 0)
-                        aiFlags += " | " + AiFlags[i];
-                    else
-                        aiFlags += AiFlags[i];
+                foreach (string flag in AiFlags) {
+                    if (string.IsNullOrEmpty(flag))
+                        continue;
+                    flagsText += string.IsNullOrEmpty(flagsText) ? flag : " | " + flag;
                 }
-                return $"\n\t\t.aiFlags = {aiFlags},";
+                if (string.IsNullOrEmpty(flagsText))
+                    flagsText = "0";
+                return $"\n\t\t.aiFlags = {flagsText},";
             }
         }
         public string PartySizeMember {
@@ -161,22 +178,6 @@ namespace Trainer_Editor {
                 return $"\n\t\t.party = {{.{type} = {Party.Name}}},";
             }
         }
-        public string CreateTrainerStruct() {
-            string partyStruct = $"\n\t[{IndexName}] =" +
-                "\n\t{" +
-                PartyFlagsMember +
-                TrainerClassMember +
-                EncounterMusic_genderMember +
-                TrainerPicMember +
-                TrainerNameMember +
-                ItemsMember +
-                DoubleBattleMember +
-                AiFlagsMember +
-                PartySizeMember +
-                PartyMember +
-                "\n\t},";
-
-            return partyStruct;
-        }
     }
+
 }

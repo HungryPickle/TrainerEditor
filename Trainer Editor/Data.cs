@@ -68,12 +68,19 @@ namespace Trainer_Editor {
         private Constant trainerClass = new Constant(Constants.TrainerClass);
         private Constant trainerPic = new Constant(Constants.TrainerPic);
         private Constant trainerEncounterMusic = new Constant(Constants.TrainerEncounterMusic);
+        private Constant trainerAiFlag = new Constant(Constants.TrainerAiFlag);
+        private Constant balls = new Constant(Constants.Balls);
+        private Constant natures = new Constant(Constants.Natures);
         public Constant Species { get => species; set { species = value; OnPropertyChanged("Species"); } }
         public Constant Moves { get => moves; set { moves = value; OnPropertyChanged("Moves"); } }
         public Constant Items { get => items; set { items = value; OnPropertyChanged("Items"); } }
         public Constant TrainerClass { get => trainerClass; set { trainerClass = value; OnPropertyChanged("TrainerClass"); } }
         public Constant TrainerPic { get => trainerPic; set { trainerPic = value; OnPropertyChanged("TrainerPic"); } }
         public Constant TrainerEncounterMusic { get => trainerEncounterMusic; set { trainerEncounterMusic = value; OnPropertyChanged("TrainerEncounterMusic"); } }
+        public Constant TrainerAiFlag { get => trainerAiFlag; set { trainerAiFlag = value; OnPropertyChanged("TrainerAiFlag"); } }
+        public Constant Balls { get => balls; set { balls = value; OnPropertyChanged("Balls"); } }
+        public Constant Natures { get => natures; set { natures = value; OnPropertyChanged("Natures"); } }
+        
         public Constant GetConstant(Constants type) {
             switch (type) {
                 case Constants.Species:
@@ -88,6 +95,12 @@ namespace Trainer_Editor {
                     return TrainerPic;
                 case Constants.TrainerEncounterMusic:
                     return TrainerEncounterMusic;
+                case Constants.TrainerAiFlag:
+                    return TrainerAiFlag;
+                case Constants.Balls:
+                    return Balls;
+                case Constants.Natures:
+                    return Natures;
                 default:
                     MessageBox.Show("Constant not implemented in Data.GetConstant.");
                     return null;
@@ -112,6 +125,15 @@ namespace Trainer_Editor {
                     break;
                 case Constants.TrainerEncounterMusic:
                     TrainerEncounterMusic = constant; 
+                    break;
+                case Constants.TrainerAiFlag:
+                    TrainerAiFlag = constant;
+                    break;
+                case Constants.Balls:
+                    Balls = constant;
+                    break;
+                case Constants.Natures:
+                    Natures = constant;
                     break;
                 default:
                     MessageBox.Show("Constant not implemented in Data.SetConstant.");

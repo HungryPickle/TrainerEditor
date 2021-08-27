@@ -1,0 +1,27 @@
+{
+  "Type": 6,
+  "PartialHeaderPath": "\\include\\constants\\battle_ai.h",
+  "DefaultRegex": {
+    "Pattern": "(?<=#define\\s+)AI_SCRIPT_\\w+",
+    "Options": 0
+  },
+  "Regex": {
+    "Pattern": "(?<=#define\\s+)AI_SCRIPT_\\w+",
+    "Options": 0
+  },
+  "List": [
+    "AI_SCRIPT_CHECK_BAD_MOVE",
+    "AI_SCRIPT_TRY_TO_FAINT",
+    "AI_SCRIPT_CHECK_VIABILITY",
+    "AI_SCRIPT_SETUP_FIRST_TURN",
+    "AI_SCRIPT_RISKY",
+    "AI_SCRIPT_PREFER_POWER_EXTREMES",
+    "AI_SCRIPT_PREFER_BATON_PASS",
+    "AI_SCRIPT_DOUBLE_BATTLE",
+    "AI_SCRIPT_HP_AWARE",
+    "AI_SCRIPT_TRY_SUNNY_DAY_START",
+    "AI_SCRIPT_ROAMING",
+    "AI_SCRIPT_SAFARI",
+    "AI_SCRIPT_FIRST_BATTLE"
+  ]
+}

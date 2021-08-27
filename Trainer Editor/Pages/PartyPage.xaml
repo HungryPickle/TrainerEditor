@@ -16,6 +16,7 @@
             <BitmapImage x:Key="GhostBitmap" UriSource="/Graphics/ghost.png"/>
             <BitmapImage x:Key="RocketBitmap" UriSource="/Graphics/rocket.png"/>
             <global:PartyTypeRadioButtonConverter x:Key="PartyTypeRadioButtonConverter"/>
+
             <Style TargetType="Image">
                 <Setter Property="Height" Value="64"/>
                 <Setter Property="Width" Value="64"/>
@@ -23,7 +24,7 @@
                 <Setter Property="Source" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag.Species, 
                     Converter={StaticResource PokemonSpriteConverter}}"/>
             </Style>
-
+            
         </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -42,14 +43,14 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.ColumnSpan="4" Orientation="Horizontal" Margin="10,10,10,10" >
-            <RadioButton Content="NoItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonNoItemDefaultMoves}}"/>
-            <RadioButton Content="ItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonItemDefaultMoves}}"/>
-            <RadioButton Content="NoItemCustomMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonNoItemCustomMoves}}"/>
-            <RadioButton Content="ItemCustomMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonItemCustomMoves}}"/>
-            <RadioButton Content="Custom" IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyType.TrainerMonCustom}}"/>
+            <RadioButton Content="NoItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyTypes.TrainerMonNoItemDefaultMoves}}"/>
+            <RadioButton Content="ItemDefaultMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyTypes.TrainerMonItemDefaultMoves}}"/>
+            <RadioButton Content="NoItemCustomMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyTypes.TrainerMonNoItemCustomMoves}}"/>
+            <RadioButton Content="ItemCustomMoves   " IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyTypes.TrainerMonItemCustomMoves}}"/>
+            <RadioButton Content="Custom" IsChecked="{Binding Path=SelectedTrainer.PartyType, Converter={StaticResource PartyTypeRadioButtonConverter}, ConverterParameter={x:Static global:PartyTypes.TrainerMonCustom}}"/>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="3">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="3">
             <Image x:Name="TrainerSprite" Margin="10,0,0,0" 
                 Source="{Binding SelectedTrainer.TrainerPic, Converter={StaticResource TrainerSpriteConverter},
                 FallbackValue={StaticResource RocketBitmap}}"/>
@@ -64,17 +65,12 @@
 
         <UserControls:PartyUserControl x:Name="party" Grid.Column="0" Grid.Row="2" Width="170" />
 
-        <UserControls:MovesUserControl x:Name="moves" Grid.Column="1" Grid.Row="2" Width="150" VerticalAlignment="Center" 
+        <UserControls:MovesUserControl x:Name="moves" Grid.Column="1" Grid.Row="2" Width="180" VerticalAlignment="Center" 
             Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Moves}"/>
 
-            
-        <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center">
-            <UserControls:LevelOffsetUserControl Grid.Row="3" Tag="{x:Static global:Input.Custom}" Style="{StaticResource PartyType}"/>
-            <UserControls:LabeledTextBox x:Name="lvlBox" LabelText="Level (1-100)"  Width="100"  Grid.Row="3" Margin="5,0,0,0"
-                TextBoxText="{Binding SelectedMon.Lvl, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
-        </StackPanel>
-            
-        <UserControls:AutoCompleteTextBox x:Name="heldItemBox" LabelContent="Held Item" Width="120" Grid.Row="3" Grid.Column="1"
+        <UserControls:LevelUserControl x:Name="lvlControl" Grid.Row="3" Width="240"/>
+
+        <UserControls:AutoCompleteTextBox x:Name="heldItemBox" LabelContent="Held Item" MinWidth="180" Grid.Row="3" Grid.Column="1"
             ListItem="{Binding SelectedMon.HeldItem, Mode=TwoWay}" ListSource="{Binding Items.List, Mode=OneWay}" 
             Tag="{x:Static global:Input.HeldItem}" Style="{StaticResource PartyType}"/>
     
@@ -83,6 +79,17 @@
 
         <UserControls:IVsUserControl Grid.Row="5" Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Custom}" Margin="0,5,0,0" HorizontalAlignment="Center"/>
         <UserControls:EVsUserControl Grid.Row="6" Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Custom}" Margin="0,5,0,0" HorizontalAlignment="Center"/>
+        
+        <UserControls:LabeledComboBox LabelContent="Gender"  Grid.Row="4" Grid.Column="1" Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Custom}"
+            ItemsSource="{x:Static global:Mon.Genders}" SelectedItem="{Binding SelectedMon.Gender, Mode=TwoWay}" Width="180"/>
 
+        <UserControls:LabeledTextBox LabelText="Nickname" Grid.Row="5" Grid.Column="1" Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Custom}"
+            TextBoxText="{Binding SelectedMon.Nickname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="140"/>
+        <UserControls:LabeledComboBox LabelContent="Ball" Grid.Row="6" Grid.Column="1" Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Custom}"
+            ItemsSource="{Binding Balls.List}" SelectedItem="{Binding SelectedMon.Ball, Mode=TwoWay}" MinWidth="140"/>
+        <UserControls:LabeledComboBox LabelContent="Ability" Grid.Row="2" Grid.Column="2" Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Custom}"
+            ItemsSource="{x:Static global:Mon.Abilities}" SelectedItem="{Binding SelectedMon.Ability, Mode=TwoWay}" MinWidth="120"/>
+        <UserControls:LabeledComboBox LabelContent="Nature" Grid.Row="3" Grid.Column="2"  Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Custom}"
+            ItemsSource="{Binding Natures.List}" SelectedItem="{Binding SelectedMon.Nature, Mode=TwoWay}" MinWidth="200"/>
     </Grid>
 </Page>
