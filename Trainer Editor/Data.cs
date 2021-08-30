@@ -34,13 +34,6 @@ namespace Trainer_Editor {
             set { selectedTrainer = value; OnPropertyChanged("SelectedTrainer"); }
         }
 
-        public ObservableCollection<Mon> SelectedParty {
-            get { return SelectedTrainer.Party.MonList; }
-            set {
-                SelectedTrainer.Party.MonList = value;
-            }
-        }
-
         private Mon selectedMon;
         public Mon SelectedMon {
             get { return selectedMon; }
@@ -60,6 +53,8 @@ namespace Trainer_Editor {
             get { return partyBoxes; }
             set { partyBoxes = value; }
         }
+        private MonSwap selectedMonSwap;
+        public MonSwap SelectedMonSwap { get { return selectedMonSwap; } set { selectedMonSwap = value; OnPropertyChanged("SelectedMonSwap"); } }
         public TextBlock StatusBar { get; set; }
 
         private Constant species = new Constant(Constants.Species);

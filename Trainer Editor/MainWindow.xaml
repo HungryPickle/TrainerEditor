@@ -35,7 +35,7 @@
         <UserControls:TrainerSearchUserControl x:Name="trainerSearch" HorizontalAlignment="Left" 
             Width="260" Margin="0,20,0,20"/>
 
-        <TabControl Margin="260,20,0,20" Background="#FF121212">
+        <TabControl Margin="260,20,0,20" >
             <TabItem Header="Party" >
                 <Frame>
                     <Frame.Content>

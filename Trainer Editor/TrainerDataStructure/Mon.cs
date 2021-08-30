@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -47,6 +48,7 @@ namespace Trainer_Editor {
                     ball = RegexMon.Ball.Match(monStruct).Value;
                     ability = RegexMon.Ability.Match(monStruct).Value;
                     nature = RegexMon.Nature.Match(monStruct).Value;
+                    monSwaps = new MonSwaps(RegexMon.MatchMonSwaps(monStruct));
                     break;
                 default:
                     break;
@@ -72,9 +74,16 @@ namespace Trainer_Editor {
                     monStruct += HeldItemMember + MovesMember;
                     break;
                 case PartyTypes.TrainerMonCustom:
-                    monStruct += HeldItemMember + MovesMember + IVsMember 
-                        + EVsMember + GenderMember + NicknameMember + BallMember
-                        + AbilityMember + NatureMember;
+                    monStruct += HeldItemMember 
+                        + MovesMember 
+                        + IVsMember 
+                        + EVsMember 
+                        + GenderMember
+                        + NatureMember 
+                        + NicknameMember 
+                        + BallMember
+                        + AbilityMember 
+                        + MonSwapsMember;
                     break;
                 default:
                     break;
@@ -97,6 +106,7 @@ namespace Trainer_Editor {
         private string ball;
         private string ability;
         private string nature;
+        private MonSwaps monSwaps;
 
         public string Species {
             get { return species; }
@@ -111,7 +121,8 @@ namespace Trainer_Editor {
         public string Iv {
             get { return iv; }
             set {
-                iv = RegexInput.Digits.Match(value).Value;
+                string input = RegexInput.Digits.Match(value).Value;
+                iv = string.IsNullOrEmpty(input) ? "0" : input;
                 OnPropertyChanged("Iv");
             }
         }
@@ -119,7 +130,7 @@ namespace Trainer_Editor {
             get { return lvl; }
             set {
                 string input = RegexInput.Digits.Match(value).Value;
-                lvl = string.IsNullOrEmpty(input) ? "1" : input;
+                lvl = string.IsNullOrEmpty(input) ? "2" : input;
                 OnPropertyChanged("Lvl");
             }
         }
@@ -171,6 +182,7 @@ namespace Trainer_Editor {
             ""
         };
         public string Nature { get => nature; set { nature = value; OnPropertyChanged("Nature"); } }
+        public MonSwaps MonSwaps { get => monSwaps; set { monSwaps = value; OnPropertyChanged("MonSwaps"); } }
 
         public string SpeciesMember {
             get => string.IsNullOrEmpty(Species) ? "" : $"\n\t.species = {Species},";
@@ -223,6 +235,28 @@ namespace Trainer_Editor {
         public string NatureMember {
             get { return string.IsNullOrEmpty(Nature) ? "" : $"\n\t.nature = {Nature},"; }
         }
+        public string MonSwapsMember {
+            get {
+                string monSwapsText = "";
+                if (MonSwaps.List.All(m => string.IsNullOrEmpty(m.Species)))
+                    return monSwapsText;
+                monSwapsText += "\n\t.monSwaps = {";
+                foreach(MonSwap monSwap in MonSwaps.List) {
+                    if (string.IsNullOrEmpty(monSwap.Species))
+                        continue;
+                    monSwapsText +=
+                        "\n\t\t{" +
+                        monSwap.SpeciesMember +
+                        monSwap.SwapAtPlayerLvlMember +
+                        monSwap.LvlMember +
+                        monSwap.MovesMember +
+                        "\n\t\t},";
+                }
+                monSwapsText += "\n\t},";
+                return monSwapsText;
+            }
+        }
+
     }
     public class Stat : ObservableObject {
         public Stat() { }
@@ -248,6 +282,79 @@ namespace Trainer_Editor {
                 statsText += stats[i].Text;
             }
             return statsText;
+        }
+    }
+    public class MonSwap : ObservableObject {
+        private string species;
+        private string lvl = "";
+        private string lvlOffset;
+        private string swapAtPlayerLvl;
+        private List<string> moves = new List<string> { "", "", "", "" };
+
+        public string Species {
+            get { return species; }
+            set { species = value; }
+        }
+
+        public string Lvl {
+            get { return lvl; }
+            set { lvl = value; }
+        }
+
+        public string LvlOffset {
+            get { return lvlOffset; }
+            set { lvlOffset = value; }
+        }
+
+        public string SwapAtPlayerLvl {
+            get { return swapAtPlayerLvl; }
+            set { swapAtPlayerLvl = value; }
+        }
+
+        public List<string> Moves {
+            get { return moves; }
+            set { moves = value; }
+        }
+        public string SpeciesMember { get => string.IsNullOrEmpty(Species) ? "" : $"\n\t\t.swapSpecies = {Species},"; }
+        public string SwapAtPlayerLvlMember { get => string.IsNullOrEmpty(SwapAtPlayerLvl) ? "" : $"\n\t\t.swapAtPlayerLvl = {SwapAtPlayerLvl},"; }
+        public string LvlMember { get => string.IsNullOrEmpty(Lvl) ? "" : $"\n\t\t.swapLvl = {LvlOffset}{Lvl},"; }
+        public string MovesMember {
+            get {
+                string movesText = "";
+                if (Moves.All(m => string.IsNullOrEmpty(m)))
+                    return movesText;
+
+                foreach (string move in Moves) {
+                    if (string.IsNullOrEmpty(move))
+                        continue;
+                    movesText += string.IsNullOrEmpty(movesText) ? move : ", " + move;
+                }
+                return $"\n\t\t.swapMoves = {{{movesText}}}";
+            }
+        }
+    }
+    public class MonSwaps : ObservableObject{
+        public MonSwaps(ObservableCollection<MonSwap> monSwaps) {
+            list = monSwaps;
+            list.CollectionChanged += new NotifyCollectionChangedEventHandler(MonSwapsChanged);
+        }
+
+        private ObservableCollection<MonSwap> list;
+        public ObservableCollection<MonSwap> List { get => list; }
+        public MonSwap this[int index] {
+            get {
+                if (index < list.Count)
+                    return list[index];
+                else
+                    return null;
+            }
+            set { 
+                if (index < list.Count)
+                    list[index] = value; 
+            }
+        }
+        public void MonSwapsChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged("Item[]");
         }
     }
 }

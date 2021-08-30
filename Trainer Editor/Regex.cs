@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -53,12 +54,41 @@ namespace Trainer_Editor {
         public static Regex Nature = new Regex(@"(?<=\.nature\s+=\s+)NATURE_\w+");
         
 
-        private static Regex Moves = new Regex(@"(?<=\.moves\s+=.+)MOVE_\w+");
-        public static Regex IVs = new Regex(@"(?<=.ivs\s+=.+)[0-9]+");
-        public static Regex EVs = new Regex(@"(?<=.evs\s+=.+)[0-9]+");
+        private static Regex Moves = new Regex(@"(?<=\.moves\s+=.+)MOVE_\w+");  
+        public static Regex IVs = new Regex(@"(?<=\.ivs\s+=.+)[0-9]+");
+        public static Regex EVs = new Regex(@"(?<=\.evs\s+=.+)[0-9]+");
+
+        public static Regex MonSwapStructs = new Regex(@"\.swapSpecies(\r|\n|\r\n|.)+?(?=},)");
+        public static Regex SwapSpecies = new Regex(@"(?<=\.swapSpecies\s+=\s+)\w+");
+        public static Regex SwapAtPlayerLvl = new Regex(@"(?<=\.swapAtPlayerLvl\s+=\s+)[0-9]+");
+        public static Regex SwapLvl = new Regex(@"(?<=\.swapLvl\s+=.+)[0-9]+(?=,)");
+        public static Regex SwapLvlOffset = new Regex(@"(?<=\.swapLvl\s+=\s+)PLAYER_LEVEL_OFFSET\s(\-|\+)\s");
+        private static Regex SwapMoves = new Regex(@"(?<=\.swapMoves\s+=.+)MOVE_\w+");
+
+        public static ObservableCollection<MonSwap> MatchMonSwaps(string monStruct) {
+            ObservableCollection<MonSwap> monSwaps = new ObservableCollection<MonSwap>();
+            List<string> monSwapStructs = new List<string>(RegexMon.MonSwapStructs.Matches(monStruct).Select(m => m.Value));
+            
+            for (int i = 0; i < monSwapStructs.Count(); i++) {
+                MonSwap monSwap = new MonSwap();
+                monSwap.Species = RegexMon.SwapSpecies.Match(monSwapStructs[i]).Value;
+                monSwap.SwapAtPlayerLvl = RegexMon.SwapAtPlayerLvl.Match(monSwapStructs[i]).Value;
+                monSwap.Lvl = RegexMon.SwapLvl.Match(monSwapStructs[i]).Value;
+                monSwap.LvlOffset = RegexMon.SwapLvlOffset.Match(monSwapStructs[i]).Value;
+                monSwap.Moves = MatchSwapMoves(monSwapStructs[i]);
+                monSwaps.Add(monSwap);
+            }
+            return monSwaps;
+        }
+        public static List<string> MatchSwapMoves(string monSwapStruct) {
+            return MatchMoves(monSwapStruct, RegexMon.SwapMoves);
+        }
         public static List<string> MatchMoves(string monStruct) {
+            return MatchMoves(monStruct, RegexMon.Moves);
+        }
+        private static List<string> MatchMoves(string monStruct, Regex regex) {
             List<string> moves = new List<string> { "", "", "", "" };
-            List<string> matches = new List<string>(RegexMon.Moves.Matches(monStruct).Select(m => m.Value));
+            List<string> matches = new List<string>(regex.Matches(monStruct).Select(m => m.Value));
             for (int i = 0; i < matches.Count; i++) {
                 moves[i] = matches[i];
             }

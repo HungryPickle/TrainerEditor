@@ -13,12 +13,11 @@
                 Visibility="{Binding LabelVisibility}"
                 Content="{Binding LabelContent}" 
                 FontSize="{Binding LabelFontSize}"/>
-            <TextBox Name="textbox"
+        <TextBox Name="textbox"
                 Text="{Binding ListItem, Mode=TwoWay, UpdateSourceTrigger=Explicit}" 
                 FontSize="{Binding TextBoxFontSize}"
                 Background="{Binding TextBoxBackground}"
-                TextChanged="TextBox_TextChanged"  PreviewKeyDown="TextBox_PreviewKeyDown" MouseDoubleClick="TextBox_MouseDoubleClick"
-                Padding="2,2,2,2" />
+                TextChanged="TextBox_TextChanged"  PreviewKeyDown="TextBox_PreviewKeyDown" MouseDoubleClick="TextBox_MouseDoubleClick"/>
             <Popup Name="popup"
                    HorizontalAlignment="Center" 
                    Height="200" 

@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="Trainer_Editor.UserControls.MonSwapUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Trainer_Editor"
+             xmlns:UserControls="clr-namespace:Trainer_Editor.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1200" PreviewKeyDown="PartyUserControl_PreviewKeyDown">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="MonSwaps" Margin="6,0,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.25*"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="UserControls:AutoCompleteTextBox">
+                        <EventSetter Event="GotFocus" Handler="AutoCompleteTextBox_GotFocus"/>
+                        <Setter Property="LabelVisibility" Value="Collapsed"/>
+                        <Setter Property="IsEnabled" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag, Converter={StaticResource DisableControlWithNullBindingConverter}}"/>
+                        <Setter Property="Margin" Value="0,3,0,3"/>
+                    </Style>
+                </Grid.Resources>
+
+                <StackPanel Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="3">
+                    <UserControls:AutoCompleteTextBox x:Name="swap0" Tag="{Binding SelectedMon.MonSwaps[0]}" ListItem="{Binding RelativeSource={RelativeSource Self}, Path=Tag.Species, Mode=TwoWay}" ListSource="{Binding Species.List, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <UserControls:AutoCompleteTextBox x:Name="swap1" Tag="{Binding SelectedMon.MonSwaps[1]}" ListItem="{Binding RelativeSource={RelativeSource Self}, Path=Tag.Species, Mode=TwoWay}" ListSource="{Binding Species.List, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <UserControls:AutoCompleteTextBox x:Name="swap2" Tag="{Binding SelectedMon.MonSwaps[2]}" ListItem="{Binding RelativeSource={RelativeSource Self}, Path=Tag.Species, Mode=TwoWay}" ListSource="{Binding Species.List, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+
+                <Button x:Name="Add" Content="Add" Grid.Column="1" Grid.Row="7" Click="Add_Click"/>
+                <Button x:Name="Delete" Content="Delete" Grid.Column="2" Grid.Row="7" Click="Delete_Click"/>
+
+                <UniformGrid Grid.Column="0" Grid.RowSpan="6" Rows="2">
+                    <Button x:Name="MoveUp"  Content="🡑" FontSize="24" Grid.Row="0" Click="MoveUp_Click"></Button>
+                    <Button x:Name="MoveDown" Content="🡓" FontSize="24" Grid.Row="1"  Click="MoveDown_Click"></Button>
+                </UniformGrid>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Moves" Grid.Column="1" VerticalAlignment="Top" Margin="6,0,0,0">
+            <StackPanel>
+                <UserControls:MovesUserControl Moves="{Binding SelectedMon.MonSwaps[0].Moves, Mode=TwoWay}"/>
+                <UserControls:MovesUserControl Moves="{Binding SelectedMon.MonSwaps[1].Moves, Mode=TwoWay}"/>
+                <UserControls:MovesUserControl Moves="{Binding SelectedMon.MonSwaps[2].Moves, Mode=TwoWay}"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Levels (1-100)" Grid.Column="2" VerticalAlignment="Top" Margin="6,0,0,0">
+            <StackPanel>
+                <UserControls:LevelUserControl Lvl="{Binding SelectedMon.MonSwaps[0].Lvl, Mode=TwoWay}" LvlOffset="{Binding SelectedMon.MonSwaps[0].LvlOffset, Mode=TwoWay}" />
+                <UserControls:LevelUserControl Lvl="{Binding SelectedMon.MonSwaps[1].Lvl, Mode=TwoWay}" LvlOffset="{Binding SelectedMon.MonSwaps[1].LvlOffset, Mode=TwoWay}" />
+                <UserControls:LevelUserControl Lvl="{Binding SelectedMon.MonSwaps[2].Lvl, Mode=TwoWay}" LvlOffset="{Binding SelectedMon.MonSwaps[2].LvlOffset, Mode=TwoWay}" />
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Swap At Player Level" Grid.Column="3" VerticalAlignment="Top" Margin="6,0,0,0">
+            <StackPanel>
+                <TextBox Text="{Binding SelectedMon.MonSwaps[0].SwapAtPlayerLvl, Mode=TwoWay}" Margin="0,3,0,3" IsEnabled="{Binding SelectedMon.MonSwaps[0], Converter={StaticResource DisableControlWithNullBindingConverter}}"/>
+                <TextBox Text="{Binding SelectedMon.MonSwaps[1].SwapAtPlayerLvl, Mode=TwoWay}" Margin="0,3,0,3" IsEnabled="{Binding SelectedMon.MonSwaps[1], Converter={StaticResource DisableControlWithNullBindingConverter}}"/>
+                <TextBox Text="{Binding SelectedMon.MonSwaps[2].SwapAtPlayerLvl, Mode=TwoWay}" Margin="0,3,0,3" IsEnabled="{Binding SelectedMon.MonSwaps[2], Converter={StaticResource DisableControlWithNullBindingConverter}}"/>
+                
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</UserControl>

@@ -7,13 +7,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        
         <StackPanel>
             <Label Content="{Binding LabelText, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
             <TextBox x:Name="textbox"
                 Text="{Binding TextBoxText, RelativeSource={RelativeSource AncestorType=UserControl},
                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                TextAlignment="{Binding TextBoxTextAlignment, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                Padding="2,2,2,2"/>
+                TextAlignment="{Binding TextBoxTextAlignment, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
         </StackPanel>
     </Grid>
 </UserControl>

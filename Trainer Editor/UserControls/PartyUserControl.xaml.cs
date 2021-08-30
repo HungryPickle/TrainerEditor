@@ -17,7 +17,7 @@ namespace Trainer_Editor.UserControls {
     /// Interaction logic for PartyUserControl.xaml
     /// </summary>
     public partial class PartyUserControl : UserControl {
-
+        public ObservableCollection<Mon> SelectedParty { get { return Data.Instance.SelectedTrainer.Party.MonList; } }
         public static List<AutoCompleteTextBox> PartyBoxes { get { return Data.Instance.PartyBoxes; } }
         public PartyUserControl() {
             InitializeComponent();
@@ -32,17 +32,17 @@ namespace Trainer_Editor.UserControls {
         }
 
         private void Add_Click(object sender, RoutedEventArgs e) {
-            if (Data.Instance.SelectedParty.Count < 6) {
-                Data.Instance.SelectedParty.Add(new Mon("SPECIES_DITTO"));
-                Data.Instance.SelectedMon = (Mon)PartyBoxes[Data.Instance.SelectedParty.Count - 1].Tag;
-                PartyBoxes[Data.Instance.SelectedParty.Count - 1].textbox.Focus();
+            if (SelectedParty.Count < 6) {
+                SelectedParty.Add(new Mon("SPECIES_DITTO"));
+                Data.Instance.SelectedMon = (Mon)PartyBoxes[SelectedParty.Count - 1].Tag;
+                PartyBoxes[SelectedParty.Count - 1].textbox.Focus();
             }
         }
         private void Delete_Click(object sender, RoutedEventArgs e) {
-            if (Data.Instance.SelectedParty.Count > 1) {
-                int deleted = Data.Instance.SelectedParty.IndexOf(Data.Instance.SelectedMon);
-                int last = Data.Instance.SelectedParty.Count - 1;
-                Data.Instance.SelectedParty.Remove(Data.Instance.SelectedMon);
+            if (SelectedParty.Count > 1) {
+                int deleted = SelectedParty.IndexOf(Data.Instance.SelectedMon);
+                int last = SelectedParty.Count - 1;
+                SelectedParty.Remove(Data.Instance.SelectedMon);
 
                 int index = deleted == last ? deleted - 1 : deleted;
                 Data.Instance.SelectedMon = (Mon)PartyBoxes[index].Tag;
@@ -52,22 +52,22 @@ namespace Trainer_Editor.UserControls {
         }
 
         private void MoveUp_Click(object sender, RoutedEventArgs e) {
-            int index = Data.Instance.SelectedParty.IndexOf(Data.Instance.SelectedMon);
+            int index = SelectedParty.IndexOf(Data.Instance.SelectedMon);
             if (index > 0) {
-                Mon tmp = Data.Instance.SelectedParty[index - 1];
-                Data.Instance.SelectedParty[index - 1] = Data.Instance.SelectedMon;
-                Data.Instance.SelectedParty[index] = tmp;
+                Mon tmp = SelectedParty[index - 1];
+                SelectedParty[index - 1] = Data.Instance.SelectedMon;
+                SelectedParty[index] = tmp;
                 PartyBoxes[index - 1].textbox.Focus();
             }
         }
 
         private void MoveDown_Click(object sender, RoutedEventArgs e) {
             
-            int index = Data.Instance.SelectedParty.IndexOf(Data.Instance.SelectedMon);
-            if (index + 1 < Data.Instance.SelectedParty.Count) {
-                Mon tmp = Data.Instance.SelectedParty[index + 1];
-                Data.Instance.SelectedParty[index + 1] = Data.Instance.SelectedMon;
-                Data.Instance.SelectedParty[index] = tmp;
+            int index = SelectedParty.IndexOf(Data.Instance.SelectedMon);
+            if (index + 1 < SelectedParty.Count) {
+                Mon tmp = SelectedParty[index + 1];
+                SelectedParty[index + 1] = Data.Instance.SelectedMon;
+                SelectedParty[index] = tmp;
                 PartyBoxes[index + 1].textbox.Focus();
             }
         }

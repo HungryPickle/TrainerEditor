@@ -24,5 +24,9 @@ namespace Trainer_Editor.Pages {
             DataContext = Data.Instance;
         }
 
+        private void MovesUserControl_Loaded(object sender, RoutedEventArgs e) {
+
+        }
+
     }
 }

@@ -17,6 +17,24 @@ namespace Trainer_Editor.UserControls {
     /// </summary>
     public partial class LevelUserControl : UserControl {
 
+
+        public string Lvl {
+            get { return (string)GetValue(LvlProperty); }
+            set { SetValue(LvlProperty, value); }
+        }
+        // Using a DependencyProperty as the backing store for Lvl.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty LvlProperty =
+            DependencyProperty.Register("Lvl", typeof(string), typeof(LevelUserControl), new PropertyMetadata(null));
+
+        public string LvlOffset {
+            get { return (string)GetValue(LvlOffsetProperty); }
+            set { SetValue(LvlOffsetProperty, value); }
+        }
+        // Using a DependencyProperty as the backing store for LvlOffset.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty LvlOffsetProperty =
+            DependencyProperty.Register("LvlOffset", typeof(string), typeof(LevelUserControl), new PropertyMetadata(null));
+
+
         public LevelUserControl() {
             InitializeComponent();
             

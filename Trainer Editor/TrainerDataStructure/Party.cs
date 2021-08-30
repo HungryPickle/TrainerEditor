@@ -51,9 +51,6 @@ namespace Trainer_Editor {
 
         public ObservableCollection<Mon> MonList {
             get => monList;
-            set { monList = value;
-                OnPropertyChanged("MonList");
-            }
         }
 
         public void PartyChanged(object sender, NotifyCollectionChangedEventArgs e) {
@@ -79,7 +76,7 @@ namespace Trainer_Editor {
             return party;
         }
         public Party(PartyTypes type, string name) {
-            MonList = new ObservableCollection<Mon>();
+            monList = new ObservableCollection<Mon>();
             Type = type;
             Name = name;
             MonList.CollectionChanged += new NotifyCollectionChangedEventHandler(PartyChanged);

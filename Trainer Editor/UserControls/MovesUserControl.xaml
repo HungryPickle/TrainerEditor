@@ -7,24 +7,24 @@
              xmlns:global="clr-namespace:Trainer_Editor"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <GroupBox Header="Moveset" VerticalAlignment="Center">
-        <Grid Margin="2,2,2,2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.Resources>
-                <Style TargetType="local:AutoCompleteTextBox">
-                    <Setter Property="LabelVisibility" Value="Collapsed"/>
-                    <Setter Property="ListSource" Value="{Binding Moves.List, Mode=OneWay}"/>
-                </Style>
-            </Grid.Resources>
-            <local:AutoCompleteTextBox x:Name="move0" ListItem="{Binding SelectedMon.Moves[0], Mode=TwoWay}" Grid.Row="0"/>
-            <local:AutoCompleteTextBox x:Name="move1" ListItem="{Binding SelectedMon.Moves[1], Mode=TwoWay}" Grid.Row="1"/>
-            <local:AutoCompleteTextBox x:Name="move2" ListItem="{Binding SelectedMon.Moves[2], Mode=TwoWay}" Grid.Row="2"/>
-            <local:AutoCompleteTextBox x:Name="move3" ListItem="{Binding SelectedMon.Moves[3], Mode=TwoWay}" Grid.Row="3"/>
-        </Grid>
-    </GroupBox>
+    <Grid Margin="0,3,0,3">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style TargetType="local:AutoCompleteTextBox">
+                <Setter Property="LabelVisibility" Value="Collapsed"/>
+                <Setter Property="ListSource" Value="{Binding Moves.List, Mode=OneWay}"/>
+                <Setter Property="MinWidth" Value="150"/>
+                <Setter Property="IsEnabled" Value="{Binding Moves, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource DisableControlWithNullBindingConverter}}"/>
+            </Style>
+        </Grid.Resources>
+        <local:AutoCompleteTextBox x:Name="move0" ListItem="{Binding Moves[0], RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" Grid.Column="0"/>
+        <local:AutoCompleteTextBox x:Name="move1" ListItem="{Binding Moves[1], RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" Grid.Column="1"/>
+        <local:AutoCompleteTextBox x:Name="move2" ListItem="{Binding Moves[2], RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" Grid.Column="2"/>
+        <local:AutoCompleteTextBox x:Name="move3" ListItem="{Binding Moves[3], RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" Grid.Column="3"/>
+    </Grid>
 </UserControl>

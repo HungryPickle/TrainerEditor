@@ -9,13 +9,14 @@
 
         <local:DisabledInputOpacityConverter x:Key="DisabledInputOpacityConverter"/>
         <local:PartyTypeEnableInputConverter x:Key="PartyTypeEnableInputConverter"/>
+        <local:DisableControlWithNullBindingConverter x:Key="DisableControlWithNullBindingConverter"/>
 
         <local:TrainerSpriteConverter x:Key="TrainerSpriteConverter"/>
         <local:PokemonSpriteConverter x:Key="PokemonSpriteConverter"/>
 
         <local:RegexStringConverter x:Key="RegexStringConverter"/>
 
-        <Style TargetType="{x:Type Control}" x:Key="PartyType">
+        <Style TargetType="{x:Type FrameworkElement}" x:Key="PartyType">
             <Setter Property="IsEnabled">
                 <Setter.Value>
                     <MultiBinding Converter="{StaticResource PartyTypeEnableInputConverter}">
@@ -24,7 +25,7 @@
                     </MultiBinding>
                 </Setter.Value>
             </Setter>
-            <Setter Property="Opacity" Value="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource DisabledInputOpacityConverter}}"/>
+            <!--<Setter Property="Opacity" Value="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource DisabledInputOpacityConverter}}"/> -->
         </Style>
 
         <Style TargetType="Label">
@@ -33,10 +34,15 @@
         
         <Style TargetType="TextBox" x:Key="DefaultCaretEnd">
             <EventSetter Event="GotKeyboardFocus" Handler="TextBoxCaret_GotKeyboardFocus"/>
+            <Setter Property="Padding" Value="2,2,2,2"/>
+            <Setter Property="Opacity" Value="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource DisabledInputOpacityConverter}}"/>
         </Style>
         <Style TargetType="TextBox" BasedOn="{StaticResource DefaultCaretEnd}">
             <EventSetter Event="GotKeyboardFocus" Handler="TextBox_GotKeyboardFocus"/>
             <EventSetter Event="LostKeyboardFocus" Handler="TextBox_LostKeyboardFocus"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Opacity" Value="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource DisabledInputOpacityConverter}}"/>
         </Style>
 
         <Style TargetType="ListBox">
@@ -56,7 +62,9 @@
         <Style TargetType="GroupBox">
             <Setter Property="Foreground" Value="WhiteSmoke"/>
         </Style>
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="#141414"/>
+        </Style>
 
-        
     </Application.Resources>
 </Application>

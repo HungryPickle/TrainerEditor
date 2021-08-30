@@ -61,7 +61,7 @@ namespace Trainer_Editor {
 
     public class DisabledInputOpacityConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            return (bool)value ? 1.0 : 0.3;
+            return (bool)value ? 1.0 : 0.1;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
@@ -69,7 +69,7 @@ namespace Trainer_Editor {
         }
     }
 
-    public class DisableEmptyPartySlotConverter : IValueConverter {
+    public class DisableControlWithNullBindingConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             return value == null ? false : true;
         }

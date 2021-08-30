@@ -9,9 +9,9 @@
              d:DesignHeight="450" d:DesignWidth="800" PreviewKeyDown="PartyUserControl_PreviewKeyDown">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
             <ColumnDefinition Width="0.25*"/>
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -24,13 +24,12 @@
         </Grid.RowDefinitions>
 
         <Grid.Resources>
-            <local:DisableEmptyPartySlotConverter x:Key="DisableEmptyPartySlotConverter"/>
             <local:HighlightSelectedMonConverter x:Key="HighlightSelectedMonConverter"/>
 
             <Style TargetType="UserControls:AutoCompleteTextBox">
                 <EventSetter Event="GotFocus" Handler="AutoCompleteTextBox_GotFocus"/>
                 <Setter Property="LabelVisibility" Value="Collapsed"/>
-                <Setter Property="IsEnabled" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag, Converter={StaticResource DisableEmptyPartySlotConverter}}"/>
+                <Setter Property="IsEnabled" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag, Converter={StaticResource DisableControlWithNullBindingConverter}}"/>
                 <Setter Property="ListItem" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag.Species, Mode=TwoWay}"/>
                 <Setter Property="ListSource" Value="{Binding Species.List, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Setter Property="TextBoxBackground">
@@ -42,13 +41,14 @@
                         </MultiBinding>
                     </Setter.Value>
                 </Setter>
+                <Setter Property="Margin" Value="0,3,0,3"/>
             </Style>
             <Style TargetType="TextBox" BasedOn="{StaticResource DefaultCaretEnd}">
                 <EventSetter Event="LostKeyboardFocus" Handler="TextBox_LostKeyboardFocus" />
             </Style>
         </Grid.Resources>
-        
-        <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="6">
+
+        <StackPanel Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="6">
             <UserControls:AutoCompleteTextBox x:Name="mon0" Tag="{Binding SelectedTrainer.Party[0]}"/>
             <UserControls:AutoCompleteTextBox x:Name="mon1" Tag="{Binding SelectedTrainer.Party[1]}"/>
             <UserControls:AutoCompleteTextBox x:Name="mon2" Tag="{Binding SelectedTrainer.Party[2]}"/>
@@ -57,12 +57,12 @@
             <UserControls:AutoCompleteTextBox x:Name="mon5" Tag="{Binding SelectedTrainer.Party[5]}"/>
         </StackPanel>
 
-        <Button x:Name="Add" Content="Add" Grid.Column="0" Grid.Row="7" Click="Add_Click"/>
-        <Button x:Name="Delete" Content="Delete" Grid.Column="1" Grid.Row="7" Click="Delete_Click"/>
+        <Button x:Name="Add" Content="Add" Grid.Column="1" Grid.Row="7" Click="Add_Click"/>
+        <Button x:Name="Delete" Content="Delete" Grid.Column="2" Grid.Row="7" Click="Delete_Click"/>
 
-        <UniformGrid Grid.Column="2" Grid.RowSpan="6" Rows="2">
+        <UniformGrid Grid.Column="0" Grid.RowSpan="6" Rows="2" >
             <Button x:Name="MoveUp"  Content="🡑" FontSize="24" Grid.Row="0" Click="MoveUp_Click"></Button>
-            <Button x:Name="MoveDown" Content="🡓" FontSize="24" Grid.Row="1"  Click="MoveDown_Click"></Button>
+            <Button x:Name="MoveDown" Content="🡓" FontSize="24" Grid.Row="1" Click="MoveDown_Click"></Button>
         </UniformGrid>
     </Grid>
 </UserControl>

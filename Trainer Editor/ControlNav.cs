@@ -38,8 +38,7 @@ namespace Trainer_Editor {
             KeyEventHandler autoPreview = new KeyEventHandler(AutoCompleteTextBox_PreviewKeyDown);
             KeyEventHandler textPreview = new KeyEventHandler(TextBox_PreviewKeyDown);
 
-            LabeledTextBox lvl = AddEvent(m.partyPage.lvlControl.lvlBox, labelPreview);
-            LabeledTextBox iv = AddEvent(m.partyPage.ivBox, labelPreview);
+            TextBox lvl = AddEvent(m.partyPage.lvlControl.lvlBox, textPreview);
 
             AutoCompleteTextBox move0 = AddEvent(m.partyPage.moves.move0, autoPreview);
             AutoCompleteTextBox move1 = AddEvent(m.partyPage.moves.move1, autoPreview);
@@ -65,9 +64,8 @@ namespace Trainer_Editor {
             Navs.Add(mon3, new ControlNav(trainerSearch, lvl, mon2, mon4));
             Navs.Add(mon4, new ControlNav(trainerSearch, lvl, mon3, mon5));
             Navs.Add(mon5, new ControlNav(trainerSearch, lvl, mon4, null));
-            Navs.Add(lvl, new ControlNav(mon0, iv));
-            Navs.Add(iv, new ControlNav(lvl, heldItem));
-            Navs.Add(heldItem, new ControlNav(iv, move0));
+            Navs.Add(lvl, new ControlNav(mon0));
+            Navs.Add(heldItem, new ControlNav( move0));
             Navs.Add(move0, new ControlNav(heldItem, move1));
             Navs.Add(move1, new ControlNav(move0, move2));
             Navs.Add(move2, new ControlNav(move1, move3));
