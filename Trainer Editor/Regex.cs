@@ -52,7 +52,8 @@ namespace Trainer_Editor {
         public static Regex Ball = new Regex(@"(?<=\.ball\s+=\s+)ITEM_\w+BALL");
         public static Regex Ability = new Regex(@"(?<=\.ability\s+=\s+)ABILITY_\w+");
         public static Regex Nature = new Regex(@"(?<=\.nature\s+=\s+)NATURE_\w+");
-        
+        public static Regex Friendship = new Regex(@"(?<=\.friendship\s+=\s+)FRIENDSHIP_(FRUSTRATION|RETURN)");
+        public static Regex Shiny = new Regex(@"(?<=\.shiny\s+=\s+)(TRUE|FALSE)");
 
         private static Regex Moves = new Regex(@"(?<=\.moves\s+=.+)MOVE_\w+");  
         public static Regex IVs = new Regex(@"(?<=\.ivs\s+=.+)[0-9]+");

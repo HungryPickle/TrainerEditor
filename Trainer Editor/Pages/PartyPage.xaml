@@ -135,7 +135,10 @@
             ItemsSource="{x:Static global:Mon.Genders}" SelectedItem="{Binding SelectedMon.Gender, Mode=TwoWay}" Width="180"/>
         <UserControls:LabeledTextBox LabelText="Nickname" Grid.Row="3" Grid.Column="4" Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Custom}"
             TextBoxText="{Binding SelectedMon.Nickname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="140"/>
-        
+        <CheckBox Content="Shiny" Grid.Row="3" Grid.Column="5" IsChecked="{Binding SelectedMon.ShinyBool, Mode=TwoWay}" VerticalAlignment="Center"/>
+
+        <UserControls:LabeledComboBox LabelContent="Friendship" Grid.Row="4" Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Custom}"
+            ItemsSource="{x:Static global:Mon.FriendshipValues}" SelectedItem="{Binding SelectedMon.Friendship, Mode=TwoWay}"/>
         <UserControls:IVsUserControl Grid.Row="4" Grid.Column="1" Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Custom}" Margin="0,5,0,0" HorizontalAlignment="Center"/>
         <UserControls:EVsUserControl Grid.Row="4" Grid.Column="2" Style="{StaticResource PartyType}" Tag="{x:Static global:Input.Custom}" Margin="0,5,0,0" HorizontalAlignment="Center"/>
         

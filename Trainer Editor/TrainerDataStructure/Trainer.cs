@@ -31,12 +31,12 @@ namespace Trainer_Editor {
             set { 
                 trainerName = value.Length > 11 ? value.Substring(0, 11) : value; 
                 OnPropertyChanged("TrainerName"); 
-            } 
+            }
         }
         public List<string> Items { get => items; set => items = value; }
         public bool DoubleBattleBool {
             get { return doubleBattle == "TRUE" ? true : false; }
-            set { doubleBattle = value ? "TRUE" : "FALSE"; }
+            set { doubleBattle = value == true ? "TRUE" : "FALSE"; }
         }
         public List<string> AiFlags { get => aiFlags; set => aiFlags = value; }
         public string PartySize { get => partySize; set => partySize = value; }

@@ -49,7 +49,9 @@ namespace Trainer_Editor.UserControls {
                 int index = deleted == last ? deleted - 1 : deleted;
                 Data.Instance.SelectedMonSwap = (MonSwap)MonSwapBoxes[index].Tag;
                 MonSwapBoxes[index].textbox.Focus();
-
+            }
+            else if (SelectedMonSwaps.Count == 1) {
+                SelectedMonSwaps.Remove(Data.Instance.SelectedMonSwap);
             }
         }
 

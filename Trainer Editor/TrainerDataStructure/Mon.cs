@@ -48,6 +48,8 @@ namespace Trainer_Editor {
                     ball = RegexMon.Ball.Match(monStruct).Value;
                     ability = RegexMon.Ability.Match(monStruct).Value;
                     nature = RegexMon.Nature.Match(monStruct).Value;
+                    friendship = RegexMon.Friendship.Match(monStruct).Value;
+                    shiny = RegexMon.Shiny.Match(monStruct).Value;
                     monSwaps = new MonSwaps(RegexMon.MatchMonSwaps(monStruct));
                     break;
                 default:
@@ -83,6 +85,8 @@ namespace Trainer_Editor {
                         + NicknameMember 
                         + BallMember
                         + AbilityMember 
+                        + FriendshipMember
+                        + ShinyMember
                         + MonSwapsMember;
                     break;
                 default:
@@ -106,7 +110,9 @@ namespace Trainer_Editor {
         private string ball;
         private string ability;
         private string nature;
-        private MonSwaps monSwaps;
+        private string friendship;
+        private string shiny;
+        private MonSwaps monSwaps = new MonSwaps(new ObservableCollection<MonSwap>());
 
         public string Species {
             get { return species; }
@@ -182,6 +188,16 @@ namespace Trainer_Editor {
             ""
         };
         public string Nature { get => nature; set { nature = value; OnPropertyChanged("Nature"); } }
+        public string Friendship { get => friendship; set { friendship = value; OnPropertyChanged("Friendship"); } }
+        public static readonly List<string> FriendshipValues = new List<string> {
+            "FRIENDSHIP_FRUSTRATION",
+            "FRIENDSHIP_RETURN",
+            ""
+        };
+        public bool ShinyBool {
+            get { return shiny == "TRUE" ? true : false; }
+            set { shiny = value == true ? "TRUE" : "FALSE"; }
+        }
         public MonSwaps MonSwaps { get => monSwaps; set { monSwaps = value; OnPropertyChanged("MonSwaps"); } }
 
         public string SpeciesMember {
@@ -235,6 +251,13 @@ namespace Trainer_Editor {
         public string NatureMember {
             get { return string.IsNullOrEmpty(Nature) ? "" : $"\n\t.nature = {Nature},"; }
         }
+        public string FriendshipMember {
+            get { return string.IsNullOrEmpty(Friendship) ? "" : $"\n\t.friendship = {Friendship},"; }
+        }
+        public string ShinyMember {
+            get { return string.IsNullOrEmpty(shiny) ? "" : $"\n\t.shiny = {shiny},"; }
+        }
+
         public string MonSwapsMember {
             get {
                 string monSwapsText = "";
