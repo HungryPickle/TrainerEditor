@@ -5,8 +5,7 @@
              xmlns:UserControls="clr-namespace:Trainer_Editor.UserControls"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
-
+        
         <local:DisabledInputOpacityConverter x:Key="DisabledInputOpacityConverter"/>
         <local:PartyTypeEnableInputConverter x:Key="PartyTypeEnableInputConverter"/>
         <local:DisableControlWithNullBindingConverter x:Key="DisableControlWithNullBindingConverter"/>
@@ -25,7 +24,6 @@
                     </MultiBinding>
                 </Setter.Value>
             </Setter>
-            <!--<Setter Property="Opacity" Value="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource DisabledInputOpacityConverter}}"/> -->
         </Style>
 
         <Style TargetType="Label">
@@ -62,9 +60,10 @@
         <Style TargetType="GroupBox">
             <Setter Property="Foreground" Value="WhiteSmoke"/>
         </Style>
-        <Style TargetType="TabControl">
+        
+        <!--<Style TargetType="TabControl">
             <Setter Property="Background" Value="#141414"/>
-        </Style>
+            </Style>-->
 
     </Application.Resources>
 </Application>

@@ -10,14 +10,17 @@
         Title="MainWindow" Height="900" Width="1600"
         ResizeMode="CanResizeWithGrip"
         >
-
-    <Grid x:Name="Grid1">
+    <Window.Resources>
+        <ResourceDictionary Source="ResourceDictionaries/TabControlDict.xaml"/>
+    </Window.Resources>
+    <Grid x:Name="Grid1" Background="Black">
         <Grid.Resources>
             <local:RegexStringConverter x:Key="RegexStringConverter"/>
+
         </Grid.Resources>
 
         <DockPanel VerticalAlignment="Top">
-            <Menu>
+            <Menu Background="Black" Foreground="WhiteSmoke">
                 <MenuItem Header="_File">
                     <MenuItem x:Name="MenuOpen" Header="_Open" Click="MenuOpen_Click"/>
                 </MenuItem>
@@ -35,8 +38,8 @@
         <UserControls:TrainerSearchUserControl x:Name="trainerSearch" HorizontalAlignment="Left" 
             Width="260" Margin="0,20,0,20"/>
 
-        <TabControl Margin="260,20,0,20" >
-            <TabItem Header="Party" >
+        <TabControl Template="{DynamicResource TabControlTemplate1}" Margin="260,20,0,20">
+            <TabItem Header="Party">
                 <Frame>
                     <Frame.Content>
                         <Pages:PartyPage x:Name="partyPage"/>
